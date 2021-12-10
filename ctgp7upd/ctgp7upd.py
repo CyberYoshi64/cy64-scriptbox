@@ -131,6 +131,8 @@ def splitChangelogData(filecnt: str):
 
 def fileMethodStrList(): return ["M","D","T"]
 
+def fileMethodColorLst(): return ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m"]
+
 def parseAndSortDlList(dll):
 	global dlCounter
 	fileN=[]; fileM=[]; fileO=[]; newDl=[]; oldf=""
@@ -169,13 +171,18 @@ def move (x, y): print("\033[%d;%dH" % (y, x))
 def ScreenDisplay():
 	global dlList, dlCounter, i, dlObtainedCnt, verf
 	global oldtermw, oldtermh
+	global showfullpath, includeNonUpdFile
 	termw, termh = os.get_terminal_size()
 	if (termw!=oldtermw or termh!=oldtermh) or (termw < 32 or termh < 10): clrscr()
 	oldtermw, oldtermh = termw, termh
 	lastver=verf[len(verf)-1][0]
 	header="Updating to "+lastver
-	fnm:str=dlList[i][1]
-	fnm=fnm[fnm.rfind("/")+1:]
+	fnm:str=dlList[i][1]; fnc="\x1b[0;37m"
+	if not showfullpath: fnm=fnm[fnm.rfind("/")+1:]
+	
+	try: fnc=fileMethodColorLst()[dlList[i][0]]
+	except: pass
+	
 	while len(fnm)>termw-3: fnm="..."+fnm[4:]
 	print("\x1b[?25l")
 	move(0, 0) # clrscr()
@@ -183,32 +190,20 @@ def ScreenDisplay():
 {}
 
 \x1b[0;93m{}
-\x1b[0;37m{}
+{}{}
 
 {}""".format("\n" * int((termh - 6) / 2 - 1), \
 				 (header).center(termw-1),\
 				 ("-"*len(header)).center(termw-1),\
 				 strpadc(str(dlObtainedCnt)+"/"+str(dlCounter), termw-1, " "),\
+				 iff(includeNonUpdFile, fnc, "\x1b[0;37m"),\
 				 fnm.center(termw-1),\
 				 dlErrCntCol()+dlErrDesc().center(termw-1)))
 
 def main():
 	global mainfolder, ses, dlList, dlCounter, dlObtainedCnt
 	global verf, vers, veri, i, rep, tooInstalled
-	if len(argv)<2 or argv[1]=="-h":
-		print("""CTGP-7 Updater script 1.0
-
-Usage: {} <CTGP7fol>
-
-CTGP-7fol – Path to CTGP-7 folder
-
-This can refer to the CTGP-7 folder on your 3DS's SD Card or
-a backup folder on your PC.
-
-This tool acts as close to the official updater, so you have to make
-sure, you specify the correct folder, otherwise, no updates will be
-performed.""".format(argv[0]))
-		exit()
+	global includeNonUpdFile
 
 	try: os.mkdir(mainfolder)
 	except: pass
@@ -253,12 +248,12 @@ performed.""".format(argv[0]))
 	for i in range(veri+1,len(verf)):
 		url="https://github.com/PabloMK7/CTGP-7updates/releases/download/v"+verf[i][0]+"/filelist.txt"
 		print(("\x1b[2K  (%5.1f%%)  Get file list for " % ((i-veri)/percv0*100))+verf[i][0]+" ...", end="\r", flush=True)
-		for rep in range(30):
+		for rep in range(10):
 			try: dl=ses.get(url, timeout=5)
-			except: print("Fail: Try {} of 30 failed: timeout/bad connection?".format(rep+1))
+			except: print("Fail getting list for {} ({}/10): timeout/bad connection?".format(verf[i][0], rep+1))
 			else:
 				if dl.ok: break
-				print("Fail: Try {} of 30 failed with statcode {}".format(rep+1,dl.status_code))
+				print("Fail getting list for {} ({}/10): got statcode {}".format(verf[i][0], rep + 1, dl.status_code))
 			time.sleep(2.0)
 		else:
 			fatErr(0)
@@ -279,10 +274,12 @@ performed.""".format(argv[0]))
 	try: ses.get("https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/data/")
 	except: pass
 
+	if includeNonUpdFile: dlCounter=len(dlList)
+
 	for i in range(len(dlList)):
 		fmode=dlList[i][0]; fname=dlList[i][1]; fmvo=dlList[i][2]
-		if fmode==fileMethodStrList().index("M"): rep=0; dlObtainedCnt += 1; ScreenDisplay()
-		
+		if fmode==fileMethodStrList().index("M") or includeNonUpdFile: rep=0; dlObtainedCnt += 1; ScreenDisplay()
+		if includeNonUpdFile and fmode!=fileMethodStrList().index("M"): time.sleep(0.25)
 		url="https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/data"+fname
 		f=fname; f1=fmvo
 		if fmode==0:
@@ -339,10 +336,45 @@ performed.""".format(argv[0]))
 		of=open(mainfolder+"/config/version.bin","x+b")
 		of.write(verf[len(verf)-1][0].encode("ascii")); of.flush(); of.close()
 	return 0
+
+tmpv:int=0
+try: tmpv=argv.index("-h")
+except: pass
+
+if len(argv)<2 or tmpv>1:
+	print("""CTGP-7 Updater script 1.0
+
+Usage: {} <CTGP7fol> [-h] [-p] [-s] [-a]
+
+CTGP-7fol – Path to CTGP-7 folder
+
+Optional:
+
+-h - Show this help
+-p - Show full path of downloaded files
+-s - Also show removed/renamed files
+-a - Same as '-p -s'
+
+This can refer to the CTGP-7 folder on your 3DS's SD Card or
+a backup folder on your PC.
+
+This tool acts as close to the official updater, so you have to make
+sure, you specify the correct folder, otherwise, no updates will be
+performed.""".format(argv[0]))
+	exit()
+
 mainfolder=argv[1]
 ses=requests.session()
 dlList=[]; verf=0; vers=0; veri=0; i=0; rep=0; tooInstalled=False
 dlCounter=0; oldtermw=0; oldtermh=0; dlObtainedCnt=0
+showfullpath:bool=False
+includeNonUpdFile:bool=False
+
+# Crued implementation, I just want optional arguments
+for i in range(2,len(argv)):
+	if argv[i]=="-p": showfullpath=True
+	if argv[i]=="-s": includeNonUpdFile=True
+	if argv[i]=="-a": showfullpath=True; includeNonUpdFile=True
 
 try:
 	print("\x1b[0;0m\x1b[?25h")

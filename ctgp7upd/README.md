@@ -6,9 +6,16 @@ Supported platforms: Linux
 
 Modules needed: `requests`, `time`
 
-Syntax: `python ctgp7upd.py [folder]`
+Syntax: `python ctgp7upd.py <folder> [-h] [-p] [-s] [-a]`
 
 - `folder` — Path to a valid CTGP-7 folder to update in
+
+Optional arguments:
+
+- `-h` — Show this help
+- `-p` — Show full path of downloaded file
+- `-s` — Show files removed/renamed (Name will change color appropriately)
+- `-a` — Same behaviour as `-p -s`
 
 ## Warning
 
@@ -19,6 +26,10 @@ If compatibility is uncertain, *please make a backup of your CTGP-7 installation
 If it doesn't work and you can help with the script, please file an issue. **Pull requests could be used, but cannot be merged, due to the way my Git setup works**
 
 ## Author notes
+
+### Where's my progress bar?
+
+Standard Python `requests` do not make use of callback/intermediary functions while they're processing. Unless I move to another module and learn its command set, this is the best I can do.
 
 ### How updates exactly work in this script
 
