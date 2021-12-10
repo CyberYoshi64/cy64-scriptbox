@@ -1,4 +1,5 @@
 import os, requests, time
+from typing import Any
 from sys import argv
 
 def mkfolders(fol):
@@ -73,9 +74,8 @@ I will not guess; the update is aborted.
 \
 		 ]
 	print("\x1b[?25h")
-	clrscr()
 	try:
-		print("\x1b[0;91m"+strl[idx])
+		clrscr(); print("\x1b[0;91m"+strl[idx])
 	except: print("An unknown error occured. Please try again.")
 	appexit(1)
 
@@ -194,7 +194,7 @@ def ScreenDisplay():
 
 def main():
 	global mainfolder, ses, dlList, dlCounter, dlObtainedCnt
-	global verf, vers, veri, i
+	global verf, vers, veri, i, rep, tooInstalled
 	if len(argv)<2 or argv[1]=="-h":
 		print("""CTGP-7 Updater script 1.0
 
@@ -252,9 +252,9 @@ performed.""".format(argv[0]))
 	percv0=len(verf)-veri-1
 	for i in range(veri+1,len(verf)):
 		url="https://github.com/PabloMK7/CTGP-7updates/releases/download/v"+verf[i][0]+"/filelist.txt"
-		print(("\x1b[2K  (%5.1f%%)  Found " % ((i-veri)/percv0*100))+verf[i][0]+"!", end="           \r", flush=True)
+		print(("\x1b[2K  (%5.1f%%)  Get file list for " % ((i-veri)/percv0*100))+verf[i][0]+" ...", end="\r", flush=True)
 		for rep in range(30):
-			try: dl=ses.get(url)
+			try: dl=ses.get(url, timeout=5)
 			except: print("Fail: Try {} of 30 failed: unknown reason".format(rep+1))
 			else:
 				if dl.ok: break
@@ -269,17 +269,15 @@ performed.""".format(argv[0]))
 	dlList=parseAndSortDlList(dlList)
 
 	if len(dlList) or veri<len(verf)-1:
-		print("Updating to "+verf[len(verf)-1][0]+".           ")
+		print("\x1b[2KDo you want to update to "+verf[len(verf)-1][0]+"?")
 		of.close(); os.system(iff(os.name!="nt","less "+mainfolder+"/changelog.txt", "notepad "+mainfolder+"/changelog.txt"))
-		input("Press ^C to abort the update, otherwise, press Return")
+		input("Press ^C to abort the update, otherwise press Return")
 	else:
-		print("No updates were found. Try again later.")
+		print("No updates were found. Please try again later.")
 		return 2
 
-	try: ses.get("https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/data")
+	try: ses.get("https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/data/")
 	except: pass
-
-	clrscr()
 
 	for i in range(len(dlList)):
 		fmode=dlList[i][0]; fname=dlList[i][1]; fmvo=dlList[i][2]
@@ -292,12 +290,12 @@ performed.""".format(argv[0]))
 			mkfolders(mainfolder+f)
 			
 			for rep in range(30):
-				try: dl=ses.get(url)
+				try: dl=ses.get(url, timeout=5, allow_redirects=0)
 				except: pass
 				else:
 					if dl.ok: break
 				
-				ScreenDisplay();
+				ScreenDisplay()
 				time.sleep(1.0)
 			else:
 				fatErr(0,f,f1)
@@ -359,8 +357,7 @@ except KeyboardInterrupt:
 	clrscr()
 	print("\x1b[0;91mThe program was interrupted. Update aborted.")
 	appexit(5)
-except:
-	clrscr()
-	fatErr(-1)
+#except:
+#	fatErr(0xDEADBEEF)
 
-print("\x1b[0;0m\x1b[?25h")
+appexit(0)
