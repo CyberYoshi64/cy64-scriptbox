@@ -1,0 +1,39 @@
+# CTGP-7 Updater Script
+
+This is a work-in-progress Python script mimicking CTGP-7's official updater, based on own observations, analysis of the [archived launcher's source code](https://github.com/PabloMK7/CTGP-7_Launcher) and a bit of help from PabloMK7 himself.
+
+Supported platforms: Linux
+
+Modules needed: `requests`, `time`
+
+Syntax: `python ctgp7upd.py [folder]`
+
+- `folder` — Path to a valid CTGP-7 folder to update in
+
+## Warning
+
+Although the code has some attempts to be compatibile with Windows, I cannot garantuee that this code works on Windows or macOS.
+
+If compatibility is uncertain, *please make a backup of your CTGP-7 installation and other important data from your 3DS's SD Card*, in case the script unexpectedly **corrupts the installation (or the SD Card by extension)**
+
+If it doesn't work and you can help with the script, please file an issue. **Pull requests could be used, but cannot be merged, due to the way my Git setup works**
+
+## Author notes
+
+### How updates exactly work in this script
+
+The script first downloads the changelog, reads all the version numbers and dedicated info into a tuple list, to then check the local version against the list.
+
+From there, if the version is outdated, I read all file lists up to the latest version to then download and insert in the main loop.
+
+After that's done, I edit the version file to reflect the changes appropriately. (Don't confuse the official launcher to redownload the update.)
+
+However, if the update includes a new launcher package, the user is told to install the new launcher themself. ***This script is not capable to install the CIA for the user. Only the 3DSX is able to be copied over.***
+
+### Why is its output so confined and clean?
+
+While I originally wanted this to be more duck-taped, PabloMK7 kicked my motivation to make this updater as true to the official updater as I can, this also includes the console output looking clean.
+
+### What on earth is this code looking like?
+
+The way I coded it, is quite rubbish, but I'll refine the codeflow over time.
