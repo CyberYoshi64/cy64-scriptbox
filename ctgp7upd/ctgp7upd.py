@@ -2,6 +2,9 @@ import os, requests, time
 from typing import Any
 from sys import argv
 
+# Useful link, helped me with the ANSI codes:
+# https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+
 def mkfolders(fol):
 	global mainfolder
 	g=fol[0:fol.rfind("/")]
