@@ -198,16 +198,16 @@ def main():
 	if len(argv)<2 or argv[1]=="-h":
 		print("""CTGP-7 Updater script 1.0
 
-	Usage: {} <CTGP7fol>
+Usage: {} <CTGP7fol>
 
-	CTGP-7fol – Path to CTGP-7 folder
+CTGP-7fol – Path to CTGP-7 folder
 
-	This can refer to the CTGP-7 folder on your 3DS's SD Card or
-	a backup folder on your PC.
+This can refer to the CTGP-7 folder on your 3DS's SD Card or
+a backup folder on your PC.
 
-	This tool acts as close to the official updater, so you have to make
-	sure, you specify the correct folder, otherwise, no updates will be
-	performed.""".format(argv[0]))
+This tool acts as close to the official updater, so you have to make
+sure, you specify the correct folder, otherwise, no updates will be
+performed.""".format(argv[0]))
 		exit()
 
 	try: os.mkdir(mainfolder)
@@ -242,9 +242,9 @@ def main():
 	for i in range(veri+1,len(verf)):
 		of.write(bytes(""" --- Changelog for {} :
 
-	{}
+{}
 
-	""".format(verf[i][0],verf[i][1]),"utf8"))
+""".format(verf[i][0],verf[i][1]),"utf8"))
 		of.flush()
 
 	print("Searching for updates...")
@@ -345,7 +345,7 @@ dlCounter=0; oldtermw=0; oldtermh=0; dlObtainedCnt=0
 try:
 	print("\x1b[0;0m\x1b[?25h")
 	if not main():
-		clrclr()
+		clrscr()
 		print("\n\x1b[0;92m Update successful!\x1b[0;0m")
 		if tooInstalled:
 			print("""
