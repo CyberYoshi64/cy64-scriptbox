@@ -255,11 +255,11 @@ performed.""".format(argv[0]))
 		print(("\x1b[2K  (%5.1f%%)  Get file list for " % ((i-veri)/percv0*100))+verf[i][0]+" ...", end="\r", flush=True)
 		for rep in range(30):
 			try: dl=ses.get(url, timeout=5)
-			except: print("Fail: Try {} of 30 failed: unknown reason".format(rep+1))
+			except: print("Fail: Try {} of 30 failed: timeout/bad connection?".format(rep+1))
 			else:
 				if dl.ok: break
 				print("Fail: Try {} of 30 failed with statcode {}".format(rep+1,dl.status_code))
-			time.sleep(1.0)
+			time.sleep(2.0)
 		else:
 			fatErr(0)
 		dl=dl.text.split("\n")
@@ -269,7 +269,7 @@ performed.""".format(argv[0]))
 	dlList=parseAndSortDlList(dlList)
 
 	if len(dlList) or veri<len(verf)-1:
-		print("\x1b[2KDo you want to update to "+verf[len(verf)-1][0]+"?")
+		print("\x1b[2KGot file lists!\n\nDo you want to update to "+verf[len(verf)-1][0]+" now?")
 		of.close(); os.system(iff(os.name!="nt","less "+mainfolder+"/changelog.txt", "notepad "+mainfolder+"/changelog.txt"))
 		input("Press ^C to abort the update, otherwise press Return")
 	else:
@@ -300,12 +300,16 @@ performed.""".format(argv[0]))
 			else:
 				fatErr(0,f,f1)
 			
-			of=open(mainfolder+f+".part","x+b")
+			try: os.stat(mainfolder+f+".updpt")
+			except: pass
+			else: os.remove(mainfolder+f+".updpt")
+			
+			of=open(mainfolder+f+".updpt","x+b")
 			of.write(dl.content)
 			of.flush()
 			of.close()
 			
-			os.rename(mainfolder+f+".part",mainfolder+f)
+			os.rename(mainfolder+f+".updpt",mainfolder+f)
 		
 		elif fmode==1:
 			try: os.stat(mainfolder+f)
@@ -355,7 +359,7 @@ Open FBI and navigate SD > CTGP-7 > cia > CTGP-7.cia, then select "Install" and 
 """)
 except KeyboardInterrupt:
 	clrscr()
-	print("\x1b[0;91mThe program was interrupted. Update aborted.")
+	print("\x1b[0;91mThe program was interrupted. Update aborted.\nThe installation may be in an inconsistent state,\nif not updated properly.")
 	appexit(5)
 #except:
 #	fatErr(0xDEADBEEF)
