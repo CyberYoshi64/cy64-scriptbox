@@ -360,8 +360,6 @@ def main():
 		of.write(verf[len(verf)-1][0].encode("ascii")); of.flush(); of.close()
 	return 0
 
-###### Start of code here
-
 tmpv:int=0
 try: tmpv=argv.index("-h")
 except: pass
@@ -418,6 +416,20 @@ Open FBI and navigate SD > CTGP-7 > cia > {}.cia, then "Install".""".format(_TAR
 except KeyboardInterrupt: # Do not show a weird error for this simple action
 	clrscr()
 	print("\x1b[0;91mThe program was interrupted. Update aborted.\nThe installation may be in an inconsistent state,\nif not updated properly.")
+	appexit(5)
+except OSError as err: # Did I corrupt the SD Card by accident or was it corrupted already?
+	clrscr()
+	print("""\x1b[0;91mAn error has occured while dealing with the storage device.
+
+Reason: {}
+Context: {}, {}, {}
+
+This could stem from a bad installation or the storage device is corrupted.
+Please backup all content on said device to another drive.
+It's recommended to reformat the device and try again.
+
+If problems persist, please obtain a new storage device.
+""".format(err.strerror, err.args, err.filename, err.filename2))
 	appexit(5)
 #except:
 #	fatErr(0xDEADBEEF)
