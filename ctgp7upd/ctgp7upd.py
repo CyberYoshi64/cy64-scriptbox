@@ -30,6 +30,12 @@ def strpadc(num,dgt,pad):
 		t=bool(not t)
 	return nums
 
+def mkSzFmt(size:int, fmts:str):
+	szstr=["bytes", "KiB", "MiB", "GiB"]; szpow:int=0
+	nsz:float=size
+	while abs(nsz)>1024: nsz=nsz/1024; szpow += 1
+	return fmts % (nsz)+" "+szstr[szpow]
+
 def ctgpververify(s):
 	p="0123456789."
 	for i in range(len(s)):
@@ -205,8 +211,8 @@ def ScreenDisplay():
 
 def main():
 	global mainfolder, ses, dlList, dlCounter, dlObtainedCnt
-	global verf, vers, veri, i, rep, tooInstalled
-	global includeNonUpdFile
+	global verf, vers, veri, i, rep, tooInstalled, fSizeOverall
+	global includeNonUpdFile, fSizeAdd, fSizeRmv
 
 	try: os.mkdir(mainfolder)
 	except: pass
@@ -220,12 +226,13 @@ def main():
 		if ctgpververify(vers): fatErr(3)
 		print("CTGP-7 version detected: "+vers)
 
+	print("Searching for updates...",end="\r")
 
 	url="https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/changeloglist"
 
 	dl=ses.get(url)
 	if not dl.ok:
-		print("Failed getting changelog. Cannot update.")
+		print("\x1b[2KFailed getting changelog. Cannot update.")
 		print("Please try again later.")
 		exit(1)
 
@@ -245,12 +252,10 @@ def main():
 """.format(verf[i][0],verf[i][1]),"utf8"))
 		of.flush()
 
-	print("Searching for updates...")
-
 	percv0=len(verf)-veri-1
 	for i in range(veri+1,len(verf)):
 		url="https://github.com/PabloMK7/CTGP-7updates/releases/download/v"+verf[i][0]+"/filelist.txt"
-		print(("\x1b[2K  (%5.1f%%)  Get file list for " % ((i-veri)/percv0*100))+verf[i][0]+" ...", end="\r", flush=True)
+		print(("\x1b[2K  (%5.1f%%)  Obtaining file list for v" % ((i-veri)/percv0*100))+verf[i][0], end="\r", flush=True)
 		for rep in range(10):
 			try: dl=ses.get(url, timeout=5)
 			except: print("Fail getting list for {} ({}/10): timeout/bad connection?".format(verf[i][0], rep + 1))
@@ -293,12 +298,16 @@ def main():
 				try: dl=ses.get(url, timeout=5, allow_redirects=0)
 				except: pass
 				else:
+					fSizeAdd += len(dl.content)
 					if dl.ok: break
 				rep += 1
 				if rep >= 30: fatErr(0,f,f1)
 				ScreenDisplay()
 				time.sleep(1.0)
 			
+			try: fsprop=os.stat(mainfolder+f)
+			except: fSizeOverall += fsprop.st_size
+			else: fSizeOverall += (len(dl.content) - fsprop.st_size)
 			try: os.stat(mainfolder+f+".updpt")
 			except: pass
 			else: os.remove(mainfolder+f+".updpt")
@@ -311,9 +320,12 @@ def main():
 			os.rename(mainfolder+f+".updpt",mainfolder+f)
 		
 		elif fmode==1:
-			try: os.stat(mainfolder+f)
+			try: fsprop=os.stat(mainfolder+f)
 			except: pass
-			else: os.remove(mainfolder+f)
+			else:
+				fSizeRmv += fsprop.st_size
+				fSizeOverall -= fsprop.st_size
+				os.remove(mainfolder+f)
 		elif fmode==2:
 			try: os.stat(mainfolder+f1)
 			except: fatErr(1,f,f1)
@@ -369,8 +381,8 @@ mainfolder=argv[1]
 ses=requests.session()
 dlList=[]; verf=0; vers=0; veri=0; i=0; rep=0; tooInstalled=False
 dlCounter=0; oldtermw=0; oldtermh=0; dlObtainedCnt=0
-showfullpath:bool=False
-includeNonUpdFile:bool=False
+showfullpath:bool=False; includeNonUpdFile:bool=False
+fSizeAdd:int=0; fSizeRmv:int=0; fSizeOverall:int=0
 
 # Crued implementation, I just want optional arguments
 for i in range(2,len(argv)):
@@ -383,14 +395,14 @@ try:
 	if not main():
 		clrscr()
 		print("\n\x1b[0;92m Update successful!\x1b[0;0m")
+		print("\n\x1b[0;36m  {} updated\n\x1b[0;35m  {} removed\n\x1b[0;93m  {} difference overall\x1b[0;0m".format(mkSzFmt(fSizeAdd,"%9.1f"), mkSzFmt(fSizeRmv,"%9.1f"), mkSzFmt(fSizeOverall,"%+9.1f")))
 		if tooInstalled:
 			print("""
 \x1b[0;96mThe launcher was updated.
 
 \x1b[0;0mPlease install the new CTGP-7 CIA manually through FBI.
 
-Open FBI and navigate SD > CTGP-7 > cia > CTGP-7.cia, then select "Install" and agree.
-""")
+Open FBI and navigate SD > CTGP-7 > cia > CTGP-7.cia, then "Install".""")
 		input("\nPress Return to exit.")
 except KeyboardInterrupt:
 	clrscr()
