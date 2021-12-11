@@ -1,9 +1,16 @@
-import os, requests, time
-from typing import Any
+import os, requests, time#, glob
 from sys import argv
+
+# Why was "typing" included? it wasn't me lol
 
 # Useful link, helped me with the ANSI codes:
 # https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+
+#TODO: Make function recursively deleting empty folders in *mainfolder*
+#def rmblankfolders():
+#	global mainfolder
+#	foldercnt=[]
+#	#... will think about it later
 
 def mkfolders(fol):
 	global mainfolder
@@ -23,36 +30,28 @@ def strpad(num,dgt,pad):
 		nums=pad+nums
 	return nums
 
-def strpadc(num,dgt,pad):
-	nums=str(num); t=bool(len(nums) and 1)
-	while len(nums)<dgt:
-		nums=(pad*t)+nums+(pad*(not t))
-		t=bool(not t)
-	return nums
-
+# size is byte count, fmt follows printf scheme
 def mkSzFmt(size:int, fmts:str):
 	szstr=["bytes", "KiB", "MiB", "GiB"]; szpow:int=0
 	nsz:float=size
-	while abs(nsz)>1024: nsz=nsz/1024; szpow += 1
-	return fmts % (nsz)+" "+szstr[szpow]
+	while abs(nsz)>=1024: nsz=nsz/1024; szpow += 1
+	return fmts%nsz + " %s"%szstr[szpow]
 
+# Output: zero: ok | non-zero: invalid
 def ctgpververify(s):
-	p="0123456789."
+	p="0123456789." # decimal + dot
 	for i in range(len(s)):
 		if p.find(s[i])<0: return 1
-	l=p.split(".") # Versions are major.minor[.micro], only expected those
+	l=p.split(".") # maj.min / maj.min.mic (Pablo, correct me when you change)
 	if len(l)<2 or len(l)>3: return 1
 	return 0
 
 def fatErr(idx:int, fn:str="", fo:str=""):
-	strl=[\
-"""
+	strl=["""
 File {} couldn't be downloaded.
 
 Please make sure you're able to connect to GitHub and try again later.
-""".format(fn),\
-\
-"""
+""".format(fn),"""
 Failed relocating a file.
 
 From: {}
@@ -60,9 +59,7 @@ To: {}
 
 This may stem from SD Card corruption or a heavily outdated build.
 It's recommended to reinstall CTGP-7 at this point.
-""".format(fo, fn),\
-\
-"""
+""".format(fo, fn),"""
 The file method for {}
 is unknown.
 
@@ -70,18 +67,14 @@ Is the file list corrupted, or did I miss a method?
 Please contact CyberYoshi64 about this.
 
 By the way, the update therefore fails.
-""".format(fn),\
-\
-"""
+""".format(fn),"""
 The folder specified does not contain a valid CTGP-7 installation.
 
 The version number of the installation is invalid.
 
 Have you specified the correct folder? Have you even installed CTGP-7?
 I will not guess; the update is aborted.
-""".format(fn, fo)\
-\
-		 ]
+""".format(fn, fo)]
 	print("\x1b[?25h")
 	try:
 		clrscr(); print("\x1b[0;91m"+strl[idx])
@@ -90,7 +83,7 @@ I will not guess; the update is aborted.
 
 def iff(x,i,o):
 	if x: return i
-	else: return o
+	return o
 
 def clrscr(): os.system(iff(os.name!="nt", "clear", "cls"))
 
@@ -98,8 +91,7 @@ def appexit(r: int):
 	global mainfolder
 	try: os.remove(mainfolder+"/changelog.txt")
 	except: pass
-	print("\x1b[0;0m\x1b[?25h")
-	exit(r)
+	print("\x1b[0;0m\x1b[?25h"); exit(r)
 
 def dlErrCntCol():
 	global rep; a=0
@@ -109,14 +101,15 @@ def dlErrCntCol():
 	else: a=31
 	return "\x1b[0;"+str(a)+"m"
 
-def dlErrDesc():
-	global rep
-	return "Tries: "+str(rep+1)+"/30"
+def dlErrDesc(): global rep; return "Attempt "+str(rep+1)+"/30"
 
 def splitChangelogData(filecnt: str):
 	mode=0; arr=[]; vern=""; chng=""; char=""
+
+	# Strip empty lines used for the official updater
 	while filecnt.find(": :")>=0: filecnt=filecnt.replace(": :",":")
 	while filecnt.find("::")>=0: filecnt=filecnt.replace("::",":")
+
 	for idx in range(len(filecnt)):
 		char=filecnt[idx]
 		
@@ -135,11 +128,14 @@ def splitChangelogData(filecnt: str):
 			chng += char
 			
 	if mode>0: arr.append((vern,chng))
+	
+	# Incase I missed empty lines, strip them out
 	while arr.count(("","")): arr.remove(("",""))
+	
 	return arr
 
+# "F" is dealt with by parseAndSortDlList()
 def fileMethodStrList(): return ["M","D","T"]
-
 def fileMethodColorLst(): return ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m"]
 
 def parseAndSortDlList(dll):
@@ -148,10 +144,11 @@ def parseAndSortDlList(dll):
 	dlCounter=0; filemode=fileMethodStrList()
 
 	for i in range(len(dll)):
-		ms=dll[i][0]
-		mf=dll[i][1]
+		ms=dll[i][0]; mf=dll[i][1]
 
 		if ms=="F":
+			# Next element is expected to use method "T", which should be always true
+			# In order to prevent renaming without downloading first, just store as reference
 			oldf=mf
 		else:
 			fileNC=-1
@@ -161,7 +158,7 @@ def parseAndSortDlList(dll):
 			else:
 				fileN.pop(fileNC); fileM.pop(fileNC); fileO.pop(fileNC)
 				fileN.append(mf); fileM.append(ms); fileO.append(oldf)
-			oldf=""
+			oldf="" # Non-rename shouldn't have the reference
 	
 	#for m in filemode:
 	for i in range(len(fileN)):
@@ -174,9 +171,9 @@ def parseAndSortDlList(dll):
 def findCVerInCList(lst,ver):
 	for idx in range(len(lst)):
 		if lst[idx][0]==ver: break
-	else: return 0 # 0.17.2 is broken
+	else: return 0 # Break out, you're too outdated, mate.
 	return idx
-def move (x, y): print("\033[%d;%dH" % (y, x))
+def move (x, y): print("\033[%d;%dH" % (y, x)) # Kinda useful helper
 def ScreenDisplay():
 	global dlList, dlCounter, i, dlObtainedCnt, verf
 	global oldtermw, oldtermh
@@ -204,7 +201,7 @@ def ScreenDisplay():
 {}""".format("\n" * int((termh - 6) / 2 - 1), \
 				 (header).center(termw-1),\
 				 ("-"*len(header)).center(termw-1),\
-				 strpadc(str(dlObtainedCnt)+"/"+str(dlCounter), termw-1, " "),\
+				 (str(dlObtainedCnt)+"/"+str(dlCounter)).center(termw-1),\
 				 iff(includeNonUpdFile, fnc, "\x1b[0;37m"),\
 				 fnm.center(termw-1),\
 				 dlErrCntCol()+dlErrDesc().center(termw-1)))
@@ -338,6 +335,7 @@ def main():
 	try: os.stat(mainfolder+"/cia/tooInstall.cia")
 	except: pass
 	else:
+		# That breaks the fSizeOverall, will add correction later
 		tooInstalled=True
 		os.rename(src=mainfolder+"/cia/tooInstall.cia",dst=mainfolder+"/cia/CTGP-7.cia")
 		os.rename(src=mainfolder+"/cia/tooInstall.3dsx",dst=mainfolder+"/cia/CTGP-7.3dsx")
@@ -350,6 +348,8 @@ def main():
 		of=open(mainfolder+"/config/version.bin","x+b")
 		of.write(verf[len(verf)-1][0].encode("ascii")); of.flush(); of.close()
 	return 0
+
+###### Start of code here
 
 tmpv:int=0
 try: tmpv=argv.index("-h")
@@ -395,7 +395,7 @@ try:
 	if not main():
 		clrscr()
 		print("\n\x1b[0;92m Update successful!\x1b[0;0m")
-		print("\n\x1b[0;36m  {} updated\n\x1b[0;35m  {} removed\n\x1b[0;93m  {} difference overall\x1b[0;0m".format(mkSzFmt(fSizeAdd,"%9.1f"), mkSzFmt(fSizeRmv,"%9.1f"), mkSzFmt(fSizeOverall,"%+9.1f")))
+		print("\n\x1b[0;36m {} updated\n\x1b[0;35m {} removed\n\x1b[0;93m {} difference overall\x1b[0;0m".format(mkSzFmt(fSizeAdd,"%9.1f"), mkSzFmt(fSizeRmv,"%9.1f"), mkSzFmt(fSizeOverall,"%+9.1f")))
 		if tooInstalled:
 			print("""
 \x1b[0;96mThe launcher was updated.
@@ -404,7 +404,7 @@ try:
 
 Open FBI and navigate SD > CTGP-7 > cia > CTGP-7.cia, then "Install".""")
 		input("\nPress Return to exit.")
-except KeyboardInterrupt:
+except KeyboardInterrupt: # Do not show a weird error for this simple action
 	clrscr()
 	print("\x1b[0;91mThe program was interrupted. Update aborted.\nThe installation may be in an inconsistent state,\nif not updated properly.")
 	appexit(5)
