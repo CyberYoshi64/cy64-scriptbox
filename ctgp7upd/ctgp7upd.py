@@ -253,7 +253,7 @@ def main():
 		print(("\x1b[2K  (%5.1f%%)  Get file list for " % ((i-veri)/percv0*100))+verf[i][0]+" ...", end="\r", flush=True)
 		for rep in range(10):
 			try: dl=ses.get(url, timeout=5)
-			except: print("Fail getting list for {} ({}/10): timeout/bad connection?".format(verf[i][0], rep+1))
+			except: print("Fail getting list for {} ({}/10): timeout/bad connection?".format(verf[i][0], rep + 1))
 			else:
 				if dl.ok: break
 				print("Fail getting list for {} ({}/10): got statcode {}".format(verf[i][0], rep + 1, dl.status_code))
@@ -281,24 +281,23 @@ def main():
 
 	for i in range(len(dlList)):
 		fmode=dlList[i][0]; fname=dlList[i][1]; fmvo=dlList[i][2]
-		if fmode==fileMethodStrList().index("M") or includeNonUpdFile: rep=0; dlObtainedCnt += 1; ScreenDisplay()
+		if fmode==fileMethodStrList().index("M") or includeNonUpdFile: dlObtainedCnt += 1; ScreenDisplay()
 		if includeNonUpdFile and fmode!=fileMethodStrList().index("M"): time.sleep(0.25)
 		url="https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/data"+fname
-		f=fname; f1=fmvo
+		f=fname; f1=fmvo; rep=0
 		if fmode==0:
 			
 			mkfolders(mainfolder+f)
 			
-			for rep in range(30):
+			while True:
 				try: dl=ses.get(url, timeout=5, allow_redirects=0)
 				except: pass
 				else:
 					if dl.ok: break
-				
+				rep += 1
+				if rep >= 30: fatErr(0,f,f1)
 				ScreenDisplay()
 				time.sleep(1.0)
-			else:
-				fatErr(0,f,f1)
 			
 			try: os.stat(mainfolder+f+".updpt")
 			except: pass
@@ -392,6 +391,7 @@ try:
 
 Open FBI and navigate SD > CTGP-7 > cia > CTGP-7.cia, then select "Install" and agree.
 """)
+		input("\nPress Return to exit.")
 except KeyboardInterrupt:
 	clrscr()
 	print("\x1b[0;91mThe program was interrupted. Update aborted.\nThe installation may be in an inconsistent state,\nif not updated properly.")
