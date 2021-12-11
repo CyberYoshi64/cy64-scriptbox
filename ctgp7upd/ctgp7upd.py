@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import os, requests, time#, glob
 from sys import argv
 
@@ -11,8 +13,6 @@ _TARGET_NAME = "CTGP-7"
 _VERSION_FILE_PATH = "/config/version.bin"
 _UPDATE_FILEFLAGMD = ["M","D","T","F"]
 _UPDATE_FILEFLAGMD_COLOR = ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m","\x1b[0;34m"]
-
-# Why was "typing" included? it wasn't me lol
 
 # Useful link, helped me with the ANSI codes:
 # https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
@@ -430,8 +430,15 @@ It's recommended to reformat the device and try again.
 
 If problems persist, please obtain a new storage device.
 """.format(err.strerror, err.args, err.filename, err.filename2))
-	appexit(5)
-#except:
-#	fatErr(0xDEADBEEF)
+	appexit(6)
+except (ConnectionError,ConnectionResetError,ConnectionAbortedError,ConnectionRefusedError):
+	clrscr()
+	print("\x1b[0;91mAn uncatched connection error has occured. Update aborted.")
+	appexit(7)
+except (ValueError, TypeError, IndexError, NotImplementedError):
+	clrscr()
+	print("\x1b[0;91mSomething unexpected has happened. Update aborted.")
+	appexit(8)
+#except: fatErr(0xDEADBEEF)
 
 appexit(0)
