@@ -1,8 +1,9 @@
 # mkcycwar
 
-This script takes a folder containing BCWAV files.
+This script takes a folder containing BCWAV files and compiling it to my inspired version of Nintendo 3DS BCWAR files.
+[See the format specifications here!](https://github.com/CyberYoshi64/cy64-scriptbox/blob/main/mkcycwar/zfmt-cycwar.md)
 
-Supported platforms: Linux
+Tested & supported on following platforms: Linux
 
 Modules needed: `glob`
 
