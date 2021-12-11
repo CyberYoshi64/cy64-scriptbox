@@ -12,7 +12,7 @@ from sys import argv
 #	foldercnt=[]
 #	#... will think about it later
 
-def mkfolders(fol):
+def mkfolders(fol:str):
 	global mainfolder
 	g=fol[0:fol.rfind("/")]
 	s=""; j=mainfolder.find("/")+1
@@ -24,7 +24,7 @@ def mkfolders(fol):
 		except OSError as error: pass
 		if s==g: break
 
-def strpad(num,dgt,pad):
+def strpad(num,dgt:int,pad:str):
 	nums=str(num)
 	while len(nums)<dgt:
 		nums=pad+nums
@@ -38,7 +38,7 @@ def mkSzFmt(size:int, fmts:str):
 	return fmts%nsz + " %s"%szstr[szpow]
 
 # Output: zero: ok | non-zero: invalid
-def ctgpververify(s):
+def ctgpververify(s:str):
 	p="0123456789." # decimal + dot
 	for i in range(len(s)):
 		if p.find(s[i])<0: return 1
@@ -87,7 +87,7 @@ def iff(x,i,o):
 
 def clrscr(): os.system(iff(os.name!="nt", "clear", "cls"))
 
-def appexit(r: int):
+def appexit(r:int):
 	global mainfolder
 	try: os.remove(mainfolder+"/changelog.txt")
 	except: pass
@@ -103,7 +103,7 @@ def dlErrCntCol():
 
 def dlErrDesc(): global rep; return "Attempt "+str(rep+1)+"/30"
 
-def splitChangelogData(filecnt: str):
+def splitChangelogData(filecnt:str):
 	mode=0; arr=[]; vern=""; chng=""; char=""
 
 	# Strip empty lines used for the official updater
@@ -138,7 +138,7 @@ def splitChangelogData(filecnt: str):
 def fileMethodStrList(): return ["M","D","T"]
 def fileMethodColorLst(): return ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m"]
 
-def parseAndSortDlList(dll):
+def parseAndSortDlList(dll:list):
 	global dlCounter
 	fileN=[]; fileM=[]; fileO=[]; newDl=[]; oldf=""
 	dlCounter=0; filemode=fileMethodStrList()
@@ -168,7 +168,7 @@ def parseAndSortDlList(dll):
 
 	return newDl
 
-def findCVerInCList(lst,ver):
+def findCVerInCList(lst:list,ver:str):
 	for idx in range(len(lst)):
 		if lst[idx][0]==ver: break
 	else: return 0 # Break out, you're too outdated, mate.
