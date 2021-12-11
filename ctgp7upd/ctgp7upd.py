@@ -1,6 +1,17 @@
 import os, requests, time#, glob
 from sys import argv
 
+_UPDTEMPDL_EXTENSION = ".updpt"
+_DL_ATTEMPT_TOTALCNT = 30
+_UPDATE_BASE_URL = "https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master"
+_UPDATE_BASE_URL2= "https://github.com/PabloMK7/CTGP-7updates/releases/download/v"
+_UPDATE_URL_EXTPART = "/updates/data"
+_TOOINSTALL_FNAME = "tooInstall"
+_TARGET_NAME = "CTGP-7"
+_VERSION_FILE_PATH = "/config/version.bin"
+_UPDATE_FILEFLAGMD = ["M","D","T","F"]
+_UPDATE_FILEFLAGMD_COLOR = ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m","\x1b[0;34m"]
+
 # Why was "typing" included? it wasn't me lol
 
 # Useful link, helped me with the ANSI codes:
@@ -101,7 +112,7 @@ def dlErrCntCol():
 	else: a=31
 	return "\x1b[0;"+str(a)+"m"
 
-def dlErrDesc(): global rep; return "Attempt "+str(rep+1)+"/30"
+def dlErrDesc(): global rep; return "Attempt "+str(rep+1)+"/"+str(_DL_ATTEMPT_TOTALCNT)
 
 def splitChangelogData(filecnt:str):
 	mode=0; arr=[]; vern=""; chng=""; char=""
@@ -135,13 +146,12 @@ def splitChangelogData(filecnt:str):
 	return arr
 
 # "F" is dealt with by parseAndSortDlList()
-def fileMethodStrList(): return ["M","D","T"]
 def fileMethodColorLst(): return ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m"]
 
 def parseAndSortDlList(dll:list):
 	global dlCounter
 	fileN=[]; fileM=[]; fileO=[]; newDl=[]; oldf=""
-	dlCounter=0; filemode=fileMethodStrList()
+	dlCounter=0; filemode=_UPDATE_FILEFLAGMD
 
 	for i in range(len(dll)):
 		ms=dll[i][0]; mf=dll[i][1]
@@ -225,7 +235,7 @@ def main():
 
 	print("Searching for updates...",end="\r")
 
-	url="https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/changeloglist"
+	url=_UPDATE_BASE_URL+"/updates/changeloglist"
 
 	dl=ses.get(url)
 	if not dl.ok:
@@ -251,14 +261,14 @@ def main():
 
 	percv0=len(verf)-veri-1
 	for i in range(veri+1,len(verf)):
-		url="https://github.com/PabloMK7/CTGP-7updates/releases/download/v"+verf[i][0]+"/filelist.txt"
+		url=_UPDATE_BASE_URL2+verf[i][0]+"/filelist.txt"
 		print(("\x1b[2K  (%5.1f%%)  Obtaining file list for v" % ((i-veri)/percv0*100))+verf[i][0], end="\r", flush=True)
-		for rep in range(10):
+		for rep in range(_DL_ATTEMPT_TOTALCNT):
 			try: dl=ses.get(url, timeout=5)
-			except: print("Fail getting list for {} ({}/10): timeout/bad connection?".format(verf[i][0], rep + 1))
+			except: print("Fail getting list for {} ({}/{}): timeout/bad connection?".format(verf[i][0], rep + 1, _DL_ATTEMPT_TOTALCNT))
 			else:
 				if dl.ok: break
-				print("Fail getting list for {} ({}/10): got statcode {}".format(verf[i][0], rep + 1, dl.status_code))
+				print("Fail getting list for {} ({}/{}): got statcode {}".format(verf[i][0], rep + 1, _DL_ATTEMPT_TOTALCNT, dl.status_code))
 			time.sleep(2.0)
 		else:
 			fatErr(0)
@@ -276,16 +286,16 @@ def main():
 		print("No updates were found. Please try again later.")
 		return 2
 
-	try: ses.get("https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/data/")
+	try: ses.get(_UPDATE_BASE_URL)
 	except: pass
 
 	if includeNonUpdFile: dlCounter=len(dlList)
 
 	for i in range(len(dlList)):
 		fmode=dlList[i][0]; fname=dlList[i][1]; fmvo=dlList[i][2]
-		if fmode==fileMethodStrList().index("M") or includeNonUpdFile: dlObtainedCnt += 1; ScreenDisplay()
-		if includeNonUpdFile and fmode!=fileMethodStrList().index("M"): time.sleep(0.25)
-		url="https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master/updates/data"+fname
+		if fmode==_UPDATE_FILEFLAGMD.index("M") or includeNonUpdFile: dlObtainedCnt += 1; ScreenDisplay()
+		if includeNonUpdFile and fmode!=_UPDATE_FILEFLAGMD.index("M"): time.sleep(0.25)
+		url=_UPDATE_BASE_URL+_UPDATE_URL_EXTPART+fname
 		f=fname; f1=fmvo; rep=0
 		if fmode==0:
 			
@@ -298,23 +308,23 @@ def main():
 					fSizeAdd += len(dl.content)
 					if dl.ok: break
 				rep += 1
-				if rep >= 30: fatErr(0,f,f1)
+				if rep >= _DL_ATTEMPT_TOTALCNT: fatErr(0,f,f1)
 				ScreenDisplay()
 				time.sleep(1.0)
 			
 			try: fsprop=os.stat(mainfolder+f)
 			except: fSizeOverall += fsprop.st_size
 			else: fSizeOverall += (len(dl.content) - fsprop.st_size)
-			try: os.stat(mainfolder+f+".updpt")
+			try: os.stat(mainfolder+f+_UPDTEMPDL_EXTENSION)
 			except: pass
-			else: os.remove(mainfolder+f+".updpt")
+			else: os.remove(mainfolder+f+_UPDTEMPDL_EXTENSION)
 			
-			of=open(mainfolder+f+".updpt","x+b")
+			of=open(mainfolder+f+_UPDTEMPDL_EXTENSION,"x+b")
 			of.write(dl.content)
 			of.flush()
 			of.close()
 			
-			os.rename(mainfolder+f+".updpt",mainfolder+f)
+			os.rename(mainfolder+f+_UPDTEMPDL_EXTENSION,mainfolder+f)
 		
 		elif fmode==1:
 			try: fsprop=os.stat(mainfolder+f)
@@ -332,20 +342,21 @@ def main():
 		else:
 			fatErr(2,f,f1)
 
-	try: os.stat(mainfolder+"/cia/tooInstall.cia")
+	try: os.stat(mainfolder+"/cia/"+_TOOINSTALL_FNAME+".cia")
 	except: pass
 	else:
 		# That breaks the fSizeOverall, will add correction later
 		tooInstalled=True
-		os.rename(src=mainfolder+"/cia/tooInstall.cia",dst=mainfolder+"/cia/CTGP-7.cia")
-		os.rename(src=mainfolder+"/cia/tooInstall.3dsx",dst=mainfolder+"/cia/CTGP-7.3dsx")
+		if _TOOINSTALL_FNAME != _TARGET_NAME:
+			os.rename(src=mainfolder+"/cia/"+_TOOINSTALL_FNAME+".cia",dst=mainfolder+"/cia/"+_TARGET_NAME+".cia")
+			os.rename(src=mainfolder+"/cia/"+_TOOINSTALL_FNAME+".3dsx",dst=mainfolder+"/cia/"+_TARGET_NAME+".3dsx")
 
 	# Update config/version.bin
 	if len(dlList):
-		try: os.stat(mainfolder+"/config/version.bin")
+		try: os.stat(mainfolder+_VERSION_FILE_PATH)
 		except: pass
-		else: os.remove(mainfolder+"/config/version.bin")
-		of=open(mainfolder+"/config/version.bin","x+b")
+		else: os.remove(mainfolder+_VERSION_FILE_PATH)
+		of=open(mainfolder+_VERSION_FILE_PATH,"x+b")
 		of.write(verf[len(verf)-1][0].encode("ascii")); of.flush(); of.close()
 	return 0
 
@@ -402,7 +413,7 @@ try:
 
 \x1b[0;0mPlease install the new CTGP-7 CIA manually through FBI.
 
-Open FBI and navigate SD > CTGP-7 > cia > CTGP-7.cia, then "Install".""")
+Open FBI and navigate SD > CTGP-7 > cia > {}.cia, then "Install".""".format(_TARGET_NAME))
 		input("\nPress Return to exit.")
 except KeyboardInterrupt: # Do not show a weird error for this simple action
 	clrscr()
