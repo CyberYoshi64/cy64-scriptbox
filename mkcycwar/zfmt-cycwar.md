@@ -34,7 +34,7 @@ Offset |   Type/Size   | Name  | Description
  *n*+0 | Uint32LE (4)  | ssize | BCWAV data length
  *n*+4 | Uint8 (1)     | sflag | Sound flags
 
-`sname` can theoratically as big as you want, however, a seperate limitation is included in the CYCWAR loader routine. ***This is not finalised, therefore it's not statically defined, how many characters are actually allowed, before being truncated on-the-fly upon loading.***
+`sname` can theoratically be as long as you want, however, a seperate limitation is included in the CYCWAR loader routine. ***This is not finalised, therefore it's not statically defined, how many characters are actually allowed, before being truncated on-the-fly upon loading.***
 
 ### sflag - Further detail
 
