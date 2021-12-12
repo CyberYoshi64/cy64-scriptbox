@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
-import os, requests, time#, glob
+import os, requests, time, locale#, glob
 from sys import argv
 
+_SCRIPTDIR=os.path.dirname(os.path.realpath(__file__))
 _UPDTEMPDL_EXTENSION = ".updpt"
 _DL_ATTEMPT_TOTALCNT = 30
 _UPDATE_BASE_URL = "https://raw.githubusercontent.com/PabloMK7/CTGP-7updates/master"
@@ -13,6 +14,8 @@ _TARGET_NAME = "CTGP-7"
 _VERSION_FILE_PATH = "/config/version.bin"
 _UPDATE_FILEFLAGMD = ["M","D","T","F"]
 _UPDATE_FILEFLAGMD_COLOR = ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m","\x1b[0;34m"]
+
+sysloc:str = locale.getlocale()[0] # No idea how to deal with encodings
 
 # Useful link, helped me with the ANSI codes:
 # https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
@@ -145,9 +148,7 @@ def splitChangelogData(filecnt:str):
 	
 	return arr
 
-# "F" is dealt with by parseAndSortDlList()
-def fileMethodColorLst(): return ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m"]
-
+# "F" is dealt with here
 def parseAndSortDlList(dll:list):
 	global dlCounter
 	fileN=[]; fileM=[]; fileO=[]; newDl=[]; oldf=""
@@ -196,7 +197,7 @@ def ScreenDisplay():
 	fnm:str=dlList[i][1]; fnc="\x1b[0;37m"
 	if not showfullpath: fnm=fnm[fnm.rfind("/")+1:]
 	
-	try: fnc=fileMethodColorLst()[dlList[i][0]]
+	try: fnc=_UPDATE_FILEFLAGMD_COLOR[dlList[i][0]]
 	except: pass
 	
 	while len(fnm)>termw-3: fnm="..."+fnm[4:]
@@ -398,6 +399,13 @@ for i in range(2,len(argv)):
 	if argv[i]=="-p": showfullpath=True
 	if argv[i]=="-s": includeNonUpdFile=True
 	if argv[i]=="-a": showfullpath=True; includeNonUpdFile=True
+
+# TODO: Would like to add translations (no real reason, just for fun)
+#lngpck:list=[]
+#fn="%s/lang/%s.cyln0"%(_SCRIPTDIR,sysloc)
+#try: os.stat(fn)
+#except: lngpck=CYWLN0_ToDefault()
+#else: lngpck=CYWLN0_FromFile(fn)
 
 try:
 	print("\x1b[0;0m\x1b[?25h")
