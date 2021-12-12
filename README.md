@@ -1,3 +1,3 @@
 # CY64 ScriptBox
 
-Random scripts and tiny projects not deserving a seperate repository.
+This repository contains random scripts and other tiny projects not deserving a seperate repository.
