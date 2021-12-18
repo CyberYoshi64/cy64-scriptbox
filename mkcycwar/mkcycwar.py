@@ -10,22 +10,16 @@ if (len(os.sys.argv) != 3):
 header=b''; fltbl=b''; hdrmgc=b'CY64CWAR'+int.to_bytes(3,2,"little")
 flist=glob.glob("."+os.sep+os.sys.argv[1]+os.sep+"*.bcwav")
 fname=os.sys.argv[2]+".cycwar"; dng=0
-
-# Open output file
 csar = open(fname,'wb+')
-
-# Loop through each bcwav file in assets/snd, add their names and file sizes to the header and copy contents to fltbl
 for i in flist:
 	flgs:int=0; cwav=open(i,"rb"); cwavsz=os.stat(i).st_size
 	j:str=i[13:len(i)-6]
 	if j.endswith("_2ch"):
-		j=j[0:len(j)-4]
-		flgs |= 1
+		j=j[0:len(j)-4]; flgs |= 1
 	if j[len(j)-2]=="_":
 		num=ord(j[len(j)-1])-47
 		if num>1 and num<10:
-			j=j[0:len(j)-2]
-			flgs |= num*2
+			j=j[0:len(j)-2]; flgs |= num*2
 	else: flgs |= 2
 
 	if len(j)<64:
