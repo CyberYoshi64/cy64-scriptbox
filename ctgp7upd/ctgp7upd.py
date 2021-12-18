@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os, requests, time, locale#, glob
+import os, requests, time#, locale, glob
 from sys import argv
 
 _SCRIPTDIR=os.path.dirname(os.path.realpath(__file__))
@@ -15,7 +15,7 @@ _VERSION_FILE_PATH = "/config/version.bin"
 _UPDATE_FILEFLAGMD = ["M","D","T","F"]
 _UPDATE_FILEFLAGMD_COLOR = ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m","\x1b[0;34m"]
 
-sysloc:str = locale.getlocale()[0] # No idea how to deal with encodings
+#sysloc:str = locale.getlocale()[0] # No idea how to deal with encodings
 
 # Useful link, helped me with the ANSI codes:
 # https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
@@ -399,13 +399,6 @@ for i in range(2,len(argv)):
 	if argv[i]=="-p": showfullpath=True
 	if argv[i]=="-s": includeNonUpdFile=True
 	if argv[i]=="-a": showfullpath=True; includeNonUpdFile=True
-
-# TODO: Would like to add translations (no real reason, just for fun)
-#lngpck:list=[]
-#fn="%s/lang/%s.cyln0"%(_SCRIPTDIR,sysloc)
-#try: os.stat(fn)
-#except: lngpck=CYWLN0_ToDefault()
-#else: lngpck=CYWLN0_FromFile(fn)
 
 try:
 	print("\x1b[0;0m\x1b[?25h")
