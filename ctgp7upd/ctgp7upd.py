@@ -12,7 +12,7 @@ _UPDATE_URL_EXTPART = "/updates/data"
 _TOOINSTALL_FNAME = "tooInstall"
 _TARGET_NAME = "CTGP-7"
 _VERSION_FILE_PATH = "/config/version.bin"
-_UPDATE_FILEFLAGMD = ["M","D","T","F"]
+_UPDATE_FILEFLAGMD = ["M","D","T","F"] # F is not treated like a method, just as a reminder for T. F in the chat bois indeed.
 _UPDATE_FILEFLAGMD_COLOR = ["\x1b[0;92m","\x1b[0;91m","\x1b[0;94m","\x1b[0;34m"]
 
 #sysloc:str = locale.getlocale()[0] # No idea how to deal with encodings
@@ -225,7 +225,7 @@ def main():
 	try: os.mkdir(mainfolder)
 	except: pass
 
-	try: verf=open(mainfolder+"/config/version.bin")
+	try: verf=open(mainfolder+_VERSION_FILE_PATH)
 	except: fatErr(3)
 	else:
 		vers=verf.read(); verf.close()
@@ -281,7 +281,7 @@ def main():
 
 	if len(dlList) or veri<len(verf)-1:
 		print("\x1b[2KGot file lists!\n\nDo you want to update to "+verf[len(verf)-1][0]+" now?")
-		of.close(); os.system(iff(os.name!="nt","less "+mainfolder+"/changelog.txt", "notepad "+mainfolder+"/changelog.txt"))
+		of.close(); os.system(iff(os.name!="nt","less "+mainfolder+"/changelog.txt", "notepad "+mainfolder.replace("/","\\")+"\\changelog.txt"))
 		input("Press ^C to abort the update, otherwise press Return")
 	else:
 		print("No updates were found. Please try again later.")
@@ -366,7 +366,7 @@ try: tmpv=argv.index("-h")
 except: pass
 
 if len(argv)<2 or tmpv>1:
-	print("""CTGP-7 Updater script 1.0
+	print("""CTGP-7 Updater script 1.1
 
 Usage: {} <CTGP7fol> [-h] [-p] [-s] [-a]
 
@@ -387,7 +387,7 @@ sure, you specify the correct folder, otherwise, no updates will be
 performed.""".format(argv[0]))
 	exit()
 
-mainfolder=argv[1]
+mainfolder=argv[1].replace("\\","/") # Windows may use \, but I'm / gang (Python is OK with it)
 ses=requests.session()
 dlList=[]; verf=0; vers=0; veri=0; i=0; rep=0; tooInstalled=False
 dlCounter=0; oldtermw=0; oldtermh=0; dlObtainedCnt=0
@@ -418,7 +418,7 @@ except KeyboardInterrupt: # Do not show a weird error for this simple action
 	clrscr()
 	print("\x1b[0;91mThe program was interrupted. Update aborted.\nThe installation may be in an inconsistent state,\nif not updated properly.")
 	appexit(5)
-except OSError as err: # Did I corrupt the SD Card by accident or was it corrupted already?
+except (OSError, FileExistsError, FileNotFoundError) as err: # Did I corrupt the SD Card by accident or was it corrupted already?
 	clrscr()
 	print("""\x1b[0;91mAn error has occured while dealing with the storage device.
 
@@ -426,20 +426,22 @@ Reason: {}
 Context: {}, {}, {}
 
 This could stem from a bad installation or the storage device is corrupted.
-Please backup all content on said device to another drive.
+Please backup all content on said device to another location.
 It's recommended to reformat the device and try again.
 
-If problems persist, please obtain a new storage device.
+If problems persist, please obtain a new storage device or update in the CTGP-7 launcher.
 """.format(err.strerror, err.args, err.filename, err.filename2))
 	appexit(6)
 except (ConnectionError,ConnectionResetError,ConnectionAbortedError,ConnectionRefusedError):
 	clrscr()
 	print("\x1b[0;91mAn uncatched connection error has occured. Update aborted.")
+	print("\nIf problems persist, try updating in the CTGP-7 launcher instead.")
 	appexit(7)
 except (ValueError, TypeError, IndexError, NotImplementedError):
 	clrscr()
 	print("\x1b[0;91mSomething unexpected has happened. Update aborted.")
+	print("\nIf problems persist, try updating in the CTGP-7 launcher instead.")
 	appexit(8)
-#except: fatErr(0xDEADBEEF)
+except: fatErr(0xDEADBEEF)
 
 appexit(0)
