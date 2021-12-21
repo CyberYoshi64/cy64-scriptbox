@@ -84,7 +84,7 @@ By the way, the update therefore fails.
 """.format(fn),"""
 The folder specified does not contain a valid CTGP-7 installation.
 
-The version number of the installation is invalid.
+The version is invalid or the folder is not a CTGP-7 installation.
 
 Have you specified the correct folder? Have you even installed CTGP-7?
 I will not guess; the update is aborted.
@@ -365,15 +365,12 @@ tmpv:int=0
 try: tmpv=argv.index("-h")
 except: pass
 
-if len(argv)<2 or tmpv>1:
+if tmpv>0:
 	print("""CTGP-7 Updater script 1.1
 
-Usage: {} <CTGP7fol> [-h] [-p] [-s] [-a]
+Usage: {} [CTGP7fol] [-h] [-p] [-s] [-a]
 
 CTGP-7fol – Path to CTGP-7 folder
-
-Optional:
-
 -h - Show this help
 -p - Show full path of downloaded files
 -s - Also show removed/renamed files
@@ -382,12 +379,16 @@ Optional:
 This can refer to the CTGP-7 folder on your 3DS's SD Card or
 a backup folder on your PC.
 
+If not specified, you'll get a prompt to drag'n'drop the CTGP-7 folder.
+
 This tool acts as close to the official updater, so you have to make
 sure, you specify the correct folder, otherwise, no updates will be
 performed.""".format(argv[0]))
 	exit()
 
-mainfolder=argv[1].replace("\\","/") # Windows may use \, but I'm / gang (Python is OK with it)
+mainfolder:str=""; tmpv=2
+if len(argv)>1: mainfolder=argv[1].replace("\\","/") # Windows may use \, but I'm / gang (Python is OK with it)
+if len(mainfolder)<5: tmpv=1
 ses=requests.session()
 dlList=[]; verf=0; vers=0; veri=0; i=0; rep=0; tooInstalled=False
 dlCounter=0; oldtermw=0; oldtermh=0; dlObtainedCnt=0
@@ -395,10 +396,20 @@ showfullpath:bool=False; includeNonUpdFile:bool=False
 fSizeAdd:int=0; fSizeRmv:int=0; fSizeOverall:int=0
 
 # Crued implementation, I just want optional arguments
-for i in range(2,len(argv)):
+for i in range(tmpv,len(argv)):
 	if argv[i]=="-p": showfullpath=True
 	if argv[i]=="-s": includeNonUpdFile=True
 	if argv[i]=="-a": showfullpath=True; includeNonUpdFile=True
+
+if tmpv==1:
+	print("The CTGP-7 folder was not specified.\n\nPlease specify the folder to continue.\nOtherwise, press ^C")
+	while True:
+		try: mainfolder=input("Name > ").strip()
+		except (KeyboardInterrupt, EOFError): exit()
+		except: pass
+		if len(mainfolder)>1 and "'\"".find(mainfolder[0])>=0 and "'\"".find(mainfolder[-1])>=0: mainfolder=mainfolder[1:-1]
+		if os.path.exists(mainfolder): break
+		print("\nThis folder does not exist. Please make sure you drag'n'drop or otherwise specify the folder correctly")
 
 try:
 	print("\x1b[0;0m\x1b[?25h")
@@ -414,7 +425,7 @@ try:
 
 Open FBI and navigate SD > CTGP-7 > cia > {}.cia, then "Install".""".format(_TARGET_NAME))
 		input("\nPress Return to exit.")
-except KeyboardInterrupt: # Do not show a weird error for this simple action
+except (KeyboardInterrupt, EOFError): # Do not show a weird error for this simple action
 	clrscr()
 	print("\x1b[0;91mThe program was interrupted. Update aborted.\nThe installation may be in an inconsistent state,\nif not updated properly.")
 	appexit(5)
@@ -442,6 +453,6 @@ except (ValueError, TypeError, IndexError, NotImplementedError):
 	print("\x1b[0;91mSomething unexpected has happened. Update aborted.")
 	print("\nIf problems persist, try updating in the CTGP-7 launcher instead.")
 	appexit(8)
-except: fatErr(0xDEADBEEF)
+#except: fatErr(0xDEADBEEF)
 
 appexit(0)
