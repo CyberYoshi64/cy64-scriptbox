@@ -6,23 +6,21 @@ Supported platforms: Linux
 
 Modules needed: `requests`, `time`
 
-Syntax: `python ctgp7upd.py <folder> [-h] [-p] [-s] [-a]`
+Syntax: `python ctgp7upd.py [folder] [-h] [-p] [-s] [-a]`
 
 - `folder` — Path to a valid CTGP-7 folder to update in
-
-Optional arguments:
-
 - `-h` — Show this help
 - `-p` — Show full path of downloaded file
 - `-s` — Show files removed/renamed (Name will change color appropriately)
 - `-a` — Same behaviour as `-p -s`
 
+If `folder` isn't specified as an argument, the script will ask for a valid path, which can also be used to drag'n'drop/enter the path to the CTGP-7 folder, inclusive.
+
 ## Warning
 
 Although the code has some attempts to be compatibile with Windows, I cannot garantuee that this code works on Windows or macOS.
 
-If compatibility is uncertain, *please make a backup of your CTGP-7 installation and other important data from your 3DS's SD Card*, in case the script unexpectedly **corrupts the installation (or the SD Card by extension)**
-
+If compatibility is uncertain, *please make a backup of your CTGP-7 installation and other important data from your 3DS's SD Card*, although SD Card corruption stemming from this tool should not be the case. It has several protections from corrupting files that aren't finished downloading.
 If it doesn't work and you can help with the script, please file an issue. **Pull requests could be used, but cannot be merged, due to the way my Git setup works**
 
 ## Author notes
@@ -39,7 +37,7 @@ From there, if the version is outdated, I read all file lists up to the latest v
 
 After that's done, I edit the version file to reflect the changes appropriately. (Don't confuse the official launcher to redownload the update.)
 
-However, if the update includes a new launcher package, the user is told to install the new launcher themself. ***This script is not capable to install the CIA for the user. Only the 3DSX is able to be copied over.***
+However, if the update includes a new launcher package, the user is told to install the new launcher themself. ***This script is not capable to install the CIA for the user. Only the 3DSX is able to be copied over, which this tool isn't doing either, at the moment.***
 
 ### Why is its output so confined and clean?
 
