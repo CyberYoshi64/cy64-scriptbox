@@ -99,7 +99,11 @@ def iff(x,i,o):
 	if x: return i
 	return o
 
-def clrscr(): os.system(iff(os.name!="nt", "clear", "cls"))
+def clrscr():
+	if os.name=="nt":
+		print("\x1b[2J\x1b[1;1H")
+	else:
+		os.system("clear")
 
 def appexit(r:int):
 	global mainfolder
