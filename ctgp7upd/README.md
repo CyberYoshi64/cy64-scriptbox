@@ -14,7 +14,7 @@ Syntax: `python ctgp7upd.py [folder] [-h] [-p] [-s] [-a]`
 - `-s` — Show files removed/renamed (Name will change color appropriately)
 - `-a` — Same behaviour as `-p -s`
 
-If `folder` isn't specified as an argument, the script will ask for a valid path, which can also be used to drag'n'drop/enter the path to the CTGP-7 folder, inclusive.
+If `folder` isn't specified as an argument, the script will ask for a valid path, which can also be used to drag'n'drop the CTGP-7 folder in the prompt or enter the path to the CTGP-7 folder, inclusive.
 
 ## Warning
 
