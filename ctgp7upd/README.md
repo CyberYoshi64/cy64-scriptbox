@@ -1,5 +1,7 @@
 # CTGP-7 Updater Script
 
+Note: **This script was not verified by the CTGP-7 team. Use this tool at your own risk.**
+
 This is a work-in-progress Python script mimicking CTGP-7's official updater, based on own observations, analysis of the [archived launcher's source code](https://github.com/PabloMK7/CTGP-7_Launcher) and a bit of help from PabloMK7 himself.
 
 Supported platforms: Linux
