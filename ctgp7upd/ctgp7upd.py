@@ -283,7 +283,7 @@ def main():
 			if i=="": break
 			dlList.append((i[0],i[1:]))
 	dlList=parseAndSortDlList(dlList)
-
+	clrscr()
 	if len(dlList) or veri<len(verf)-1:
 		print("\nGot file lists!\n\nDo you want to update to "+verf[len(verf)-1][0]+" now?")
 		of.close(); os.system(iff(os.name!="nt","less "+mainfolder+"/changelog.txt", "notepad "+mainfolder.replace("/","\\")+"\\changelog.txt"))
