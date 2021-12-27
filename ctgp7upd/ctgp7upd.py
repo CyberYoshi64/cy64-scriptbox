@@ -101,7 +101,8 @@ def iff(x,i,o):
 
 def clrscr():
 	if os.name=="nt":
-		print("\x1b[2J\x1b[1;1H")
+		os.system("cls")
+		#print("\x1b[2J\x1b[1;1H")
 	else:
 		os.system("clear")
 
@@ -267,7 +268,7 @@ def main():
 	percv0=len(verf)-veri-1
 	for i in range(veri+1,len(verf)):
 		url=_UPDATE_BASE_URL2+verf[i][0]+"/filelist.txt"
-		print(("\x1b[2K  (%5.1f%%)  Obtaining file list for v" % ((i-veri)/percv0*100))+verf[i][0], end="\r", flush=True)
+		print((" (%5.1f%%)  Obtaining file list for v" % ((i-veri)/percv0*100))+verf[i][0], end="                \r", flush=True)
 		for rep in range(_DL_ATTEMPT_TOTALCNT):
 			try: dl=ses.get(url, timeout=5)
 			except: print("Fail getting list for {} ({}/{}): timeout/bad connection?".format(verf[i][0], rep + 1, _DL_ATTEMPT_TOTALCNT))
@@ -284,7 +285,7 @@ def main():
 	dlList=parseAndSortDlList(dlList)
 
 	if len(dlList) or veri<len(verf)-1:
-		print("\x1b[2KGot file lists!\n\nDo you want to update to "+verf[len(verf)-1][0]+" now?")
+		print("\nGot file lists!\n\nDo you want to update to "+verf[len(verf)-1][0]+" now?")
 		of.close(); os.system(iff(os.name!="nt","less "+mainfolder+"/changelog.txt", "notepad "+mainfolder.replace("/","\\")+"\\changelog.txt"))
 		input("Press ^C to abort the update, otherwise press Return")
 	else:
@@ -298,10 +299,10 @@ def main():
 
 	for i in range(len(dlList)):
 		fmode=dlList[i][0]; fname=dlList[i][1]; fmvo=dlList[i][2]
+		f=fname; f1=fmvo; rep=0
 		if fmode==_UPDATE_FILEFLAGMD.index("M") or includeNonUpdFile: dlObtainedCnt += 1; ScreenDisplay()
 		if includeNonUpdFile and fmode!=_UPDATE_FILEFLAGMD.index("M"): time.sleep(0.25)
 		url=_UPDATE_BASE_URL+_UPDATE_URL_EXTPART+fname
-		f=fname; f1=fmvo; rep=0
 		if fmode==0:
 			
 			mkfolders(mainfolder+f)
@@ -329,6 +330,9 @@ def main():
 			of.flush()
 			of.close()
 			
+			try: os.stat(mainfolder+f)
+			except: pass
+			else: os.remove(mainfolder+f)
 			os.rename(mainfolder+f+_UPDTEMPDL_EXTENSION,mainfolder+f)
 		
 		elif fmode==1:
@@ -353,7 +357,13 @@ def main():
 		# That breaks the fSizeOverall, will add correction later
 		tooInstalled=True
 		if _TOOINSTALL_FNAME != _TARGET_NAME:
+			try: os.stat(mainfolder+"/cia/"+_TARGET_NAME+".cia")
+			except: pass
+			else: os.remove(mainfolder+"/cia/"+_TARGET_NAME+".cia")
 			os.rename(src=mainfolder+"/cia/"+_TOOINSTALL_FNAME+".cia",dst=mainfolder+"/cia/"+_TARGET_NAME+".cia")
+			try: os.stat(mainfolder+"/cia/"+_TARGET_NAME+".3dsx")
+			except: pass
+			else: os.remove(mainfolder+"/cia/"+_TARGET_NAME+".3dsx")
 			os.rename(src=mainfolder+"/cia/"+_TOOINSTALL_FNAME+".3dsx",dst=mainfolder+"/cia/"+_TARGET_NAME+".3dsx")
 
 	# Update config/version.bin
@@ -416,7 +426,7 @@ if tmpv==1:
 		print("\nThis folder does not exist. Please make sure you drag'n'drop or otherwise specify the folder correctly")
 
 try:
-	print("\x1b[0;0m\x1b[?25h")
+	print("\x1b[0;0m\x1b[?25h"*(os.name!="nt"))
 	if not main():
 		clrscr()
 		print("\n\x1b[0;92m Update successful!\x1b[0;0m")

@@ -4,7 +4,7 @@ Note: **This script was not verified by the CTGP-7 team. Use this tool at your o
 
 This is a work-in-progress Python script mimicking CTGP-7's official updater, based on own observations, analysis of the [archived launcher's source code](https://github.com/PabloMK7/CTGP-7_Launcher) and a bit of help from PabloMK7 himself.
 
-Supported platforms: Linux
+Supported platforms: Linux, Windows
 
 Modules needed: `requests`, `time`
 
@@ -20,11 +20,6 @@ If specifying `folder`, it can be relative, but it was intended to be absolute t
 
 If `folder` isn't specified as an argument, the script will ask for a valid path, which can also be used to drag'n'drop the CTGP-7 folder in the prompt or enter the path to the CTGP-7 folder, inclusive.
 
-## Warning
-
-Although the code has some attempts to be compatibile with Windows, I cannot garantuee that this code works on Windows or macOS.
-
-If compatibility is uncertain, *please make a backup of your CTGP-7 installation and other important data from your 3DS's SD Card*, although SD Card corruption stemming from this tool should not be the case. It has several protections from corrupting files that aren't finished downloading.
 If it doesn't work and you can help with the script, please file an issue. **Pull requests could be used, but cannot be merged, due to the way my Git setup works**
 
 ## Author notes
