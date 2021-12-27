@@ -1,8 +1,8 @@
 # CTGP-7 Updater Script
 
-Note: **This script was not verified by the CTGP-7 team. Use this tool at your own risk.**
-
 This is a work-in-progress Python script mimicking CTGP-7's official updater, based on own observations, analysis of the [archived launcher's source code](https://github.com/PabloMK7/CTGP-7_Launcher) and a bit of help from PabloMK7 himself.
+
+Note: **This script was not verified by the CTGP-7 team yet.** This tool is performing updates safely. Fails should only come from a faulty SD Card, although since this tool is only tested on a few CTGP-7 installations and devices and not released properly, actual bugs may slip in.
 
 Supported platforms: Linux, Windows
 
