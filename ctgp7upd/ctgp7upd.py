@@ -198,7 +198,7 @@ def ScreenDisplay():
 	if (termw!=oldtermw or termh!=oldtermh) or (termw < 32 or termh < 10): clrscr()
 	oldtermw, oldtermh = termw, termh
 	lastver=verf[len(verf)-1][0]
-	header="Updating to "+lastver
+	header="Updating from "+vers+" to "+lastver
 	fnm:str=dlList[i][1]; fnc="\x1b[0;37m"
 	if not showfullpath: fnm=fnm[fnm.rfind("/")+1:]
 	
