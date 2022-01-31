@@ -3,3 +3,5 @@
 *.old
 *.cywbak
 *.bak
+CY64SBFP/*bin
+__pycache__
