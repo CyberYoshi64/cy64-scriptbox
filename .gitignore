@@ -4,4 +4,6 @@
 *.cywbak
 *.bak
 CY64SBFP/*bin
+CY64SBFP/NewProject1
+CY64SBFP/*out*
 __pycache__

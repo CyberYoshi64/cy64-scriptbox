@@ -74,19 +74,23 @@ def cvtImg_applySpcFltr(t, x, y, fid):
     if type(t)!=tuple or len(t)!=4: return None
     if min(t)<0 or max(t)>255: return None
     r,g,b,a = t
-    if fid|1: # Simple dithering through randomizing a small amount
-        r += random.randint(0,7)
-        g += random.randint(0,7)
-        b += random.randint(0,7)
-    if fid|2: # Bayer-like filtering (?! at least I'm trying, lmao)
-        r += 7 * ((x+y) % 2)
-        g += 4
-        b += 7 * ((x+y+1) % 2)
-    if fid|4: # Magenta -> Transparent
+    if fid&1: # Simple dithering through randomizing a small amount
+        r += random.randint(-2,5)
+        g += random.randint(-2,5)
+        b += random.randint(-2,5)
+    if fid&2: # Bayer-like filtering (?! at least I'm trying, lmao)
+        r += -2 + (7 * ((x+y) % 2))
+        g += -2 + (2 * ((x+y+2) % 3))
+        b += -2 + (7 * ((x+y+1) % 2))
+    if fid&4: # Magenta -> Transparent
         if r>244 and g<7 and b>244: r,g,b,a = (0,0,0,0)
-    if fid|8: # Grayscale
+    if fid&8: # Grayscale
         m=r*.35+b*.2+g*.45
         r,g,b = m,m,m
+    r=int(min(255,max(0,r)))
+    g=int(min(255,max(0,g)))
+    b=int(min(255,max(0,b)))
+    a=int(min(255,max(0,a)))
     return (r,g,b,a)
 def convertImage(buf, outfmt, sp=0):
     if type(buf)!=list or len(buf)!=4: return None
@@ -96,7 +100,7 @@ def convertImage(buf, outfmt, sp=0):
     stp = getFmtByteCnt(infmt)
     for i in range(0, w*h*stp, stp):
         t=getRGBAFromBuf(infmt,buf[3],i)
-        cvtImg_applySpcFltr(t, i%w, int(i/w), sp)
+        t=cvtImg_applySpcFltr(t, (i/stp %w), int(i/stp/w), sp)
         b = packRGBA(t,outfmt)
         if b==None: return None
         nbuf += b
