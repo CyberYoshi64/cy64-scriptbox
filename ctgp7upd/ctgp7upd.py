@@ -108,6 +108,7 @@ def clrscr():
 
 def appexit(r:int):
 	global mainfolder
+	input("Press any key to continue... ")
 	try: os.remove(mainfolder+"/changelog.txt")
 	except: pass
 	print("\x1b[0;0m\x1b[?25h"); exit(r)

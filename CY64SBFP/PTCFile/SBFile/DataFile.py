@@ -63,4 +63,7 @@ Property:
     for i in range(len(a)):
       if b and (i % c)==(c-1): d.write(b"%d\n"%a[i])
       else: d.write(b"%d,"%a[i])
-    d.close()
+    d.flush(); d.close()
+    d=open(f+"/%s.bin"%(sbf.name),'wb')
+    for i in a: d.write(struct.pack(">%s"%DATATYPE_STCTFMT[sbf.data.type], i))
+    d.flush(); d.close()
