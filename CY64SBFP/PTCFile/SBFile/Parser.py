@@ -14,11 +14,11 @@ def setFileClass(s)->None:
         try:
             if CYW.CYW4PTC_ENABLE and hasattr(CYW,"CYW4PTC_KnownFmt"):
                     for i in CYW.CYW4PTC_KnownFmt:
-                        print(i,s.name.startswith(i.preferedPrefix()), s.name.endswith(i.preferedExtension()), i.guessFormat(s))
-                        if (
-                           s.name.startswith(i.preferedPrefix()) and \
-                           s.name.endswith(i.preferedExtension())
-                        ) or i.guessFormat(s):
+                        name0,name1 = 0,0
+                        for j in i.PREFPREFIX: name0 |= s.name.startswith(j)
+                        for j in i.PREFSUFFIX: name1 |= s.name.endswith(j)
+                        print(i, name0, name1, i.guessFormat(s))
+                        if (name0 and name1) or i.guessFormat(s):
                             s.fmt = i(s)
                             return
         except Exception as e: raise Exception(e)

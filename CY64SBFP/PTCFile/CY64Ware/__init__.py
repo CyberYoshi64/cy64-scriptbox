@@ -49,9 +49,9 @@ class CYW4SB3_CFD_Data:
       d += int.to_bytes(i[0],4,"little")+i[1]
     return h+d
 class CYW4SB3_CFD:
-  ctypeName = "CYW-CFD"
-  def preferedPrefix()->str: return "B"
-  def preferedExtension()->str: return ".CFD"
+  CTYPENAME = "CYW-CFD"
+  PREFPREFIX = ["B"]
+  PREFSUFFIX = [".CFD"]
   def guessFormat(sbf)->bool: return False # too generic format, literally anything could be valid here
   def __init__(s,sbf)->None:
     sbf.data = CYW4SB3_CFD_Data(sbf.data)
@@ -61,7 +61,7 @@ class CYW4SB3_CFD:
     d.write("""\
 Property:
     ContentType: "%s"
-""" % s.ctypeName)
+""" % s.CTYPENAME)
     d.close()
     ob=b''; d=open(f+"/font.csv","wb"); d.truncate(0)
     for i in sbf.data.definitions:
@@ -74,5 +74,9 @@ Property:
 
 CYW4PTC_KnownFmt = [
   CYW4SB3_CFD #,\ # (SB3) Compressed Font Data
-  # CYW4SB3_PCM16 #,\ # (SB3) 16bit PCM sample
+  # CYW4SB3_CYLPK #,\ # (SB3) CY64 Language Packs
+  # CYW4SB3_PCM16 #,\ # (SB3) 16bit PCM
+  # CFMT4_PCM16 #,\ # (SB4) 16bit PCM
+  # CYW4SB3_SPDEF #,\ # (SB3) Enhanced SPDEF array
+  # CYW4SB3_CYGRP #,\ # (SB3) CYGRP (other pixel formats)
 ]
