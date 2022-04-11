@@ -58,14 +58,15 @@ try:
     if args.stats and not args.bulk:
       print(textwrap.dedent('''\
         File header of %s:
-          File type : %s for SB%d
+          File type : %s for SB%d (%s)
           Data size : %d bytes %s%s
           Modified  : %s, %04d/%d/%d at %d:%02d:%02d
           Creator   : %s (ID: 0x%08X)
           Editor    : %s (ID: 0x%08X)
       ''' % (\
       args.input, origf.head.getFileTypeName(),\
-      origf.head.isForSwitch()+3, origf.head.dataSize, \
+      origf.head.isForSwitch()+3, str(type(origf.fmt)).split("'")[1].split(".")[-1],\
+      origf.head.dataSize,\
       "(desynced: {} B) ".format(szDiff)*(szDiff != 0),\
       "(compressed)"*(origf.head.compress != 0),\
       origf.head.getWeekdayStr(), origf.head.modYear, origf.head.modMonth, \
@@ -90,7 +91,8 @@ try:
     if doExtract:
       origf.extract(args.output.rstrip("\\/"),args.input, args.bulk)
 
-  if not args.bulk: print("Please note that this tool is just getting started. I have only made the basics here.")
+  if not args.bulk:
+    print("Please note that this tool is just getting started. I have only made the basics here.")
 
 except:
   errtype, errvalue, errtrace = sys.exc_info()

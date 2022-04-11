@@ -5,7 +5,7 @@ outf="BOUT2.GRP"
 outi="in.png"
 outf2="out3.png"
 
-f=open("cbin/BBG_DESK00.GRP","rb")
+f=open(outf,"rb")
 origfobj = PTCFile.File(f)
 f.close()
 origf = origfobj.format

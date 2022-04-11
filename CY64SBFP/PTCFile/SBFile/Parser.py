@@ -6,10 +6,22 @@ from PTCFile.SBFile.DataFile import DataFile
 from PTCFile.SBFile.GRPFile import GRPFile
 from PTCFile.SBFile.MetaFile import MetaFile
 from PTCFile.SBFile.ProjectFile import ProjectFile
+import PTCFile.CY64Ware as CYW
 
-def setFileClass(s):
-    if hasattr(s,"head") and hasattr(s,"fmt") and\
+def setFileClass(s)->None:
+    if hasattr(s,"head") and hasattr(s,"fmt") and \
     hasattr(s,"neck") and hasattr(s,"data"):
+        try:
+            if CYW.CYW4PTC_ENABLE and hasattr(CYW,"CYW4PTC_KnownFmt"):
+                    for i in CYW.CYW4PTC_KnownFmt:
+                        print(i,s.name.startswith(i.preferedPrefix()), s.name.endswith(i.preferedExtension()), i.guessFormat(s))
+                        if (
+                           s.name.startswith(i.preferedPrefix()) and \
+                           s.name.endswith(i.preferedExtension())
+                        ) or i.guessFormat(s):
+                            s.fmt = i(s)
+                            return
+        except Exception as e: raise Exception(e)
         ftyp = s.head.getFTypeStr()
         if ftyp=="TXT":
             s.fmt = TextFile(s)
@@ -24,4 +36,3 @@ def setFileClass(s):
             s.fmt = MetaFile(s)
         if ftyp=="PRJ":
             s.fmt = ProjectFile(s)
-    pass
