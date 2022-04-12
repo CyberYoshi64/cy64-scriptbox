@@ -52,8 +52,6 @@ def packRGBA(t,ofm):
 # For ImgCnv.convertImage()
 def getRGBAFromBuf(ifm, buf, idx):
     r,g,b,a = 0,0,0,0; pxl = getFmtByteCnt(ifm)
-    if type(buf)!=bytearray: return None
-    # if (idx % pxl)!=0: return None # Might not be feasible with file-ceptions
     if idx < 0 or idx+pxl > len(buf): return None
     if ifm == CNV_BGRA8:
         a,r,g,b = struct.unpack("<BBBB",buf[idx:idx+4])
@@ -79,14 +77,14 @@ def getImageFromFile(f): # Output is ARGB8-encoded data (ready for SB4 GRP/META)
                 buf[(i + j * w) * 4 + k] = img[j][i][3-k]
     return [CNV_BGRA8, w, h, buf]
 
-def saveImageToFile(buf, f) -> bool:
-    if type(buf)!=list or len(buf)!=4: return False
-    if type(buf[0])!=int or type(buf[1])!=int or type(buf[2])!=int or type(buf[3])!=bytearray: return False
+def saveImageToFile(buf, f) -> int:
+    if type(buf)!=list or len(buf)!=4: return -1
+    if type(buf[0])!=int or type(buf[1])!=int or type(buf[2])!=int or type(buf[3])!=bytearray: return -2
     nbuf = buf
     
     # If input buffer does not have ARGB8 data, convert it
-    if buf[0] != CNV_BGRA8: nbuf = convertImage(buf, CNV_BGRA8, False)
-    if nbuf == None: return False
+    if buf[0] != CNV_BGRA8: nbuf = convertImage(buf, CNV_BGRA8, 0)
+    if nbuf == None: return -3
     w, h = buf[1:3]
     
     ih = [] # Unpack into array for numpy array for cv2.imwrite
@@ -130,7 +128,7 @@ def convertImage(buf, outfmt, sp=0):
     stp = getFmtByteCnt(infmt)
     for i in range(0, w*h*stp, stp):
         t=getRGBAFromBuf(infmt,buf[3],i)
-        t=cvtImg_applySpcFltr(t, (i/stp %w), int(i/stp/w), sp)
+        t=cvtImg_applySpcFltr(t, i//stp%w, i//stp//w, sp)
         b = packRGBA(t,outfmt)
         if b==None: return None
         nbuf += b

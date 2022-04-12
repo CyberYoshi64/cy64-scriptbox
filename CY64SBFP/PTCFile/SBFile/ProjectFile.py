@@ -47,7 +47,7 @@ class ProjectHeader:
     sbf.data.raw = sbf.data.raw[dataoff:]
   def pack(s):
     d = bytearray()
-    if s.meta != None: d += s.meta.data.pack()
+    if s.meta != None: d += s.meta.fmt.pack()
     d += struct.pack("<II",s.prjsz,s.fileCount)
     for i in s.data.files:
       d += struct.pack("<I%ss"%((16,36)[bool(s.isSw)]),i[1],i[0].encode("iso8859_15","ignore"))
@@ -61,6 +61,7 @@ class ProjectFile:
     sbf.data.getFiles()
   def extract(s, f, sbf):
     import os
+    if sbf.neck.meta != None: sbf.neck.meta.fmt.extract(f, sbf.neck.meta)
     os.makedirs(f+"/raw",exist_ok=True)
     for i in sbf.data.files:
       d=open(f+"/raw/%s"%(i[0]),'wb'); d.truncate(0)

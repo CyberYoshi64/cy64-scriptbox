@@ -36,8 +36,10 @@ class SBFile:
   data = False    # Main data
   valid = False   # Is file valid on-load?
   def usesHash(s)->bool:
-    if s.neck != None: return s.neck.usesHash
-    return True
+    # No idea why META is the only format without footer
+    # Likely only intended to be in the Project file type
+    # as it has an additional Meta and it does have a footer.
+    return s.head.getFileTypeName()!="META" 
   def makeHash(s)->bytes:
     if not s.usesHash(): return b''
     return s.pack()[-20:]
