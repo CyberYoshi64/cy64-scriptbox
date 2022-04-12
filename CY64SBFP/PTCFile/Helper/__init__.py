@@ -5,15 +5,7 @@ import os
 def mkfolders(fol:str):
   fol = "./"+fol
   g=fol[0:fol.rfind("/")]
-  s=""; j=0
-  while True:
-    j=fol.find("/",j)+1
-    if j==-1: break
-    s=fol[0:j-1]
-    try: os.mkdir(s)
-    except OSError: pass
-    if s==g: break
-  try: os.mkdir(fol)
+  try: os.makedirs(fol,exist_ok=True)
   except OSError: pass
 
 def numClamp(x,min,max):

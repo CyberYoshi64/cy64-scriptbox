@@ -9,6 +9,37 @@ def getFmtByteCnt(f):
     try: return (4,3,2,1,1,1,1,2,2,1,2,1)[f]
     except: return 0
 
+def buf2simparr(buf, convert=False):
+    if type(buf)!=list or len(buf)!=4: return []
+    if type(buf[0])!=int or type(buf[1])!=int or type(buf[2])!=int or type(buf[3])!=bytearray: return []
+    nbuf = buf
+    
+    if convert:
+        if buf[0] != CNV_ARGB8: nbuf = convertImage(buf, CNV_ARGB8, False)
+        if nbuf == None: return []
+    
+    g=getFmtByteCnt(nbuf[0])
+    w, h = buf[1:3]; ih = []
+    for i in range(h):
+        iw = []
+        for j in range(w):
+            k = (j+i*w)*g
+            iw.append(int.from_bytes(nbuf[3][k:k+g],"little"))
+        ih.append(iw)
+    return [nbuf[0], ih]
+
+def simparr2buf(obuf):
+    if type(obuf)!=list or len(obuf)!=2: return []
+    if type(obuf[0])!=int or type(obuf[1])!=list: return []
+    buf = obuf
+    
+    g=getFmtByteCnt(buf[0])
+    w, h = len(buf[1][0]), len(buf[1]); byt=bytearray()
+    for i in range(h):
+        for j in range(w):
+            byt += int.to_bytes(buf[1][i][j],g,"little")
+    return [buf[0], w, h, byt]
+
 # For ImgCnv.convertImage()
 def packRGBA(t,ofm):
     if type(t)!=tuple or len(t)!=4: return None
