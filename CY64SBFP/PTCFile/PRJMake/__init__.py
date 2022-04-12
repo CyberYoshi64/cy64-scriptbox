@@ -2,4 +2,3 @@
 
 import os
 import PTCFile.PRJMake.descParser as descParser
-
