@@ -67,7 +67,7 @@ try:
       args.input, origf.head.getFileTypeName(),\
       origf.head.isForSwitch()+3, str(type(origf.fmt)).split("'")[1].split(".")[-1],\
       origf.head.dataSize,\
-      "(desynced: {} B) ".format(szDiff)*(szDiff != 0),\
+      "(desynced: {} B) ".format(szDiff)*(szDiff != 0 and origf.head.getFileTypeName()!="PRJ"),\
       "(compressed)"*(origf.head.compress != 0),\
       origf.head.getWeekdayStr(), origf.head.modYear, origf.head.modMonth, \
       origf.head.modDay, origf.head.modHour, origf.head.modMinute, \

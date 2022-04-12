@@ -36,7 +36,7 @@ class MetaFile:
         sbf.neck = MetaNeck()
         sbf.data = MetaData(sbf.data)
     def extract(s, f, sbf):
-        print(imcv.saveImageToFile(sbf.data.icon,"%s/icon.png"%f))
+        imcv.saveImageToFile(sbf.data.icon,"%s/icon.png"%f)
         d=open(f+"/desc.rsf","a")
         d.write("""ProjectMeta:
     Title: "%s"

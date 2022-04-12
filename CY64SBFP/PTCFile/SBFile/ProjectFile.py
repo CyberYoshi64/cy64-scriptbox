@@ -47,7 +47,7 @@ class ProjectHeader:
     sbf.data.raw = sbf.data.raw[dataoff:]
   def pack(s):
     d = bytearray()
-    if s.meta != None: d += s.meta.fmt.pack()
+    if s.meta != None: d += s.meta.data.pack()
     d += struct.pack("<II",s.prjsz,s.fileCount)
     for i in s.data.files:
       d += struct.pack("<I%ss"%((16,36)[bool(s.isSw)]),i[1],i[0].encode("iso8859_15","ignore"))
