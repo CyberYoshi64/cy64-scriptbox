@@ -33,7 +33,7 @@ Note:
     EditDate:   "%d,%04d/%02d/%02d,%02d:%02d:%02d"
     FileIcon:   "%d"
 
-""" % (s.getFTypeStr(), n, ("False","True")[bool(s.compress)], \
+""" % (s.getFTypeStr(), n, str(bool(s.compress)), \
        s.creatorName, s.creatorID, \
        s.uploaderName, s.uploaderID, \
        s.creator_uploadID, s.uploader_uploadID, s.dataSize, s.modWeekDay, \
@@ -57,7 +57,7 @@ Note:
   def getUsernameLen(s): return (18,32)[s.isForSwitch()]
   def getWeekdayStr(s)->str:
     try: return ("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")[s.modWeekDay]
-    except: return "(Bad weekday)"
+    except: return "(Bad weekday - %08x)"%s.modWeekDay
   def getFTypeStr(s)->str:
     if s.isForSwitch():
       try: return ("TXT","DAT","GRP","PRJ","META")[s.fileType]

@@ -10,7 +10,7 @@ import struct, os
 DATATYPE_GRPFMT = (None, None, None, imgsvc.CNV_RGBA5551, imgsvc.CNV_ARGB8, None)
 
 class GRPFileData:
-  MAGIC=b'PCBN000'; formatVer = 5
+  MAGIC=b'PCBN000'; formatVer = 4
   type = 4; dim = [0, 0, 0, 0]; dimc = 1
   imageData = [None, 0, 0, b'']
 
@@ -18,9 +18,11 @@ class GRPFileData:
     if d!=None:
       mgc, s.formatVer, s.type, dimc, dim0, dim1, dim2, dim3 = \
       struct.unpack("<7ssHHiiii", d[:28])
+      e = open("dummy.bin","wb")
+      e.write(d); e.close()
       if mgc!=s.MAGIC: return
       if dimc != 2: return
-      try: (b"1",b"5").index(s.formatVer)
+      try: (b"1",b"4").index(s.formatVer)
       except: return
       s.dimc = dimc
       s.dim = [dim0, dim1, dim2, dim3]

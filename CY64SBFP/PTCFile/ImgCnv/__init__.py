@@ -1,23 +1,18 @@
 #!/usr/bin/python3
 import cv2, numpy, struct, random
 
-CNV_ARGB8, CNV_BGR8, CNV_RGBA5551, CNV_LA4, CNV_L8, CNV_RGB332,\
+CNV_ARGB8, CNV_BGRA8, CNV_BGR8, CNV_RGBA5551, CNV_LA4, CNV_L8, CNV_RGB332,\
 CNV_RGBA3221, CNV_HSV844, CNV_HSVA7441, CNV_A8, CNV_LA8, CNV_RGBX2 =\
-    range(12)
+    range(13)
 
 def getFmtByteCnt(f):
-    try: return (4,3,2,1,1,1,1,2,2,1,2,1)[f]
+    try: return (4,4,3,2,1,1,1,1,2,2,1,2,1)[f]
     except: return 0
 
-def buf2simparr(buf, convert=False):
+def buf2simparr(buf):
     if type(buf)!=list or len(buf)!=4: return []
     if type(buf[0])!=int or type(buf[1])!=int or type(buf[2])!=int or type(buf[3])!=bytearray: return []
     nbuf = buf
-    
-    if convert:
-        if buf[0] != CNV_ARGB8: nbuf = convertImage(buf, CNV_ARGB8, False)
-        if nbuf == None: return []
-    
     g=getFmtByteCnt(nbuf[0])
     w, h = buf[1:3]; ih = []
     for i in range(h):
@@ -44,8 +39,10 @@ def simparr2buf(obuf):
 def packRGBA(t,ofm):
     if type(t)!=tuple or len(t)!=4: return None
     if min(t)<0 or max(t)>255: return None # Is the color in Uint8 bounds?
-    if ofm == CNV_ARGB8:
+    if ofm == CNV_BGRA8:
         return struct.pack("<BBBB",t[3],t[0],t[1],t[2])
+    if ofm == CNV_ARGB8:
+        return struct.pack("<BBBB",t[2],t[1],t[0],t[3])
     if ofm == CNV_BGR8:
         return struct.pack("<BBB",t[2],t[1],t[0])
     if ofm == CNV_RGBA5551:
@@ -58,8 +55,10 @@ def getRGBAFromBuf(ifm, buf, idx):
     if type(buf)!=bytearray: return None
     # if (idx % pxl)!=0: return None # Might not be feasible with file-ceptions
     if idx < 0 or idx+pxl > len(buf): return None
-    if ifm == CNV_ARGB8:
+    if ifm == CNV_BGRA8:
         a,r,g,b = struct.unpack("<BBBB",buf[idx:idx+4])
+    if ifm == CNV_ARGB8:
+        b,g,r,a = struct.unpack("<BBBB",buf[idx:idx+4])
     if ifm == CNV_BGR8:
         b,g,r = struct.unpack("<BBB",buf[idx:idx+3])
     if ifm == CNV_RGBA5551:
@@ -78,7 +77,7 @@ def getImageFromFile(f): # Output is ARGB8-encoded data (ready for SB4 GRP/META)
         for j in range(h):
             for k in range(4):
                 buf[(i + j * w) * 4 + k] = img[j][i][3-k]
-    return [CNV_ARGB8, w, h, buf]
+    return [CNV_BGRA8, w, h, buf]
 
 def saveImageToFile(buf, f) -> bool:
     if type(buf)!=list or len(buf)!=4: return False
@@ -86,7 +85,7 @@ def saveImageToFile(buf, f) -> bool:
     nbuf = buf
     
     # If input buffer does not have ARGB8 data, convert it
-    if buf[0] != CNV_ARGB8: nbuf = convertImage(buf, CNV_ARGB8, False)
+    if buf[0] != CNV_BGRA8: nbuf = convertImage(buf, CNV_BGRA8, False)
     if nbuf == None: return False
     w, h = buf[1:3]
     
