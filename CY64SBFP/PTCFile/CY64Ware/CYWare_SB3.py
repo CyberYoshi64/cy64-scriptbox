@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-import math
+import math, struct
 import PTCFile.ImgCnv as cv
-import struct
+from PTCFile.SBFile import DataFile, GRPFile, TextFile
 
 # .###### ##    ## ##    ##     .##  ###### ######  .######.
 # ##      ##    ## ## .. ##   .#### ##      ##   ##       ##
@@ -40,7 +40,7 @@ class CYW4SB3_CFD_Data:
         s.definitions.append((char, cdat))
     except: pass
   def pack(s)->bytes:
-    h=b'PCBN0001\x04\0\x01\0'+int.to_bytes(1+33*len(s.definitions),4,"little")+b'\0'*12 # Crafted header - sufficient for this format
+    h=DataFile.mkPCBN(dim=[33*len(s.definitions)])
     d=b''
     for i in s.definitions:
       d += int.to_bytes(i[0],4,"little")+i[1]

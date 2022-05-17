@@ -1,13 +1,23 @@
 #!/usr/bin/python3
 import cv2, numpy, struct, random
 
-CNV_ARGB8, CNV_BGRA8, CNV_BGR8, CNV_RGBA5551, CNV_LA4, CNV_L8, CNV_RGB332,\
-CNV_RGBA3221, CNV_HSV844, CNV_HSVA7441, CNV_A8, CNV_LA8, CNV_RGBX2 =\
-    range(13)
+CNV_NULL, CNV_ARGB8, CNV_BGRA8, CNV_BGR8, CNV_RGBA5551, CNV_RGB565, CNV_LA4, CNV_L8,\
+CNV_RGBA3221, CNV_RGB332, CNV_HSV844, CNV_HSVA7441, CNV_LA53, CNV_A8, CNV_LA8, CNV_RGBA2321 =\
+    range(16)
 
 def getFmtByteCnt(f):
-    try: return (4,4,3,2,1,1,1,1,2,2,1,2,1)[f]
-    except: return 0
+    try: [CNV_ARGB8, CNV_BGRA8].index(f); return 4
+    except: pass
+    try: [CNV_BGR8].index(f); return 3
+    except: pass
+    try: [CNV_RGBA5551, CNV_RGB565, CNV_HSV844, CNV_HSVA7441, CNV_LA8].index(f); return 2
+    except: pass
+    try: 
+        [\
+            CNV_LA4, CNV_L8, CNV_RGB332, CNV_RGBA3221, CNV_A8, CNV_RGBA2321, CNV_LA53
+        ].index(f); return 1
+    except: pass
+    return 0
 
 def buf2simparr(buf):
     if type(buf)!=list or len(buf)!=4: return []
@@ -47,7 +57,10 @@ def packRGBA(t,ofm):
         return struct.pack("<BBB",t[2],t[1],t[0])
     if ofm == CNV_RGBA5551:
         return struct.pack("<H",
-        bool(t[3])*1 | int(t[0]/8)<<11 | int(t[1]/8)<<6 | int(t[2]/8)<<1)
+        bool(t[3])*1 | (t[0]//8)<<11 | (t[1]//8)<<6 | (t[2]//8)<<1)
+    if ofm == CNV_RGB565:
+        return struct.pack("<H",
+        (t[0]//8)<<11 | (t[1]//4)<<5 | (t[2]//8))
 
 # For ImgCnv.convertImage()
 def getRGBAFromBuf(ifm, buf, idx):
@@ -64,6 +77,11 @@ def getRGBAFromBuf(ifm, buf, idx):
         r,g,b,a = \
         ((im>>11)&31) * 8, ((im>>6)&31) * 8, \
         ((im>>1)&31) * 8, (im&1)*255
+    if ifm == CNV_RGB565:
+        im = struct.unpack("<H",buf[idx:idx+2])[0]
+        r,g,b,a = \
+        ((im>>11)&31) * 8, ((im>>5)&63) * 4, \
+        (im&31) * 8, 255
     return (r,g,b,a)
 
 def getImageFromFile(f): # Output is ARGB8-encoded data (ready for SB4 GRP/META)

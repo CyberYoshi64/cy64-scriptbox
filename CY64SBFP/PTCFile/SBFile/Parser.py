@@ -6,6 +6,7 @@ from PTCFile.SBFile.DataFile import DataFile
 from PTCFile.SBFile.GRPFile import GRPFile
 from PTCFile.SBFile.MetaFile import MetaFile
 from PTCFile.SBFile.ProjectFile import ProjectFile
+from PTCFile.SBFile.JpegFile import JpegFile
 import PTCFile.CY64Ware as CYW
 
 def setFileClass(s)->None:
@@ -35,3 +36,5 @@ def setFileClass(s)->None:
             s.fmt = MetaFile(s)
         if ftyp=="PRJ":
             s.fmt = ProjectFile(s)
+        if ftyp=="JPG":
+            s.fmt = JpegFile(s)

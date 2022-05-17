@@ -5,10 +5,19 @@ except: pass
 
 import struct, os
 
-DATATYPE_STCTFMT = ("b","B","h","H","i","d") # S8,U8,S16,U16,U32,dbl
+MAGIC=b'PCBN000'
+DATATYPE_STCTFMT = ("b","B","h","H","i","d") # S8,U8,S16,U16,S32,dbl
+
+def mkPCBN(fmtV:int=1, type:int=4, dimc:int=1, dim:list=[0])->bytes:
+  bit=struct.pack("<7sBH",MAGIC,48+fmtV,type)
+  bit += int.to_bytes(dimc,2,"little")
+  for i in range(dimc):
+    bit += int.to_bytes(dim[i],4,"little")
+  while i<3: bit+=int.to_bytes(0,4,"little"); i+=1
+  return bit
 
 class DataFileContent:
-  MAGIC=b'PCBN000'; formatVer = 5
+  formatVer = 5
   type = 4; dim = [0, 0, 0, 0]; dimc = 1
   data = b''
 
@@ -16,7 +25,7 @@ class DataFileContent:
     if d!=None:
       mgc, s.formatVer, s.type, dimc, dim0, dim1, dim2, dim3 = \
       struct.unpack("<7ssHHiiii", d[:28])
-      if mgc!=s.MAGIC: return
+      if mgc!=MAGIC: return
       if dimc<1 or dimc>4: return
       try: (b"1",b"5").index(s.formatVer)
       except: return
@@ -31,9 +40,8 @@ class DataFileContent:
       except: pass
   def extract(s,f): pass
   def pack(s):
-    return struct.pack(
-      "<7ssHHiiii", s.MAGIC, s.formatVer, s.type, s.dimc, s.dim[0], s.dim[1], s.dim[2], s.dim[3]
-    ) + s.data
+    return mkPCBN(s.formatVer, s.type, s.dimc, s.dim)\
+            + s.data
 
 
 class DataFile:

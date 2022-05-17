@@ -16,8 +16,9 @@ CYW4PTC_ENABLE = True
 # Misc
 
 CYW4PTC_KnownFmt = [
-  CYW4SB3_CFD #,\ # (SB3) Compressed Font Data
-  # CYW4SB3_BCFG #,\ (SB3) Binary config files
-  # CYW4SB4_PCM16 #,\ # (SB4) 16bit PCM
-  # CYW4SB3_CYGRP #,\ # (SB3) CYGRP (other pixel formats)
+  CYW4SB3_CFD, # (SB3) Compressed Font Data
+  # CYW4SB3_CFD2#, # (SB3) CFD revision 2
+  # CYW4SB3_BCFG#, # (SB3) Binary config files
+  # CYW4SB4_PCM16#, # (SB4) 16bit PCM
+  # CYW4SB3_CYGRP#, # (SB3) CYGRP (other pixel formats)
 ]

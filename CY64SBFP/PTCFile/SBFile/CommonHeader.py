@@ -30,13 +30,13 @@ File:
 
 Note:
     FileSize:   %d
-    EditDate:   "%d,%04d/%02d/%02d,%02d:%02d:%02d"
+    EditDate:   "%04d/%02d/%02d,%02d:%02d:%02d"
     FileIcon:   "%d"
 
 """ % (s.getFTypeStr(), n, str(bool(s.compress)), \
        s.creatorName, s.creatorID, \
        s.uploaderName, s.uploaderID, \
-       s.creator_uploadID, s.uploader_uploadID, s.dataSize, s.modWeekDay, \
+       s.creator_uploadID, s.uploader_uploadID, s.dataSize, \
        s.modYear, s.modMonth, s.modDay, s.modHour, s.modMinute, s.modSecond,\
        s.fileIcon
       ))
@@ -58,9 +58,18 @@ Note:
   def getWeekdayStr(s)->str:
     try: return ("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")[s.modWeekDay]
     except: return "(Bad weekday - %08x)"%s.modWeekDay
+
+  def getFPrefix(s)->str:
+    if s.isForSwitch():
+      try: return ("T","B","B","P","META","J")[s.fileType]
+      except: return ""
+    else:
+      try: return ("T","B","P")[s.fileType]
+      except: return ""
+
   def getFTypeStr(s)->str:
     if s.isForSwitch():
-      try: return ("TXT","DAT","GRP","PRJ","META")[s.fileType]
+      try: return ("TXT","DAT","GRP","PRJ","META","JPG")[s.fileType]
       except: return "UNK"
     else:
       try: return ("TXT","DAT","PRJ")[s.fileType]
