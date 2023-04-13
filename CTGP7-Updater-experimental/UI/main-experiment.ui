@@ -22,14 +22,6 @@
     <height>240</height>
    </size>
   </property>
-  <property name="font">
-   <font>
-    <pointsize>9</pointsize>
-   </font>
-  </property>
-  <property name="acceptDrops">
-   <bool>false</bool>
-  </property>
   <property name="windowTitle">
    <string>CTGP-7 Installer</string>
   </property>
@@ -87,12 +79,6 @@
       </item>
       <item>
        <widget class="QLineEdit" name="sdRootText">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="minimumSize">
          <size>
           <width>300</width>
@@ -107,9 +93,6 @@
         </property>
         <property name="frame">
          <bool>true</bool>
-        </property>
-        <property name="cursorPosition">
-         <number>0</number>
         </property>
         <property name="placeholderText">
          <string>Path to 3DS/Citra SD Card</string>
@@ -148,7 +131,6 @@
      <widget class="QLabel" name="miscInfoLabel">
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -208,7 +190,6 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>9</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
@@ -237,7 +218,6 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>9</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
@@ -318,7 +298,7 @@
     <item>
      <widget class="QLabel" name="progressInfoLabel">
       <property name="text">
-       <string>Progress Information</string>
+       <string>Progress Info</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -336,60 +316,18 @@
       <property name="value">
        <number>0</number>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <property name="textVisible">
-       <bool>true</bool>
-      </property>
-      <property name="invertedAppearance">
-       <bool>false</bool>
-      </property>
      </widget>
     </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>640</width>
-     <height>26</height>
+     <height>27</height>
     </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>0</width>
-     <height>26</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>16777215</width>
-     <height>26</height>
-    </size>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>9</pointsize>
-     <kerning>true</kerning>
-    </font>
-   </property>
-   <property name="defaultUp">
-    <bool>false</bool>
-   </property>
-   <property name="nativeMenuBar">
-    <bool>true</bool>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -404,7 +342,7 @@
     <property name="title">
      <string>Experimental</string>
     </property>
-    <addaction name="actionInstallCIA"/>
+    <addaction name="actionShowChangelog"/>
     <addaction name="actionIntegChk"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -415,10 +353,13 @@
      <property name="title">
       <string>Get help...</string>
      </property>
+     <addaction name="actionHelpDiscord"/>
      <addaction name="actionHelpGamebanana"/>
      <addaction name="actionHelpGitHub"/>
     </widget>
     <addaction name="actionAboutThisApp"/>
+    <addaction name="actionAboutQt"/>
+    <addaction name="separator"/>
     <addaction name="menuGetHelp"/>
    </widget>
    <addaction name="menuFile"/>
@@ -458,6 +399,24 @@
   <action name="actionHelpGitHub">
    <property name="text">
     <string>GitHub</string>
+   </property>
+  </action>
+  <action name="actionShowChangelog">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Changelog</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionHelpDiscord">
+   <property name="text">
+    <string>Discord Server</string>
    </property>
   </action>
  </widget>

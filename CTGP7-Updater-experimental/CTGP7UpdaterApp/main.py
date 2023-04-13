@@ -46,7 +46,7 @@ class CTGP7InstallerWorker(QRunnable):
     @Slot()  # QtCore.Slot
     def run(self):
         try:
-            self.logData({"m": "Starting CTGP-7 Installation..."})
+            self.logData({"m": "Initializing..."})
             self.updater = CTGP7Updater(self.isInstall, self.isCitra)
             self.updater.fetchDefaultCDNURL()
             self.updater.setLogFunction(self.logData)
@@ -62,6 +62,9 @@ class CTGP7InstallerWorker(QRunnable):
             self.signals.success.emit(self.updater.latestVersion)
 
 class Window(QMainWindow, Ui_MainWindow):
+    
+    HELP_DISCORD_LINK = "https://discord.com/invite/0uTPwYv3SPQww54l"
+    
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
@@ -100,7 +103,7 @@ class Window(QMainWindow, Ui_MainWindow):
         msg.setText(
             "An error has occurred.<br><br>"+
             "If this error keeps happening, ask for help in the "+
-            "<a href='https://discord.com/invite/0uTPwYv3SPQww54l'>"+
+            "<a href='"+self.HELP_DISCORD_LINK+"'>"+
             "CTGP-7 Discord Server</a>."
         )
         msg.setDetailedText(str(err))
@@ -152,6 +155,22 @@ class Window(QMainWindow, Ui_MainWindow):
     def updateButtonPress(self):
         if self.hasPending and (QMessageBox.question(self, "Pending update", "A pending update was detected. You must finish it first, before updating again. Do you want to continue this update?", QMessageBox.Yes | QMessageBox.No) == QMessageBox.No): return
         self.workerMode = CTGP7Updater._MODE_UPDATE
+        self.miscInfoLabel.setText("")
+        self.installerworker = CTGP7InstallerWorker(self.sdRootText.text(), self.workerMode, self.isCitraPath)
+        self.installerworker.signals.progress.connect(self.reportProgress)
+        self.installerworker.signals.success.connect(self.installOnSuccess)
+        self.installerworker.signals.error.connect(self.installOnError)
+        self.setStartButtonState(4)
+        self.sdBrowseButton.setEnabled(False)
+        self.helpButton.setEnabled(False)
+        self.sdRootText.setEnabled(False)
+        self.menuFile.setEnabled(False)
+        self.menuExperimental.setEnabled(False)
+        self.threadpool.start(self.installerworker)
+    
+    def performIntegrityCheck(self):
+        if QMessageBox.question(self, "Warning: Experimental", "\"Integrity Check\" is a work in progress feature.\nIt currently isn't sophisticated but can do the job of simply redownloading missing files.\n\nDo you want to continue?", QMessageBox.Yes | QMessageBox.No) == QMessageBox.No: return
+        self.workerMode = CTGP7Updater._MODE_INTCHECK
         self.miscInfoLabel.setText("")
         self.installerworker = CTGP7InstallerWorker(self.sdRootText.text(), self.workerMode, self.isCitraPath)
         self.installerworker.signals.progress.connect(self.reportProgress)
@@ -270,7 +289,7 @@ class Window(QMainWindow, Ui_MainWindow):
         QMessageBox.information(self, "About", 
             "CTGP-7 Installer v"+CTGP7Updater.VERSION_NUMBER+"<br><br>"+
             "Having issues? Ask for help in the "+
-            "<a href='https://discord.com/invite/0uTPwYv3SPQww54l'>"+
+            "<a href='"+self.HELP_DISCORD_LINK+"'>"+
             "CTGP-7 Discord Server</a><br><br>"+
             "2021-2023 CyberYoshi64, PabloMK7"
         )
@@ -283,6 +302,9 @@ class Window(QMainWindow, Ui_MainWindow):
 
     def openBrowserGameBanana(self):
         QDesktopServices.openUrl(QUrl("https://gamebanana.com/mods/50221"))
+
+    def openDiscord(self):
+        QDesktopServices.openUrl(QUrl(self.HELP_DISCORD_LINK))
 
     def quitApp(self):
         self.close()
@@ -301,12 +323,12 @@ class Window(QMainWindow, Ui_MainWindow):
         self.actionUpdateMod.triggered.connect(self.updateButtonPress)
         self.actionExit.triggered.connect(self.quitApp)
         self.actionAboutQt.triggered.connect(self.aboutQt)
+        self.actionHelpDiscord.triggered.connect(self.openDiscord)
         self.actionHelpGamebanana.triggered.connect(self.openBrowserGameBanana)
         self.actionHelpGitHub.triggered.connect(self.openBrowserGitHub)
 
-        self.actionShowChangelog.setEnabled(False)
-        self.actionInstallCIA.setEnabled(False)
-        self.actionIntegChk.triggered.connect(self.featureNotImplemented)
+        self.actionShowChangelog.triggered.connect(self.featureNotImplemented)
+        self.actionIntegChk.triggered.connect(self.performIntegrityCheck)
 
 def startUpdaterApp():
     app = QApplication(sys.argv)

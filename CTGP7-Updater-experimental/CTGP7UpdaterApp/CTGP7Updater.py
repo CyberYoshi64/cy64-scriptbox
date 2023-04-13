@@ -81,7 +81,7 @@ class CTGP7Updater:
                         fileDownSize = int(u.headers.get("Content-Length", 1))
 
                         fileDownCurr = 0
-                        block_sz = 8192
+                        block_sz = 32768
                         while True:
                             if userCancel or (self.isStoppedCallback is not None and self.isStoppedCallback()):
                                 userCancel = True
@@ -227,7 +227,7 @@ class CTGP7Updater:
         return self.isStopped
 
     def _logFileProgressCallback(self, fileDownCurr, fileDownSize, fileOnlyName):
-        self._log("Downloading file {} of {}: \"{}\" ({:.1f}%){}".format(self.currDownloadCount+1, self.downloadCount, fileOnlyName, (fileDownCurr / fileDownSize) * 100, "\r"*(fileDownCurr<fileDownSize)))
+        self._log("File {}/{}: '{}' ({:.1f}%){}".format(self.currDownloadCount, self.downloadCount, fileOnlyName, (fileDownCurr / fileDownSize) * 100, "\r"*(fileDownCurr<fileDownSize)))
     
     def setBaseURL(self, url):
         self.baseURL = url
@@ -276,7 +276,6 @@ class CTGP7Updater:
         self.basePath = path
 
     def getLatestVersion(self):
-        self._log("Fetching latest version...")
         try:
             self.latestVersion = self._downloadString(self.baseURL + CTGP7Updater._LATEST_VER_LOCATION).replace("\n", "").replace("\r", "")
         except Exception as e:
@@ -286,7 +285,8 @@ class CTGP7Updater:
         try:
             p = os.path.join(self.basePath, "CTGP-7", *self._REINSTALLFLAG_PATH)
             CTGP7Updater.mkFoldersForFile(p)
-            open(p, 'wb').close()
+            with open(p, 'wb') as f:
+                f.write(b"Oopsies... you gotta reinstall, bro.")
         except:
             pass
 
@@ -379,7 +379,35 @@ class CTGP7Updater:
 
                     except Exception as e:
                         raise Exception("Failed to get list of files: {}".format(e))
-    
+        if (self.operationMode == self._MODE_INTCHECK):
+            try:
+                configPath = os.path.join(self.basePath, "CTGP-7", *CTGP7Updater._VERSION_FILE_PATH)
+                with open(configPath, "rb") as vf:
+                    localVersion = vf.read().decode("utf-8")
+            except Exception as e:
+                self.makeReinstallFlag()
+                raise Exception("Could not read the version file: {}".format(e))
+
+            if localVersion != self.latestVersion:
+                raise Exception("Cannot continue: This installation is not up-to-date. Please update this installation before performing an integrity check.")
+
+            self._log("Preparing integrity check...")
+            try:
+                fileList = self._downloadString(self.baseURL + CTGP7Updater._INSTALLER_FILE_DIFF).split("\n")
+                for file in fileList:
+                    if file=="": continue
+                    if file[0]!="S":
+                        fileName = file[1:].strip()
+                        if fileName.find("tooInstall")<0 and not os.path.exists(
+                            os.path.join(self.basePath, "CTGP-7"+fileName.replace("/",os.sep))
+                        ):
+                            fileModeList.append((file[0],fileName))
+                if not len(fileModeList):
+                    raise Exception("No files are missing. There's nothing to do.")
+                self.fileList = self._parseAndSortDlList(fileModeList)
+            except Exception as e:
+                raise Exception("Couldn't prepare integrity check: {}".format(e))
+
     def verifySpaceAvailable(self):
         available_space = psutil.disk_usage(self.basePath).free
         neededSpace = self._checkNeededExtraSpace(available_space)
@@ -414,27 +442,30 @@ class CTGP7Updater:
 
         fileName = os.path.join(self.basePath, "CTGP-7", *self._PENDINGUPDATE_PATH)
         self.mkFoldersForFile(fileName)
+        self.fileDelete(fileName)
         with open(fileName,"wb") as puf:
             puf.write(header + flist)
 
     def startUpdate(self):
         mainfolder = os.path.join(self.basePath, "CTGP-7")
+        hbrwfolder = os.path.join(self.basePath, "3ds")
+
         try:
             os.makedirs(mainfolder, exist_ok=True)
+            os.makedirs(hbrwfolder, exist_ok=True)
         except Exception as e:
-            raise Exception("Failed to create CTGP-7 directory: {}".format(e))
+            raise Exception("Failed to create directories: {}".format(e))
 
-        CTGP7Updater.fileDelete(os.path.join(self.basePath, "CTGP-7", *self._PENDINGUPDATE_PATH))
         if self.isCitra:
             configPath = os.path.join(self.basePath, "CTGP-7", *self._ISCITRAFLAG_PATH)
             self.mkFoldersForFile(configPath)
             with open(configPath, "wb") as vf:
-                vf.write(b'empty')
+                vf.write(b'It\'s really a lemon, no?')
         prevReturnValue = None
         self.currDownloadCount = 0
         for entry in self.fileList:
             entry.setCallbacks(self._isStoppedCallback, self._logFileProgressCallback)
-            if (entry.fileMethod == "M"):
+            if (entry.fileMethod == "M" or entry.fileMethod == "C"):
                 self._prog(self.currDownloadCount, self.downloadCount)
                 self.currDownloadCount += 1
 
@@ -449,21 +480,16 @@ class CTGP7Updater:
                 if type(e)==KeyboardInterrupt: raise Exception("User cancelled installation") # Terminal
                 raise Exception(e)
 
-        self._prog(self.currDownloadCount, self.downloadCount)
+        if self.downloadCount:
+            self._prog(self.currDownloadCount, self.downloadCount)
         
         ciaFile = os.path.join(mainfolder, "cia", "CTGP-7.cia")
+        hbrwFile = os.path.join(mainfolder, "cia", "CTGP-7.3dsx")
+        hbrwFileFinal = os.path.join(hbrwfolder, "CTGP-7.3dsx")
         tooInstallCiaFile = os.path.join(mainfolder, "cia", "tooInstall.cia")
+        tooInstallHbrwFile = os.path.join(mainfolder, "cia", "tooInstall.3dsx")
         
-        self._log("Completing installation...")
-
-        try:
-            if os.path.exists(tooInstallCiaFile):
-                try: os.stat(ciaFile)
-                except: pass
-                else: os.remove(ciaFile)
-                os.rename(src=tooInstallCiaFile,dst=ciaFile)
-        except Exception as e:
-            raise Exception("Failed to finish cleanup: {}".format(e))
+        self._log("Finishing operations...")
 
         try:
             configPath = os.path.join(mainfolder, *CTGP7Updater._VERSION_FILE_PATH)
@@ -474,7 +500,17 @@ class CTGP7Updater:
             self.makeReinstallFlag()
             raise Exception("Failed to write version info: {}".format(e))
         
-        self._log("Installation complete!")
+        try:
+            self.fileDelete(os.path.join(self.basePath, "CTGP-7", *self._PENDINGUPDATE_PATH))
+            if os.path.exists(tooInstallHbrwFile):
+                self.fileMove(tooInstallHbrwFile,hbrwFile)
+                shutil.copyfile(hbrwFile, hbrwFileFinal)
+            if os.path.exists(tooInstallCiaFile):
+                self.fileMove(tooInstallCiaFile,ciaFile)
+        except Exception as e:
+            raise Exception("Failed to finish cleanup: {}".format(e))
+
+        self._log("")
 
     def cleanInstallFolder(self):
         # Only wipe folder, if not updating
