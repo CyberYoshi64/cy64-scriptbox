@@ -1,0 +1,21 @@
+#CYWPTCPRJDSC 1
+
+Project:
+    Name:               "New Project 1"
+    Creator:            "CyberYoshi64"
+    TargetVersion:      3
+    Checksum:           Ignore
+    IsMulti:            True
+    Description:
+        """
+        This is a sample project used as the building ground of
+        CY64Ware PetitCom projects.
+
+        Of course, this is a dummy project but whatever, man.
+        """
+    Version:            "0.1.2r3"
+    CompressFiles:      True
+
+FileCategory:
+    1: "Miscellaneous"
+    2: "CYW4SB3-related data"

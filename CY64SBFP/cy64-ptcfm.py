@@ -17,15 +17,21 @@ argpar.add_argument("-c", "--compress", action="store_true", help="Apply compres
 argpar.add_argument("-d", "--decompress", action="store_true", help="Remove compression (if it was applied)")
 argpar.add_argument("-e", "--extract", action="store_true", help='Extract the file contents into a folder')
 argpar.add_argument("-v", "--verify", action="store_true", help="Check, if the input file is valid.")
+argpar.add_argument("-u", "--update", action="store_true", help="Update file header")
+argpar.add_argument("-0", "--setname", metavar="name", help="Set creator/editor name")
 argpar.add_argument("--bulk", action="store_true", help="(Internal use) Silent mode")
 
 args = argpar.parse_args()
 # print(args)
-try:
+#try:
+if True:
   if args.compress and args.decompress: raise argparse.ArgumentError(None, "Cannot compress and decompress simultaneously; what the heck?")
   if (args.compress or args.decompress) and args.extract: raise argparse.ArgumentError(None, "Cannot (de-)compress and extract simulataneously.")
   if type(args.output)!=str and args.extract:
     raise argparse.ArgumentError(None, "No output name provided, try specifying a folder or file with -o")
+
+  if args.setname and len(args.setname)>16:
+    raise argparse.ArgumentError(None, "The user name you specified is too long.")
 
   if type(args.input)!=str:
     raise argparse.ArgumentError(None, "No input provided, try specifying a folder or file with -i")
@@ -33,7 +39,7 @@ try:
     l=glob(args.input+"/*")
     a=sys.argv; b=""
     for i in a:
-      if i==args.input: b += "{} "
+      if i==args.input: b += "\"{}\" "
       else: b += i+" "
     try: a.index("--bulk")
     except: b += " --bulk"
@@ -42,9 +48,10 @@ try:
     else:
       print("Folder specified as input; recursively reading inner files...")
     for i in range(len(l)):
-      print("(% 5.1f%%) Extracting %s ..." % ((i/(len(l)-1)*100), l[i]))
+      print("(% 5.1f%%) %s ..." % ((i/(len(l)-1)*100), l[i]))
       if os.system(b.format(l[i]))>0: exit(1)
   else:
+    flushFile = False
     inFileStm = open(args.input,"rb")
     inFileStm.seek(0,0)
     origfobj = PTCFile.File(inFileStm)
@@ -52,7 +59,7 @@ try:
     inFileStm.close()
     szDiff = origf.getDataSize() - origf.head.dataSize
     #if origf.error: raise TypeError("File failed to parse: "+origf.errorstr)
-    if args.stats and not args.bulk:
+    if args.stats:
       print(textwrap.dedent('''\
         File header of %s:
           File type : %s for SB%d (%s)
@@ -77,7 +84,7 @@ try:
       elif origf.valid:
         print("File is valid")
       else:
-        print("File is not valid; bad checksum or bad content for specified file type"); prgerr=True
+        print("File is not valid; bad checksum or bad content for specified file type"); prgerr=bool(args.extract)
 
     doExtract = False
     if args.extract:
@@ -90,9 +97,29 @@ try:
       
     if doExtract:
       origf.extract(args.output.rstrip("\\/"),args.input, args.bulk)
+    
+    if args.compress or args.decompress:
+    	if args.compress: origf.head.compress = True
+    	if args.decompress: origf.head.compress = False
+    	flushFile = True
+    
+    if args.setname != None:
+    	origf.head.creatorName = args.setname
+    	origf.head.uploaderName = args.setname
+    	origf.head.creatorID = 0
+    	origf.head.uploaderID = 0
+    	flushFile = True
+    
+    if flushFile or args.update:
+    	origf.updateCmnHdr()
+    	d = origf.pack()
+    	with open(args.input,"wb") as f:
+    		f.truncate()
+    		f.write(d)
+    		f.flush()
 
-
-except:
+else:
+#except:
   errtype, errvalue, errtrace = sys.exc_info()
   if errtype==KeyboardInterrupt:
     print("Script was stopped."); prgerr=0xc0ffee

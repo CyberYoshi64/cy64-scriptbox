@@ -3,8 +3,6 @@
 *.old
 *.cywbak
 *.bak
-CY64SBFP/*bin
-CY64SBFP/NewProject1
-CY64SBFP/SKKBAfile
-CY64SBFP/*out*
+CY64SBFP2/
 __pycache__
+CY64PTCFP2/

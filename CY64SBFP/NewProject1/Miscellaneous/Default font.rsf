@@ -1,0 +1,10 @@
+#CYWPTCPRJDSC 1
+
+File:
+    Type:       "GRP"
+    Name:       "DEFFONT.GRP"
+
+Properties:
+    Image:      "/image.png"
+    Format:     "RGBA5551"
+    Filter:     None

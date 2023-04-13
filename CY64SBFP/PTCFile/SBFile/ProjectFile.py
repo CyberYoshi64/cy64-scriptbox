@@ -63,6 +63,7 @@ class ProjectFile:
     import os
     if sbf.neck.meta != None: sbf.neck.meta.fmt.extract(f, sbf.neck.meta)
     os.makedirs(f+"/raw",exist_ok=True)
+    print("File count: {}".format(len(sbf.data.files)))
     for i in sbf.data.files:
       d=open(f+"/raw/%s"%(i[0]),'wb'); d.truncate(0)
       d.write(i[2]); d.flush(); d.close()

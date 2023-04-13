@@ -72,13 +72,13 @@ class SBFile:
     if type(fd)==io.BufferedReader:
       s.name = fd.name.split("\\")[-1].split("/")[-1]
       fd.seek(0,2); fsz=fd.tell(); fd.seek(0,0)
+      if fsz<100:
+        raise Exception("File is truncated. Not enough bytes.")
       d=fd.read(fsz-20); f=fd.read(20)
       s.valid = (f == hmac.new(HMAC_KEY, d, hashlib.sha1).digest())
-      fd.seek(0,0); f,d=(None,None)
+      fd.seek(0,0)
       if s.head.loadFromFD(fd)<0:
-        s.error = 1
-        s.errorstr = "File is truncated. Not enough bytes."
-        return
+        raise Exception("File is truncated. Not enough bytes.")
       fsz -= fd.tell() + 20 * s.usesHash()
       s.data = fd.read(fsz)
       if s.head.compress: s.data=zlib.decompress(s.data)

@@ -2,13 +2,13 @@
 import PTCFile, struct
 from sys import argv
 
-if len(argv)<2: print("Usage: %s [file]"%argv[0]); exit(0)
+if len(argv)<3: print("Usage: %s [file] [mode 0/1-to/fromGRP]"%argv[0]); exit(0)
 inf=argv[1]
 outf="BOUT2.GRP"
 outi="in.png"
 outf2="out3.png"
 
-if False:
+if not int(argv[2]):
 	f=open(inf,"rb")
 	origfobj = PTCFile.File(f)
 	f.close()
@@ -32,13 +32,13 @@ if False:
 	f.flush(); f.close()
 else:
 	f=open(inf,"rb")
-	w,h=48,48#512,512
-	#f.seek(0x6C)
+	w,h=512,512
+	f.seek(0x6C)
 	print("Get image back from written file")
 	img = bytearray(f.read(w*h*2))
 	f.close()
 	print("Convert to ARGB8")
-	buf = PTCFile.ImgCnv.convertImage([PTCFile.ImgCnv.CNV_RGB565, w, h, img], PTCFile.ImgCnv.CNV_BGRA8, 0)
+	buf = PTCFile.ImgCnv.convertImage([PTCFile.ImgCnv.CNV_RGBA5551, w, h, img], PTCFile.ImgCnv.CNV_BGRA8, 0)
 	print("Saving file")
 	print(PTCFile.ImgCnv.saveImageToFile(buf, outf2))
 	

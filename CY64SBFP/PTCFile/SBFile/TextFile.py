@@ -15,6 +15,6 @@ class TextFile:
     sbf.neck = None
     sbf.data = TextFileData(sbf.data.decode("utf8","ignore"))
   def extract(s, f, sbf):
-    d=open(f+"/%s.txt"%(sbf.name),'w')
-    d.write(sbf.data.string)
+    d=open(f+"/%s.txt"%(sbf.name),'wb')
+    d.write(sbf.data.string.encode("utf-8"))
     d.close()

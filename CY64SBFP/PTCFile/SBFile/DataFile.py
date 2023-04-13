@@ -27,20 +27,19 @@ class DataFileContent:
       struct.unpack("<7ssHHiiii", d[:28])
       if mgc!=MAGIC: return
       if dimc<1 or dimc>4: return
-      try: (b"1",b"5").index(s.formatVer)
+      try: (b"1",b"4").index(s.formatVer)
       except: return
       s.dimc = dimc
       s.data = d[28:]
       s.dim = [dim0, dim1, dim2, dim3]
       try:
         tl=struct.calcsize(DATATYPE_STCTFMT[s.type]); dl=1
-        for i in range(dimc):
-          dl *= s.dim[i]
-        if dl*tl != len(s.data): raise ValueError("Data length mismatch!")
+        for i in range(dimc): dl *= s.dim[i]
       except: pass
+      if dl*tl != len(s.data): raise ValueError("Data length mismatch!")
   def extract(s,f): pass
   def pack(s):
-    return mkPCBN(s.formatVer, s.type, s.dimc, s.dim)\
+    return mkPCBN(int(s.formatVer), s.type, s.dimc, s.dim)\
             + s.data
 
 
@@ -57,11 +56,9 @@ Property:
 """ % (sbf.data.type))
     d.close()
     a=[]; desz=struct.calcsize(DATATYPE_STCTFMT[sbf.data.type])
-    try:
-      for i in range(0, len(sbf.data.data), desz):
-        a.append(struct.unpack("<%s"%DATATYPE_STCTFMT[sbf.data.type],\
-        sbf.data.data[i:i+desz])[0])
-    except: pass
+    for i in range(0, len(sbf.data.data), desz):
+      a.append(struct.unpack("<%s"%DATATYPE_STCTFMT[sbf.data.type],\
+      sbf.data.data[i:i+desz])[0])
     d=open(f+"/%s.csv"%(sbf.name),'wb')
     d.write(b"%d,%d,%d,%d,%d\n\n" % (
       sbf.data.dimc, sbf.data.dim[0],sbf.data.dim[1],\
@@ -73,5 +70,5 @@ Property:
       else: d.write(b"%d,"%a[i])
     d.flush(); d.close()
     d=open(f+"/%s.bin"%(sbf.name),'wb')
-    for i in a: d.write(struct.pack(">%s"%DATATYPE_STCTFMT[sbf.data.type], i))
+    for i in a: d.write(struct.pack(">%s"%DATATYPE_STCTFMT[sbf.data.type],i))
     d.flush(); d.close()
