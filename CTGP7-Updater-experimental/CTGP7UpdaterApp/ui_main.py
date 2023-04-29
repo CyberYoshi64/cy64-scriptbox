@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main-experimentWceGJN.ui'
+## Form generated from reading UI file 'main-experimentHrFxtA.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.8
+## Created by: Qt User Interface Compiler version 5.15.9
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -12,14 +12,14 @@ from PySide2.QtCore import *  # type: ignore
 from PySide2.QtGui import *  # type: ignore
 from PySide2.QtWidgets import *  # type: ignore
 
-import CTGP7UpdaterApp.resources_rc
+from . import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(640, 240)
-        MainWindow.setMinimumSize(QSize(512, 240))
+        MainWindow.resize(640, 200)
+        MainWindow.setMinimumSize(QSize(512, 200))
         MainWindow.setMaximumSize(QSize(720, 240))
         icon = QIcon()
         icon.addFile(u":/images/window_icon.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -41,7 +41,6 @@ class Ui_MainWindow(object):
         self.actionHelpGitHub.setObjectName(u"actionHelpGitHub")
         self.actionShowChangelog = QAction(MainWindow)
         self.actionShowChangelog.setObjectName(u"actionShowChangelog")
-        self.actionShowChangelog.setCheckable(True)
         self.actionAboutQt = QAction(MainWindow)
         self.actionAboutQt.setObjectName(u"actionAboutQt")
         self.actionHelpDiscord = QAction(MainWindow)
@@ -66,7 +65,7 @@ class Ui_MainWindow(object):
 
         self.sdRootText = QLineEdit(self.centralwidget)
         self.sdRootText.setObjectName(u"sdRootText")
-        self.sdRootText.setMinimumSize(QSize(300, 0))
+        self.sdRootText.setMinimumSize(QSize(256, 0))
         self.sdRootText.setMaxLength(512)
         self.sdRootText.setFrame(True)
         self.sdRootText.setClearButtonEnabled(False)
@@ -77,6 +76,11 @@ class Ui_MainWindow(object):
         self.sdBrowseButton.setObjectName(u"sdBrowseButton")
 
         self.horizontalLayout_2.addWidget(self.sdBrowseButton)
+
+        self.sdDetectButton = QPushButton(self.centralwidget)
+        self.sdDetectButton.setObjectName(u"sdDetectButton")
+
+        self.horizontalLayout_2.addWidget(self.sdDetectButton)
 
         self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -106,12 +110,12 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer_7)
 
-        self.startStopButton = QPushButton(self.centralwidget)
-        self.startStopButton.setObjectName(u"startStopButton")
-        self.startStopButton.setMinimumSize(QSize(0, 40))
-        self.startStopButton.setFont(font)
+        self.installButton = QPushButton(self.centralwidget)
+        self.installButton.setObjectName(u"installButton")
+        self.installButton.setMinimumSize(QSize(0, 40))
+        self.installButton.setFont(font)
 
-        self.horizontalLayout_4.addWidget(self.startStopButton)
+        self.horizontalLayout_4.addWidget(self.installButton)
 
         self.updateButton = QPushButton(self.centralwidget)
         self.updateButton.setObjectName(u"updateButton")
@@ -132,24 +136,6 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_4)
-
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_5)
-
-        self.helpButton = QPushButton(self.centralwidget)
-        self.helpButton.setObjectName(u"helpButton")
-
-        self.horizontalLayout_3.addWidget(self.helpButton)
-
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_6)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -213,20 +199,21 @@ class Ui_MainWindow(object):
         self.actionAboutThisApp.setText(QCoreApplication.translate("MainWindow", u"About this app...", None))
         self.actionHelpGamebanana.setText(QCoreApplication.translate("MainWindow", u"Gamebanana", None))
         self.actionHelpGitHub.setText(QCoreApplication.translate("MainWindow", u"GitHub", None))
-        self.actionShowChangelog.setText(QCoreApplication.translate("MainWindow", u"Show Changelog", None))
+        self.actionShowChangelog.setText(QCoreApplication.translate("MainWindow", u"View Changelog", None))
         self.actionAboutQt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
         self.actionHelpDiscord.setText(QCoreApplication.translate("MainWindow", u"Discord Server", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Select target:", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Target:", None))
         self.sdRootText.setInputMask("")
         self.sdRootText.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Path to 3DS/Citra SD Card", None))
-        self.sdBrowseButton.setText(QCoreApplication.translate("MainWindow", u"Browse...", None))
-        self.miscInfoLabel.setText(QCoreApplication.translate("MainWindow", u"[Information]", None))
-        self.startStopButton.setText(QCoreApplication.translate("MainWindow", u"Install", None))
+        self.sdBrowseButton.setText(QCoreApplication.translate("MainWindow", u"Browse", None))
+        self.sdDetectButton.setText(QCoreApplication.translate("MainWindow", u"Detect", None))
+        self.miscInfoLabel.setText(QCoreApplication.translate("MainWindow", u"[Some information here]", None))
+        self.installButton.setText(QCoreApplication.translate("MainWindow", u"Install", None))
         self.updateButton.setText(QCoreApplication.translate("MainWindow", u"Update", None))
-        self.helpButton.setText(QCoreApplication.translate("MainWindow", u"Help", None))
         self.progressInfoLabel.setText(QCoreApplication.translate("MainWindow", u"Progress Info", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
-        self.menuExperimental.setTitle(QCoreApplication.translate("MainWindow", u"Experimental", None))
+        self.menuExperimental.setTitle(QCoreApplication.translate("MainWindow", u"Experiments", None))
         self.menuAbout.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuGetHelp.setTitle(QCoreApplication.translate("MainWindow", u"Get help...", None))
     # retranslateUi
+

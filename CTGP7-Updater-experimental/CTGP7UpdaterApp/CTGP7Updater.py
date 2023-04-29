@@ -6,16 +6,17 @@ import struct
 from typing import List
 
 urlmgr = urllib3.PoolManager(headers={"connection":"keep-alive"})
-def urlopen(url, **kwarg):
+def urlopen(url:str, **kwarg):
     out = urlmgr.request("GET", url, chunked=True, preload_content=False, **kwarg)
-    if out.status != 200: raise Exception("Received staus code {}".format(out.status))
+    if out.status != 200: raise Exception("Failed opening URL '{}': Received staus code {}".format(url, out.status))
     return out
 
 class CTGP7Updater:
 
-    VERSION_NUMBER = "1.1.3-dev"
+    VERSION_NUMBER = "1.1.2-dev"
 
     _BASE_URL_DYN_LINK = "https://ctgp7.page.link/baseCDNURL"
+    _INSTALLER_VERSION = "installerver"
     _INSTALLER_FILE_DIFF = "installinfo.txt"
     _UPDATER_CHGLOG_FILE = "changeloglist"
     _UPDATER_FILE_URL = "fileListPrefix.txt"
@@ -27,6 +28,7 @@ class CTGP7Updater:
     _PENDINGUPDATE_PATH = ["config", "pendingUpdate.bin"]
     _ISCITRAFLAG_PATH = ["config", "citra.flag"]
     _REINSTALLFLAG_PATH = ["config", "forceInstall.flag"]
+    _PATCHFLAG_PATH = ["config", "forcePatch.flag"]
     _SLACK_FREE_SPACE = 20000000
 
     _MODE_INSTALL, _MODE_UPDATE, _MODE_INTCHECK = range(3)
@@ -75,6 +77,7 @@ class CTGP7Updater:
             while (True):
                 try:
                     CTGP7Updater.mkFoldersForFile(self.filePath)
+                    if self.url.find("dummy.txt")>=0: return
                     u = urlopen(self.url, timeout=10)
                     with open(self.filePath + _DOWN_PART_EXT, 'wb') as downFile:
 
@@ -162,6 +165,10 @@ class CTGP7Updater:
         CTGP7Updater.fileDelete(newf)
         os.rename(oldf,newf)
 
+    @staticmethod
+    def getDefaultCdnUrlAsString():
+        return CTGP7Updater._downloadString(CTGP7Updater._BASE_URL_DYN_LINK).strip()
+
     def fetchDefaultCDNURL(self):
         try:
             self.baseURL = self._downloadString(CTGP7Updater._BASE_URL_DYN_LINK).replace("\r", "").replace("\n", "")
@@ -213,7 +220,8 @@ class CTGP7Updater:
     def _checkNeededExtraSpace(self, diskSpace):
         return 0 if not self.downloadSize else max(0, self.downloadSize + CTGP7Updater._SLACK_FREE_SPACE - diskSpace)
 
-    def _downloadString(self, url: str) -> str:
+    @staticmethod
+    def _downloadString(url: str) -> str:
         try:
             output = urlopen(url, timeout=10).read()
             return output.decode('utf-8')
@@ -369,7 +377,7 @@ class CTGP7Updater:
                 progTotal = len(changelogData) - chglogIdx
                 for index in range(chglogIdx + 1, len(changelogData)):
                     try:
-                        self._log("Preparing update (v{})...\r".format(changelogData[index]))
+                        self._log("Obtaining update info for v{}...\r".format(changelogData[index]))
                         self._prog(index - chglogIdx, progTotal-1)
                         fileList = self._downloadString(fileListURL % changelogData[index]).split("\n")
                         for file in fileList:
@@ -381,7 +389,15 @@ class CTGP7Updater:
                         raise Exception("Failed to get list of files: {}".format(e))
         if (self.operationMode == self._MODE_INTCHECK):
             try:
-                configPath = os.path.join(self.basePath, "CTGP-7", *CTGP7Updater._VERSION_FILE_PATH)
+                patchFlag = os.path.join(self.basePath, "CTGP-7", *self._PATCHFLAG_PATH)
+                self.fileDelete(patchFlag)
+                with open(patchFlag,"wb") as f:
+                    f.write(b"lol")
+            except Exception as e:
+                raise Exception("Unable to be create patch flag: {}".format(e))
+
+            try:
+                configPath = os.path.join(self.basePath, "CTGP-7", *self._VERSION_FILE_PATH)
                 with open(configPath, "rb") as vf:
                     localVersion = vf.read().decode("utf-8")
             except Exception as e:
@@ -393,12 +409,12 @@ class CTGP7Updater:
 
             self._log("Preparing integrity check...")
             try:
-                fileList = self._downloadString(self.baseURL + CTGP7Updater._INSTALLER_FILE_DIFF).split("\n")
+                fileList = self._downloadString(self.baseURL + self._INSTALLER_FILE_DIFF).split("\n")
                 for file in fileList:
                     if file=="": continue
                     if file[0]!="S":
                         fileName = file[1:].strip()
-                        if fileName.find("tooInstall")<0 and not os.path.exists(
+                        if fileName.find("tooInstall")<0 and fileName[-5:]!=".flag" and not os.path.exists(
                             os.path.join(self.basePath, "CTGP-7"+fileName.replace("/",os.sep))
                         ):
                             fileModeList.append((file[0],fileName))
@@ -425,11 +441,15 @@ class CTGP7Updater:
                         candidates.append(m.mountpoint)
                 except:
                     pass
-            if (len(candidates) == 1):
-                return candidates[0]
         except:
             pass
-        return None
+        return candidates
+
+    @staticmethod
+    def checkProgramVersion():
+        baseURL = CTGP7Updater.getDefaultCdnUrlAsString()
+        ver = CTGP7Updater._downloadString(baseURL + CTGP7Updater._INSTALLER_VERSION).strip()
+        return ver != CTGP7Updater.VERSION_NUMBER.split("-")[0]
 
     def makePendingUpdate(self):
         header:bytes = self.latestVersion.encode("ascii") + b'\0'
@@ -489,7 +509,7 @@ class CTGP7Updater:
         tooInstallCiaFile = os.path.join(mainfolder, "cia", "tooInstall.cia")
         tooInstallHbrwFile = os.path.join(mainfolder, "cia", "tooInstall.3dsx")
         
-        self._log("Finishing operations...")
+        self._log("Finishing up...")
 
         try:
             configPath = os.path.join(mainfolder, *CTGP7Updater._VERSION_FILE_PATH)
@@ -513,29 +533,41 @@ class CTGP7Updater:
         self._log("")
 
     def cleanInstallFolder(self):
-        # Only wipe folder, if not updating
         if (self.operationMode != self._MODE_INSTALL): return
         mainfolder = os.path.join(self.basePath, "CTGP-7")
         if (os.path.exists(mainfolder)):
-            self._log("Cleaning up previous CTGP-7 installation...")
+            self._log("Removing previous installation...")
             shutil.rmtree(mainfolder)
 
+    """
+    Check, if the SD specified is for Citra.
+
+    Return values:
+        True  - Path is Citra SD
+        False - Path is not Citra (3DS)
+        None  - Uncertain, ask in front-end
+
+        FIXME: Can only detect locally installed on main
+               drive; fails if Citra is installed externally.
+
+        TODO: Figure out how to read Citra config
+    """
     @staticmethod
-    def isCitraDirectory(path:str): # True/False: Citra/3DS , None: Unsure
+    def isCitraDirectory(path:str):
         if os.name == "nt":
             citraPath = os.path.join(os.environ["APPDATA"],"Citra","sdmc")
         else:
             citraPath = os.path.join(os.environ["HOME"],".local","share","citra-emu","sdmc")
         
         try:
-            if os.path.samefile(path, citraPath): # Linux is case-sensitive, Windows may use inconsistent casing, ruining a simple ==
+            if os.path.samefile(path, citraPath): # Linux is case-sensitive, Windows may use inconsistent casing, ruining simple checks
                                                   # Added bonus: symlinks would work this way too.
-                return True # These paths are fixed, so it's definitely Citra
+                return True
             else:
                 if os.path.exists(os.path.join(path, "boot.firm")):
-                    return False # This path is of a hacked 3DS's SD.
+                    return False
                 if os.path.exists(os.path.join(path, *CTGP7Updater._ISCITRAFLAG_PATH)):
-                    return True # This file is used to only ask during initial installation
-            return None # It's unsure, will need to be asked at front-end.
+                    return True
+            return None
         except:
-            return None # os.path.samefile could throw exception if Citra was never ran by current user; asking anyway
+            return None

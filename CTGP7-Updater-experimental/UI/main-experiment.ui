@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>240</height>
+    <height>200</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>512</width>
-    <height>240</height>
+    <height>200</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -70,7 +70,7 @@
       <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Select target:</string>
+         <string>Target:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::AutoText</enum>
@@ -81,7 +81,7 @@
        <widget class="QLineEdit" name="sdRootText">
         <property name="minimumSize">
          <size>
-          <width>300</width>
+          <width>256</width>
           <height>0</height>
          </size>
         </property>
@@ -105,7 +105,14 @@
       <item>
        <widget class="QPushButton" name="sdBrowseButton">
         <property name="text">
-         <string>Browse...</string>
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="sdDetectButton">
+        <property name="text">
+         <string>Detect</string>
         </property>
        </widget>
       </item>
@@ -136,7 +143,7 @@
        </font>
       </property>
       <property name="text">
-       <string>[Information]</string>
+       <string>[Some information here]</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -181,7 +188,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="startStopButton">
+       <widget class="QPushButton" name="installButton">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -238,43 +245,6 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>64</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="helpButton">
-        <property name="text">
-         <string>Help</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_6">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
           <height>20</height>
          </size>
         </property>
@@ -340,7 +310,7 @@
    </widget>
    <widget class="QMenu" name="menuExperimental">
     <property name="title">
-     <string>Experimental</string>
+     <string>Experiments</string>
     </property>
     <addaction name="actionShowChangelog"/>
     <addaction name="actionIntegChk"/>
@@ -402,11 +372,8 @@
    </property>
   </action>
   <action name="actionShowChangelog">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
-    <string>Show Changelog</string>
+    <string>View Changelog</string>
    </property>
   </action>
   <action name="actionAboutQt">

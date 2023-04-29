@@ -1,0 +1,44 @@
+from PySide2.QtWidgets import *
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from CTGP7UpdaterApp.dialogTemplate1 import ThreadedDialog
+
+class ThreadedDialogTemplate(QRunnable, QThread):
+    def __init__(self) -> None:
+        super().__init__()
+        self.closed = False
+        self.signals = ThreadedDialog.RunSignals()
+    
+    @Slot()
+    def setClosed(self):
+        self.closed = True
+
+    @Slot()
+    def run(self):
+        
+        # Here goes any code that the thread is executing.
+        # This below is an example.
+
+        self.signals.title.emit("This is the thread's title")
+
+        self.signals.text.emit(Qt.MarkdownText)
+        self.signals.text.emit("## Hello there\n\nThis is a piece of text executed by another thread.")
+        
+        for i in range(100):
+            if self.closed: 
+                self.signals.closed.emit()
+                return
+            self.signals.progress.emit(i)
+            self.msleep(100)
+        
+        self.signals.progress.emit(False)
+        import random
+        while not self.closed:
+            s = ""
+            for i in range(2048):
+                s += chr(random.randint(32,122))
+            self.signals.detailedText.emit(False, s)
+            self.msleep(100)
+
+        # This line is required when the dialog should close as well.
+        self.signals.closed.emit()
