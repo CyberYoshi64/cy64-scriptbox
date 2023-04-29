@@ -1,7 +1,7 @@
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
-from CTGP7UpdaterApp.dialogTemplate1 import ThreadedDialog
+from .dialogTemplate1 import ThreadedDialog
 
 class ThreadedDialogTemplate(QRunnable, QThread):
     def __init__(self) -> None:
@@ -22,7 +22,7 @@ class ThreadedDialogTemplate(QRunnable, QThread):
         self.signals.title.emit("This is the thread's title")
 
         self.signals.text.emit(Qt.MarkdownText)
-        self.signals.text.emit("## Hello there\n\nThis is a piece of text executed by another thread.")
+        self.signals.text.emit("## Hello there\n\nThis is a piece of text.")
         
         for i in range(100):
             if self.closed: 
