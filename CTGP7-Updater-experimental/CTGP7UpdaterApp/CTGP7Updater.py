@@ -5,7 +5,7 @@ import psutil
 import struct
 from typing import List
 
-urlmgr = urllib3.PoolManager(headers={"connection":"keep-alive"})
+urlmgr = urllib3.PoolManager(headers={"Connection":"Keep-Alive"})
 def urlopen(url:str, **kwarg):
     out = urlmgr.request("GET", url, chunked=True, preload_content=False, **kwarg)
     if out.status != 200: raise Exception("Failed opening URL '{}': Received staus code {}".format(url, out.status))
@@ -74,6 +74,7 @@ class CTGP7Updater:
             _DOWN_PART_EXT = ".part" # Better safe than sorry
             countRetry = 0
             userCancel = False
+            oldPos = -1
             while (True):
                 try:
                     CTGP7Updater.mkFoldersForFile(self.filePath)
@@ -82,9 +83,9 @@ class CTGP7Updater:
                     with open(self.filePath + _DOWN_PART_EXT, 'wb') as downFile:
 
                         fileDownSize = int(u.headers.get("Content-Length", 1))
+                        progDiv = max(1, fileDownSize // 10)
 
-                        fileDownCurr = 0
-                        block_sz = 32768
+                        fileDownCurr = 0; block_sz = 32768
                         while True:
                             if userCancel or (self.isStoppedCallback is not None and self.isStoppedCallback()):
                                 userCancel = True
@@ -96,9 +97,11 @@ class CTGP7Updater:
                             fileDownCurr += len(buffer)
                             downFile.write(buffer)
 
-                            if (self.fileProgressCallback is not None):
+                            if (self.fileProgressCallback is not None and (fileDownCurr//progDiv)!=oldPos):
                                 self.fileProgressCallback(fileDownCurr, fileDownSize, self.fileOnlyName)
-                        break
+                                oldPos = fileDownCurr//progDiv
+                    CTGP7Updater.fileMove(self.filePath+_DOWN_PART_EXT, self.filePath)
+                    break
                 except KeyboardInterrupt:
                     userCancel = True # Terminal uses Ctrl+C to signal cancelling
                 except Exception as e:
@@ -107,7 +110,6 @@ class CTGP7Updater:
                         raise Exception("Failed to download file \"{}\": {}".format(self.fileOnlyName, e))
                     else:
                         countRetry += 1
-            CTGP7Updater.fileMove(self.filePath+_DOWN_PART_EXT, self.filePath)
 
         def perform(self, lastPerformValue:str):
             if self.fileMethod == "M" or self.fileMethod == "C": # Modify
@@ -255,28 +257,25 @@ class CTGP7Updater:
     def _isValidNintendo3DSSDCard(path:str):
         return os.path.exists(os.path.join(path, "Nintendo 3DS"))
 
-    # Return bitmask to prepare and determine, if an
-    # update is viable or a reinstall is needed.
-    # bit0 (1) - CTGP-7 installation doesn't exist.
-    # bit1 (2) - Config missing or invalid
-    # bit2 (4) - A pending update is available
-    # bit3 (8) - Installation has been flagged for reinstall as updating is not possible.
     @staticmethod
-    def checkForInstallOfPath(path:str):
-        bitMask:int = \
-        (not os.path.exists(os.path.join(path, "CTGP-7")))<<0|\
-        (not os.path.exists(os.path.join(path, "CTGP-7", *CTGP7Updater._VERSION_FILE_PATH)))<<1|\
-        (os.path.exists(os.path.join(path, "CTGP-7", *CTGP7Updater._PENDINGUPDATE_PATH)))<<2|\
-        (os.path.exists(os.path.join(path, "CTGP-7", *CTGP7Updater._REINSTALLFLAG_PATH)))<<3
-        
-        try:
-            if not (bitMask & 2):
-                vfSz = os.stat(os.path.join(path, "CTGP-7", *CTGP7Updater._VERSION_FILE_PATH)).st_size
-                bitMask |= (vfSz<3 or vfSz>8)<<1
-        except:
-            bitMask |= 2
-        
-        return bitMask
+    def doesInstallExist(path):
+        return os.path.exists(os.path.join(path, "CTGP-7"))
+
+    @staticmethod
+    def isVersionValid(path):
+        file = os.path.join(path, "CTGP-7", *CTGP7Updater._VERSION_FILE_PATH)
+        if not os.path.exists(file):
+            return False
+        size = os.stat(file).st_size
+        return (size>=3 and size<=8)
+
+    @staticmethod
+    def hasBrokenFlag(path):
+        return os.path.exists(os.path.join(path, "CTGP-7", *CTGP7Updater._REINSTALLFLAG_PATH))
+
+    @staticmethod
+    def hasPendingInstall(path):
+        return os.path.exists(os.path.join(path, "CTGP-7", *CTGP7Updater._PENDINGUPDATE_PATH))
 
     def setBaseDirectory(self, path: str):
         if not (os.path.exists(path)):

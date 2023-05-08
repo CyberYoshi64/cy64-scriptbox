@@ -97,9 +97,9 @@ class CTGP7InstallerWorker(QRunnable):
             self.updater = CTGP7Updater(self.workMode, self.isCitra)
             self.updater.fetchDefaultCDNURL()
             self.updater.setLogFunction(self.logData)
+            self.updater.getLatestVersion()
             self.updater.setBaseDirectory(self.basedir)
             self.updater.cleanInstallFolder()
-            self.updater.getLatestVersion()
             self.updater.loadUpdateInfo()
             self.updater.verifySpaceAvailable()
             self.updater.startUpdate()
@@ -404,24 +404,23 @@ class Window(QMainWindow, Ui_MainWindow):
             return
         self.isCitraPath = CTGP7Updater.isCitraDirectory(folder)
         if (os.path.exists(folder)):
-            bmsk = CTGP7Updater.checkForInstallOfPath(folder)
-            self.miscInfoLabel.setText("Ready to install CTGP-7.")
-            self.miscInfoLabel.setStyleSheet("color: #084")
-            if not os.path.exists(os.path.join(folder,"Nintendo 3DS")):
+            if not CTGP7Updater._isValidNintendo3DSSDCard(folder):
                 self.miscInfoLabel.setText("This path appears to not be of a 3DS SD Card.")
                 self.miscInfoLabel.setStyleSheet("color: #c60")
-            if (bmsk & 3)==2:
+            if not CTGP7Updater.doesInstallExist(folder):
+                self.miscInfoLabel.setText("Ready to install CTGP-7.")
+                self.miscInfoLabel.setStyleSheet("color: #084")
+                self.setInstallBtnState(1)
+            elif not CTGP7Updater.isVersionValid(folder):
                 self.miscInfoLabel.setText("Corrupted CTGP-7 installation detected.")
                 self.miscInfoLabel.setStyleSheet("color: #f40")
                 self.setInstallBtnState(3)
-            elif bmsk & 8:
+            elif CTGP7Updater.hasBrokenFlag(folder):
                 self.miscInfoLabel.setText("Broken CTGP-7 installation detected.")
                 self.miscInfoLabel.setStyleSheet("color: #f24")
                 self.setInstallBtnState(3)
-            elif bmsk & 1:
-                self.setInstallBtnState(1)
             else:
-                self.hasPending = bool(bmsk & 4)
+                self.hasPending = CTGP7Updater.hasPendingInstall(folder)
                 self.miscInfoLabel.setText("Valid CTGP-7 installation detected.")
                 self.miscInfoLabel.setStyleSheet("color: #480")
                 self.setInstallBtnState(2)
