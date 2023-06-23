@@ -21,6 +21,7 @@ class Ui_Dialog(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(self)
         self.label.setObjectName(u"label")
+        self.label.setWordWrap(True)
         self.label.setMargin(8)
         self.verticalLayout.addWidget(self.label)
         self.horizontalLayout = QHBoxLayout()

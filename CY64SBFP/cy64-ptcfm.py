@@ -65,8 +65,8 @@ if True:
           File type : %s for SB%d (%s)
           Data size : %d bytes %s%s
           Modified  : %s, %04d/%d/%d at %d:%02d:%02d
-          Creator   : "%s" (ID: 0x%08X)
-          Editor    : "%s" (ID: 0x%08X)
+          Creator   : "%s" (ID: 0x%08X - 0x%016X)
+          Editor    : "%s" (ID: 0x%08X - 0x%016X)
       ''' % (\
       args.input, origf.head.getFileTypeName(),\
       origf.head.isForSwitch()+3, str(type(origf.fmt)).split("'")[1].split(".")[-1],\
@@ -75,8 +75,9 @@ if True:
       "(compressed)"*(origf.head.compress != 0),\
       origf.head.getWeekdayStr(), origf.head.modYear, origf.head.modMonth, \
       origf.head.modDay, origf.head.modHour, origf.head.modMinute, \
-      origf.head.modSecond, origf.head.creatorName, origf.head.creatorID, \
-      origf.head.uploaderName, origf.head.uploaderID
+      origf.head.modSecond, \
+      origf.head.creatorName, origf.head.creatorID, origf.head.creator_uploadID, \
+      origf.head.uploaderName, origf.head.uploaderID, origf.head.uploader_uploadID
       )))
     if args.verify:
       if not origf.usesHash():

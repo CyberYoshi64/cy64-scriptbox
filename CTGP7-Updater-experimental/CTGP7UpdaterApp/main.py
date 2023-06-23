@@ -1,19 +1,19 @@
-import sys
-import os
-import shutil
+import sys, os, shutil, ctypes
 
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 
-from CTGP7UpdaterApp.ui_main import Ui_MainWindow
-from CTGP7UpdaterApp.ui_dialog01 import Ui_Dialog as Ui_Dialog1
-from CTGP7UpdaterApp.ui_chglogvwr import Ui_Dialog as Ui_ChglogVwr
+from CTGP7UpdaterApp.constants import CONSTANT as const
+import CTGP7UpdaterApp.lang as lang
+import CTGP7UpdaterApp.utils as utils
 
+from UI.ui_main import Ui_MainWindow
+from UI.ui_dialog01 import Ui_Dialog as Ui_Dialog1
+from UI.ui_chglogvwr import Ui_Dialog as Ui_ChglogVwr
 from CTGP7UpdaterApp.dialogTemplate1 import ThreadedDialog
-
 from CTGP7UpdaterApp.CTGP7Updater import CTGP7Updater
-import ctypes
+from CTGP7UpdaterApp.installationInfo import CTGP7InstallationInformation
 
 class ChangeLogViewerRun(QRunnable, QThread):
     def __init__(self) -> None:
@@ -27,16 +27,16 @@ class ChangeLogViewerRun(QRunnable, QThread):
 
     @Slot()
     def run(self):
-        self.signals.title.emit("Changelog Viewer")
-        self.signals.text.emit("Downloading changelog...")
+        self.signals.title.emit(lang.get("chgLogViewTitle"))
+        self.signals.text.emit(lang.get("chgLogViewDownload"))
         self.signals.progress.emit(0)
         try:
             baseURL = CTGP7Updater.getDefaultCdnUrlAsString()
             self.signals.progress.emit(33)
             hdr, text = [], []
-            changelogData = CTGP7Updater._downloadString(baseURL + CTGP7Updater._UPDATER_CHGLOG_FILE).split(";")
+            changelogData = CTGP7Updater._downloadString(baseURL + const._UPDATER_CHGLOG_FILE).split(";")
             self.signals.progress.emit(66)
-            self.signals.text.emit("Parsing data...")
+            self.signals.text.emit(lang.get("chgLogViewParse"))
             for index in range(len(changelogData)):
                 tex1 = changelogData[index]
                 hdr.insert(0, tex1[:tex1.find(":")])
@@ -46,10 +46,11 @@ class ChangeLogViewerRun(QRunnable, QThread):
             self.signals.minsize.emit(QSize(440, 200))
             self.signals.text.emit(Qt.MarkdownText)
             self.signals.text.emit(
-                "## An error has occured\n\n"+
-                "Could not display changelog. See the below error details.\n\n"+
-                "Ask for help in the [CTGP-7 Discord Server]({}) ".format(Window.HELP_DISCORD_LINK)+
-                "if this error keeps occuring."
+                "## {}\n\n".format(lang.get("errorOccured"))+
+                utils.strfmt(
+                    lang.get("chgLogViewExcep"),
+                    "[{}]({})".format(lang.get("discordURLName"), Window.HELP_DISCORD_LINK)
+                )
             )
             self.signals.progress.emit(False)
             self.signals.detailedText.emit(False, str(e))
@@ -61,13 +62,16 @@ class ChangeLogViewerRun(QRunnable, QThread):
         
         tex1 = ""
         for i in range(len(hdr)):
-            tex1 += "### Ver. {}\n\n```\n{}\n```\n\n".format(hdr[i], text[i])
+            # tex1 += "### Ver. {}\n\n{}\n\n".format(hdr[i], text[i])
+            tex1 += utils.strfmt("### " + lang.get("chgLogViewVerHeader"), hdr[i])
+            tex1 += "\n\n{}\n\n".format(text[i])
         self.signals.detailedText.emit(False, tex1)
         self.signals.detailedText.emit(False, Qt.MarkdownText)
 
 class WorkerSignals(QObject):
     progress = Signal(dict)
     error = Signal(str)
+    prematureExit = Signal(str)
     success = Signal(str)
     stop = Signal()
 
@@ -93,7 +97,7 @@ class CTGP7InstallerWorker(QRunnable):
     @Slot()  # QtCore.Slot
     def run(self):
         try:
-            self.logData({"m": "Initializing..."})
+            self.logData({"m": lang.get("logInitialize")})
             self.updater = CTGP7Updater(self.workMode, self.isCitra)
             self.updater.fetchDefaultCDNURL()
             self.updater.setLogFunction(self.logData)
@@ -104,7 +108,10 @@ class CTGP7InstallerWorker(QRunnable):
             self.updater.verifySpaceAvailable()
             self.updater.startUpdate()
         except Exception as e:
-            self.signals.error.emit(str(e))
+            if e.args[0]!=False:
+                self.signals.error.emit(str(e))
+            else:
+                self.signals.prematureExit.emit(str(e.args[1]))
         else:
             self.signals.success.emit(self.updater.latestVersion)
         self.finished = True
@@ -112,18 +119,22 @@ class CTGP7InstallerWorker(QRunnable):
 class Window(QMainWindow, Ui_MainWindow):
     
     HELP_DISCORD_LINK = "https://discord.com/invite/0uTPwYv3SPQww54l"
-    
+    HELP_GAMEBANANA_LINK = "https://gamebanana.com/mods/50221"
+    HELP_GITHUB_LINK = "https://github.com/CyberYoshi64/CTGP7-UpdateTool/issues"
+
     def __init__(self, parent=None):
         self.isInit = True
         super().__init__(parent)
+        lang.Initialize()
         self.setupUi(self)
-        self.setWindowTitle("CTGP-7 Installer v{}".format(CTGP7Updater.VERSION_NUMBER))
+        self.setDefaultText()
         self.connectSignalsSlots()
-        self.workerMode = CTGP7Updater._MODE_INSTALL
+        self.workerMode = const._MODE_INSTALL
         self.isCitraPath = None
         self.hasPending = False
         self.didSaveBackup = False
         self.installerworker = None
+        self.installationInfo = None
         self.checkOwnVersion()
         self.scanForNintendo3DSSD()
         self.reSetup()
@@ -131,26 +142,56 @@ class Window(QMainWindow, Ui_MainWindow):
         self.windowPool = []
         self.isInit = False
 
+    def setDefaultText(self):
+        self.setWindowTitle("{} v{}".format(lang.get("windowTitle"), CTGP7Updater.displayProgramVersion()))
+        self.actionExit.setText(lang.get("appExit"))
+        self.actionIntegChk.setText(lang.get("integChk"))
+        self.actionInstallMod.setText(lang.get("barInstall"))
+        self.actionUpdateMod.setText(lang.get("barUpdate"))
+        self.actionShowChangelog.setText(lang.get("showChangelog"))
+        self.actionAboutThisApp.setText(lang.get("aboutThisApp"))
+        self.actionAboutQt.setText(lang.get("aboutQt"))
+        self.actionHelpGamebanana.setText(lang.get("helpGamebanana"))
+        self.actionHelpGitHub.setText(lang.get("helpGitHub"))
+        self.actionHelpDiscord.setText(lang.get("helpDiscord"))
+        self.label_3.setText(lang.get("sdTarget"))
+        self.sdRootText.setInputMask("")
+        self.sdRootText.setPlaceholderText(lang.get("sdTextDefault"))
+        self.sdBrowseButton.setText(lang.get("btnBrowse"))
+        self.sdDetectButton.setText(lang.get("btnDetect"))
+        self.miscInfoLabel.setText("")
+        self.installButton.setText(lang.get("btnInstall"))
+        self.updateButton.setText(lang.get("btnUpdate"))
+        self.progressInfoLabel.setText("")
+        self.menuFile.setTitle(lang.get("barFile"))
+        self.menuExperimental.setTitle(lang.get("barExperimental"))
+        self.menuAbout.setTitle(lang.get("barAbout"))
+        self.menuGetHelp.setTitle(lang.get("menuGetHelp"))
+
     def checkOwnVersion(self):
         try:
             if CTGP7Updater.checkProgramVersion():
-                QMessageBox.information(self, "Update Check",
-                    "There's a new update available for the PC installer.<br><br>"+
-                    "It is recommended to visit the <a href='https://gamebanana.com/mods/50221'>Gamebanana page</a> "+
-                    "to download the latest version to ensure that the PC installer can work smoothly."
+                QMessageBox.information(self, lang.get("updateCheck"),
+                    utils.strfmt(
+                        lang.get("updateAvail"),
+                        "<a href='{}'>{}</a>".format(self.HELP_GAMEBANANA_LINK, lang.get("updateURLName"))
+                    ).replace("\n","<br>")
                 )
         except Exception as e:
             msg = QMessageBox(self)
             msg.setIcon(QMessageBox.Critical)
             msg.setText(
-                "An error has occurred while checking for updates.<br>"+
-                "Ensure your device is connected to the internet.<br><br>"+
-                "If this error keeps happening, ask for help in the "+
-                "<a href='https://discord.com/invite/0uTPwYv3SPQww54l'>"+
-                "CTGP-7 Discord Server</a>."
+                utils.strfmt(
+                        lang.get("updateCheckFail"),
+                        "<a href='{}'>{}</a>".format(self.HELP_DISCORD_LINK, lang.get("discordURLName"))
+                ).replace("\n","<br>")
             )
-            msg.setDetailedText("{}\n\nInstaller version: {}".format(str(e), CTGP7Updater.VERSION_NUMBER))
-            msg.setWindowTitle("Update Check")
+            msg.setDetailedText(
+                msg.setDetailedText("{}\n\n{}: {}".format(
+                str(e), lang.get("installerVerDesc"),
+                CTGP7Updater.displayProgramVersion()
+            )))
+            msg.setWindowTitle(lang.get("updateCheck"))
             for b in msg.buttons():
                 if (msg.buttonRole(b) == QMessageBox.ActionRole):
                     b.click()
@@ -175,6 +216,10 @@ class Window(QMainWindow, Ui_MainWindow):
         self.menuExperimental.setEnabled(True)
 
     def prepareForWorker(self):
+        self.installerworker.signals.progress.connect(self.reportProgress)
+        self.installerworker.signals.success.connect(self.installOnSuccess)
+        self.installerworker.signals.error.connect(self.installOnError)
+        self.installerworker.signals.prematureExit.connect(self.installPrematureExit)
         self.progressBar.setEnabled(True)
         self.sdBrowseButton.setEnabled(False)
         self.sdDetectButton.setEnabled(False)
@@ -188,13 +233,16 @@ class Window(QMainWindow, Ui_MainWindow):
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Critical)
         msg.setText(
-            "An error has occurred.<br>"+
-            "See the error information below.<br><br>"+
-            "Ask for help in the <a href='"+self.HELP_DISCORD_LINK+
-            "'>CTGP-7 Discord Server</a>, if this error keeps happening."
-        )
-        msg.setDetailedText("{}\n\nInstaller version: {}".format(str(err), CTGP7Updater.VERSION_NUMBER))
-        msg.setWindowTitle("Error")
+            "<h3>{}</h3>".format(lang.get("errorOccured"))+
+            utils.strfmt(
+            lang.get("errorDescGeneric").replace("\n","<br>"),
+            "<a href='{}'>{}</a>".format(self.HELP_DISCORD_LINK, lang.get("discordURLName"))
+        ))
+        msg.setDetailedText("{}\n\n{}: {}".format(
+            str(err), lang.get("installerVerDesc"),
+            CTGP7Updater.displayProgramVersion()
+        ))
+        msg.setWindowTitle(lang.get("error"))
         for b in msg.buttons():
             if (msg.buttonRole(b) == QMessageBox.ActionRole):
                 b.click()
@@ -202,61 +250,68 @@ class Window(QMainWindow, Ui_MainWindow):
         msg.exec_()
         self.reSetup()#self.close()
     
+    def installPrematureExit(self, err:str):
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText(err)
+        msg.setWindowTitle("Warning")
+        msg.exec_()
+        self.reSetup()#self.close()
+    
     def installOnSuccess(self, ver:str):
-        QMessageBox.information(self, "Operation successful", "Installation finished successfully! (v{})<br>Make sure to install the CIA file in the CTGP-7 -> cia folder on the SD card.".format(ver))
+        QMessageBox.information(
+            self, lang.get("success"),
+            utils.strfmt(lang.get("installSuccess"), ver)
+        )
         if (self.didSaveBackup):
             msg = QMessageBox(self)
             msg.setIcon(QMessageBox.Question)
             msg.addButton(QMessageBox.Yes)
             msg.addButton(QMessageBox.No)
             msg.setDefaultButton(QMessageBox.No)
-            msg.setWindowTitle("Save backup")
-            msg.setText("Would you like to restore the save backup done previously?")
+            msg.setWindowTitle(lang.get("saveBackup"))
+            msg.setText(lang.get("saveBackupRestoreQuestion"))
             if (msg.exec_() == QMessageBox.Yes):
-                savefolder = os.path.join(self.sdRootText.text(), "CTGP-7", "savefs")
-                backupfolder = os.path.join(self.sdRootText.text(), "CTGP-7savebak")
+                savefolder = os.path.join(self.sdRootText.text(), *const._SAVEBAK_MOD_PATH)
+                backupfolder = os.path.join(self.sdRootText.text(), const._SAVEBAK_BAK_PATH)
                 try:
                     shutil.copytree(backupfolder, savefolder)
                 except Exception as e:
-                    self.installOnError("Failed to restore save backup, please restore it manually: {}".format(e))
+                    self.installOnError(utils.strfmt(lang.get("failSaveBackupRestore"), e))
                     return
         self.reSetup()#self.close()
 
     def doSaveBackup(self):
         try:
-            savefolder = os.path.join(self.sdRootText.text(), "CTGP-7", "savefs")
-            backupfolder = os.path.join(self.sdRootText.text(), "CTGP-7savebak")
+            savefolder = os.path.join(self.sdRootText.text(), *const._SAVEBAK_MOD_PATH)
+            backupfolder = os.path.join(self.sdRootText.text(), const._SAVEBAK_BAK_PATH)
             if (os.path.exists(savefolder)):
-                self.reportProgress({"m": "Creating save backup..."})
+                self.reportProgress({"m": lang.get("logSaveBackupCreate")})
                 if (os.path.exists(backupfolder)):
                     shutil.rmtree(backupfolder)
                 os.rename(savefolder, backupfolder)
                 self.didSaveBackup = True
-                QMessageBox.information(self, "Save backup", "Save data backup of the previous CTGP-7 installation has been made in {}".format(backupfolder))
+                QMessageBox.information(self, lang.get("saveBackup"), utils.strfmt(lang.get("saveBackupCreatedAt"), backupfolder))
             elif (os.path.exists(backupfolder)):
                 msg = QMessageBox(self)
                 msg.setIcon(QMessageBox.Question)
                 msg.addButton(QMessageBox.Yes)
                 msg.addButton(QMessageBox.No)
                 msg.setDefaultButton(QMessageBox.No)
-                msg.setWindowTitle("Detected save data backup")
-                msg.setText(
-                    "While no save data could be detected for CTGP-7, "+
-                    "a backup was detected.\n\nDo you want to use it?"
-                )
+                msg.setWindowTitle(lang.get("confirm"))
+                msg.setText(lang.get("saveBackupFoundOld"))
                 self.didSaveBackup = msg.exec_() == QMessageBox.Yes
             return True
         except Exception as e:
-            self.installOnError("Failed to create save backup: {}".format(e))
+            self.installOnError(utils.strfmt(lang.get("failSaveBackupCreate"), e))
             return False
 
     def selectSDFromList(self, l:list)->str:
         dlg = QDialog(self)
         Ui_Dialog1.setupUi(dlg)
-        dlg.setWindowTitle("Select SD Card")
+        dlg.setWindowTitle(lang.get("sdDetectionTitle"))
         dlg.label.setText(
-            "Detected SD Card count: {}\n\n".format(len(l)) +
-            "Please select the one you want to manage installations on."
+            utils.strfmt(lang.get("sdDetectionHeader"), len(l))
         )
         for i in l: dlg.sdList.addItem(i)
         dlg.sdList.setCurrentRow(0)
@@ -271,10 +326,10 @@ class Window(QMainWindow, Ui_MainWindow):
         if (doesCitraExist): fol.append(citraDir)
         if self.isInit and (len(fol)==1):
             if (fol[0] == citraDir):
-                QMessageBox.information(self, "Warning", "Couldn't detect an SD Card but a Citra build was found.\n\nIf you want to install/update CTGP-7 for a 3DS console, use the \"Browse\" button to navigate to the SD Card of your console.")
+                QMessageBox.information(self, lang.get("warning"), lang.get("sdFoundOnlyCitra"))
             self.sdRootText.setText(fol[0])
         elif (len(fol)<1):
-            QMessageBox.information(self, "Warning", "No SD Card could be detected.\n\nMake sure the SD Card is inserted into your device and mounted.")
+            QMessageBox.information(self, lang.get("warning"), lang.get("sdNoneDetected"))
         else:
             if self.isInit:
                 self.sdRootText.setText(fol[0])
@@ -286,20 +341,20 @@ class Window(QMainWindow, Ui_MainWindow):
     def updateButtonPress(self):
         if self.hasPending:
             msg = QMessageBox(self)
-            msg.setIcon(QMessageBox.Warning)
+            msg.setIcon(QMessageBox.Question)
             msg.addButton(QMessageBox.Yes)
             msg.addButton(QMessageBox.No)
             msg.setDefaultButton(QMessageBox.No)
-            msg.setWindowTitle("Pending update")
-            msg.setText("A pending update was detected. You must finish it first, before updating again. Do you want to continue this update?")
+            msg.setWindowTitle(lang.get("confirm"))
+            msg.setText(
+                "<h3>{}</h3>".format(lang.get("pendUpdate"))+
+                lang.get("pendUpdateContinue").replace("\n","<br>")
+            )
             if msg.exec_() == QMessageBox.No: return
         
-        self.workerMode = CTGP7Updater._MODE_UPDATE
+        self.workerMode = const._MODE_UPDATE
         self.miscInfoLabel.setText("")
         self.installerworker = CTGP7InstallerWorker(self.sdRootText.text(), self.workerMode, self.isCitraPath)
-        self.installerworker.signals.progress.connect(self.reportProgress)
-        self.installerworker.signals.success.connect(self.installOnSuccess)
-        self.installerworker.signals.error.connect(self.installOnError)
         self.prepareForWorker()
         self.threadPool.start(self.installerworker)
     
@@ -309,8 +364,8 @@ class Window(QMainWindow, Ui_MainWindow):
         msg.addButton(QMessageBox.Yes)
         msg.addButton(QMessageBox.No)
         msg.setDefaultButton(QMessageBox.No)
-        msg.setWindowTitle("Warning")
-        msg.setText(
+        msg.setWindowTitle(lang.get("warning"))
+        msg.setText( # This is temporary anyway...
             "Integrity Check is a W.I.P. feature.\n"+
             "It can currently only redownload missing files."+
             
@@ -320,12 +375,9 @@ class Window(QMainWindow, Ui_MainWindow):
         )
         if msg.exec_() == QMessageBox.No: return
 
-        self.workerMode = CTGP7Updater._MODE_INTCHECK
+        self.workerMode = const._MODE_INTCHECK
         self.miscInfoLabel.setText("")
         self.installerworker = CTGP7InstallerWorker(self.sdRootText.text(), self.workerMode, self.isCitraPath)
-        self.installerworker.signals.progress.connect(self.reportProgress)
-        self.installerworker.signals.success.connect(self.installOnSuccess)
-        self.installerworker.signals.error.connect(self.installOnError)
         self.prepareForWorker()
         self.threadPool.start(self.installerworker)
     
@@ -333,39 +385,36 @@ class Window(QMainWindow, Ui_MainWindow):
         if (self.startButtonState > 0 and self.startButtonState < 4):
             msg = QMessageBox(self)
             msg.setIcon(QMessageBox.Warning)
+            msg.setWindowTitle(lang.get("warning"))
             msg.addButton(QMessageBox.Yes)
             msg.addButton(QMessageBox.No)
             msg.setDefaultButton(QMessageBox.No)
             
             if (self.startButtonState == 2):
-                msg.setWindowTitle("Confirm re-installation")
-                msg.setText("You are about to re-install CTGP-7.<br>Any modifications via MyStuff will be deleted.<br><br>Do you want to continue?<br>(Your save data will be backed up, if possible.)")
+                
+                msg.setText(lang.get("reinstallConfirmRegular"))
                 if msg.exec_() == QMessageBox.No: return
             
             if (self.startButtonState == 3):
-                msg.setWindowTitle("Broken CTGP-7 installation")
-                msg.setText("This installation is either corrupted or was flagged for removal. Proceeding will wipe this installation and create a new one.<br><br>Do you want to proceed anyway?<br>(Your save data will be backed up, if possible.)")
+                msg.setText(lang.get("reinstallConfirmNeeded"))
                 if msg.exec_() == QMessageBox.No: return
             
             if self.workerMode and (self.isCitraPath == None):
                 msg = QMessageBox(self)
-                msg.setWindowTitle("Question")
+                msg.setWindowTitle(lang.get("question"))
                 msg.setIcon(QMessageBox.Question)
-                msg.setText("Unable to determine, whether this installation is meant for a 3DS or Citra.<br><br>Please select which platform you want to install CTGP-7 for.")
-                dlgIs3DS = msg.addButton("3DS", QMessageBox.NoRole)
-                dlgisCitra = msg.addButton("Citra", QMessageBox.NoRole)
-                dlgCancel = msg.addButton("Cancel", QMessageBox.NoRole)
+                msg.setText(lang.get("installTargetAsk"))
+                msg.addButton(lang.get("btn3DS"), QMessageBox.NoRole)
+                dlgisCitra = msg.addButton(lang.get("btnCitra"), QMessageBox.NoRole)
+                dlgCancel = msg.addButton(lang.get("btnCancel"), QMessageBox.NoRole)
                 msg.setDefaultButton(dlgCancel)
                 msg.exec_()
                 if msg.clickedButton() == dlgCancel: return
                 self.isCitraPath = (msg.clickedButton() == dlgisCitra)
 
             if not self.doSaveBackup(): return
-            self.workerMode = CTGP7Updater._MODE_INSTALL
+            self.workerMode = const._MODE_INSTALL
             self.installerworker = CTGP7InstallerWorker(self.sdRootText.text(), self.workerMode, self.isCitraPath)
-            self.installerworker.signals.progress.connect(self.reportProgress)
-            self.installerworker.signals.success.connect(self.installOnSuccess)
-            self.installerworker.signals.error.connect(self.installOnError)
             self.prepareForWorker()
             self.threadPool.start(self.installerworker)
         elif (self.startButtonState == 4):
@@ -376,7 +425,7 @@ class Window(QMainWindow, Ui_MainWindow):
     def setInstallBtnState(self, state):
         self.startButtonState = state
         self.installButton.setEnabled(state != 0)
-        self.updateButton.setText("Continue update" if self.hasPending else "Update")
+        self.updateButton.setText(lang.get("btnPendingUpdate") if self.hasPending else lang.get("btnUpdate"))
         self.updateButton.setEnabled(True)
         self.updateButton.setHidden(True)
         if (state == 0):
@@ -385,47 +434,46 @@ class Window(QMainWindow, Ui_MainWindow):
             self.updateButton.setText("")
             self.updateButton.clearFocus()
         elif (state == 1):
-            self.installButton.setText("Install")
+            self.installButton.setText(lang.get("btnInstall"))
         elif (state == 2):
-            self.installButton.setText("Re-install")
+            self.installButton.setText(lang.get("btnReinstall"))
             self.updateButton.setHidden(False)
         elif (state == 3):
-            self.installButton.setText("Re-install")
+            self.installButton.setText(lang.get("btnReinstall"))
         elif (state == 4):
-            self.installButton.setText("Cancel")
+            self.installButton.setText(lang.get("btnCancel"))
         self.updateButton.setEnabled(not self.updateButton.isHidden())
         self.actionInstallMod.setEnabled(self.installButton.isEnabled())
         self.actionUpdateMod.setEnabled(self.updateButton.isEnabled())
 
     def applySDFolder(self, folder: str):
-        if (folder == "" or folder[-1]==" "):
-            self.miscInfoLabel.setText("")
-            self.setInstallBtnState(0)
-            return
+        self.miscInfoLabel.setText("")
+        self.setInstallBtnState(0)
         self.isCitraPath = CTGP7Updater.isCitraDirectory(folder)
         if (os.path.exists(folder)):
-            if not CTGP7Updater._isValidNintendo3DSSDCard(folder):
-                self.miscInfoLabel.setText("This path appears to not be of a 3DS SD Card.")
-                self.miscInfoLabel.setStyleSheet("color: #c60")
-            if not CTGP7Updater.doesInstallExist(folder):
-                self.miscInfoLabel.setText("Ready to install CTGP-7.")
-                self.miscInfoLabel.setStyleSheet("color: #084")
-                self.setInstallBtnState(1)
-            elif not CTGP7Updater.isVersionValid(folder):
-                self.miscInfoLabel.setText("Corrupted CTGP-7 installation detected.")
-                self.miscInfoLabel.setStyleSheet("color: #f40")
-                self.setInstallBtnState(3)
-            elif CTGP7Updater.hasBrokenFlag(folder):
-                self.miscInfoLabel.setText("Broken CTGP-7 installation detected.")
-                self.miscInfoLabel.setStyleSheet("color: #f24")
-                self.setInstallBtnState(3)
-            else:
-                self.hasPending = CTGP7Updater.hasPendingInstall(folder)
-                self.miscInfoLabel.setText("Valid CTGP-7 installation detected.")
+            self.installationInfo = CTGP7InstallationInformation(folder)
+            self.miscInfoLabel.setText(utils.strfmt(
+                lang.get("instVerdict"),
+                self.installationInfo.stateDescription()
+            ))
+            
+            if self.installationInfo.good():
+                self.hasPending = self.installationInfo.hasPendingUpdate
                 self.miscInfoLabel.setStyleSheet("color: #480")
                 self.setInstallBtnState(2)
+            elif not CTGP7Updater._isValidNintendo3DSSDCard(folder):
+                self.miscInfoLabel.setText(lang.get("sdMaybeUnrelated"))
+                self.miscInfoLabel.setStyleSheet("color: #c60")
+                self.setInstallBtnState(1)
+            elif not CTGP7Updater.doesInstallExist(folder):
+                self.miscInfoLabel.setText(lang.get("readyToInstall"))
+                self.miscInfoLabel.setStyleSheet("color: #084")
+                self.setInstallBtnState(1)
+            else:
+                self.miscInfoLabel.setStyleSheet("color: #f04")
+                self.setInstallBtnState(3)
         else:
-            self.miscInfoLabel.setText("Folder does not exist")
+            self.miscInfoLabel.setText(lang.get("invalidPath"))
             self.miscInfoLabel.setStyleSheet("color: red")
             self.setInstallBtnState(0)
 
@@ -439,7 +487,7 @@ class Window(QMainWindow, Ui_MainWindow):
         run = True; l = len(ff)
         while run:
             for i in p:
-                if len(ff)<2: run = False; break
+                if len(ff)<3: run = False; break
                 for j in range(-3,0):
                     if ff[j]==i: ff.pop()
             if len(ff) == l: break
@@ -456,7 +504,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
     def selectSDDirectory(self):
         dialog = QFileDialog()
-        folder_path = dialog.getExistingDirectory(self, "Select destination", self.sdRootText.text())
+        folder_path = dialog.getExistingDirectory(self, lang.get("sdSelectDest"), self.sdRootText.text())
         if (folder_path != ""):
             folder_path = folder_path.replace("/", os.path.sep).replace("\\", os.path.sep)
             folder_path = self.tryCorrectSDPath(folder_path)
@@ -470,50 +518,40 @@ class Window(QMainWindow, Ui_MainWindow):
             pass
 
     def spawnThreadedDialog(self, thread, modality):
-        try:
-            dlg = ThreadedDialog.Dialog()
-            dlg.scrollArea.setHidden(True)
-            dlg.progBar.setHidden(True)
-            dlg.buttonBox.setHidden(True)
-            dlg.setWindowModality(modality)
-            thread.signals.progress.connect(dlg._setProgress)
-            thread.signals.title.connect(dlg._setTitle)
-            thread.signals.text.connect(dlg._setText)
-            thread.signals.size.connect(dlg._setSize)
-            thread.signals.minsize.connect(dlg._setMinSize)
-            thread.signals.detailedText.connect(dlg._setDetailedText)
-            thread.signals.buttons.connect(dlg._setButtons)
-            thread.signals.closed.connect(dlg.onClose)
-            dlg.signals.closed.connect(self.dialogClose)
-            dlg.signals.closed2.connect(thread.setClosed)
-            self.windowPool.append(dlg)
-        except Exception as e:
-            msg = QMessageBox(self)
-            msg.setIcon(QMessageBox.Critical)
-            msg.setText(
-                "An error has occurred while opening a dialog box.<br>"+
-                "This is probably a bug and should be reported.<br><br>"+
-                "File an issue on the GitHub repository with the below error."
-            )
-            msg.setDetailedText(e)
-            msg.exec_()
-        else:
-            dlg.open()
-            self.threadPool.start(thread)
+        dlg = ThreadedDialog.Dialog()
+        dlg.scrollArea.setHidden(True)
+        dlg.progBar.setHidden(True)
+        dlg.buttonBox.setHidden(True)
+        dlg.setWindowModality(modality)
+        thread.signals.progress.connect(dlg._setProgress)
+        thread.signals.title.connect(dlg._setTitle)
+        thread.signals.text.connect(dlg._setText)
+        thread.signals.size.connect(dlg._setSize)
+        thread.signals.minsize.connect(dlg._setMinSize)
+        thread.signals.detailedText.connect(dlg._setDetailedText)
+        thread.signals.buttons.connect(dlg._setButtons)
+        thread.signals.closed.connect(dlg.onClose)
+        dlg.signals.closed.connect(self.dialogClose)
+        dlg.signals.closed2.connect(thread.setClosed)
+        self.windowPool.append(dlg)
+        dlg.open()
+        self.threadPool.start(thread)
         
     def changeLogViewer(self):
+        if not lang.isNative(): QMessageBox.warning(self, lang.get("warning"), lang.get("nonEnglishWarn"))
         self.spawnThreadedDialog(ChangeLogViewerRun(), Qt.WindowModality.NonModal)
 
     def showHelpDialog(self):
         msg = QMessageBox(self)
-        msg.setWindowTitle("About this application")
+        msg.setWindowTitle(lang.get("aboutThisAppTitle"))
         msg.setIcon(QMessageBox.Information)
         msg.setText(
-            "CTGP-7 Installer v"+CTGP7Updater.VERSION_NUMBER+"<br><br>"+
-            "Having issues? Ask for help in the "+
-            "<a href='https://discord.com/invite/0uTPwYv3SPQww54l'>"+
-            "Discord server</a>.<br><br>"+
-            "2021-2023 CyberYoshi64, PabloMK7"
+            utils.strfmt(
+            lang.get("aboutThisAppText"),
+            utils.strfmt(lang.get("version0"), CTGP7Updater.displayProgramVersion()),
+            "<a href='{}'>{}</a>".format(self.HELP_DISCORD_LINK, lang.get("discordURLName"))
+            ).replace("\n","<br>")+
+            "<br><br>2021-2023 CyberYoshi64, PabloMK7"
         )
         msg.exec_()
 
@@ -521,10 +559,10 @@ class Window(QMainWindow, Ui_MainWindow):
         QMessageBox.aboutQt(self)
 
     def openBrowserGitHub(self):
-        QDesktopServices.openUrl(QUrl("https://github.com/CyberYoshi64/CTGP7-UpdateTool/issues"))
+        QDesktopServices.openUrl(QUrl(self.HELP_GITHUB_LINK))
 
     def openBrowserGameBanana(self):
-        QDesktopServices.openUrl(QUrl("https://gamebanana.com/mods/50221"))
+        QDesktopServices.openUrl(QUrl(self.HELP_GAMEBANANA_LINK))
 
     def openDiscord(self):
         QDesktopServices.openUrl(QUrl(self.HELP_DISCORD_LINK))
@@ -533,7 +571,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.close()
 
     def featureNotImplemented(self):
-        QMessageBox.warning(self, "Feature not implemented","This feature is not available at the moment. Check again later.")
+        QMessageBox.warning(self, lang.get("featureNotImpl"), lang.get("featureNotImplText"))
 
     def connectSignalsSlots(self):
         self.sdBrowseButton.clicked.connect(self.selectSDDirectory)
@@ -559,9 +597,9 @@ class Window(QMainWindow, Ui_MainWindow):
         if self.installerworker and not self.installerworker.finished:
             msg = QMessageBox(self)
             msg.setIcon(QMessageBox.Warning)
-            msg.setWindowTitle("Warning")
+            msg.setWindowTitle(lang.get("warning"))
             msg.addButton(QMessageBox.Ok)
-            msg.setText("The installer worker is currently running. Please stop the worker by pressing the 'Cancel' button before closing this window.")
+            msg.setText(lang.get("cantExitWorkerActive"))
             msg.exec_()
             event.ignore()
             return
@@ -579,13 +617,12 @@ class Window(QMainWindow, Ui_MainWindow):
             if not (i % 50):
                 msg = QMessageBox(self)
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("Warning")
+                msg.setWindowTitle(lang.get("warning"))
                 msg.addButton(QMessageBox.Yes)
                 msg.addButton(QMessageBox.No)
                 msg.addButton(QMessageBox.Retry)
                 msg.setDefaultButton(QMessageBox.No)
-                msg.setText("Could not deinitialize in time.\n\nDo you want to quit the app?")
-                msg.setInformativeText("This may result in unsaved changes if you quit now.")
+                msg.setText(lang.get("cantExitAskForce"))
                 btn = msg.exec_()
                 if (btn == QMessageBox.No):
                     event.ignore()

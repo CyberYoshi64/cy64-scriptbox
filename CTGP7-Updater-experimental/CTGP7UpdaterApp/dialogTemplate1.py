@@ -1,7 +1,7 @@
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
-from CTGP7UpdaterApp.ui_threadedDialog import Ui_Dialog as UiDlg
+from UI.ui_threadedDialog import Ui_Dialog as UiDlg
 
 class ThreadedDialog:
     class RunSignals(QObject):

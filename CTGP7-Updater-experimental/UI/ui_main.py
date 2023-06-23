@@ -185,35 +185,4 @@ class Ui_MainWindow(object):
         self.menuGetHelp.addAction(self.actionHelpGamebanana)
         self.menuGetHelp.addAction(self.actionHelpGitHub)
 
-        self.retranslateUi(MainWindow)
-
         QMetaObject.connectSlotsByName(MainWindow)
-    # setupUi
-
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"CTGP-7 Installer", None))
-        self.actionExit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
-        self.actionIntegChk.setText(QCoreApplication.translate("MainWindow", u"Integrity Check", None))
-        self.actionInstallMod.setText(QCoreApplication.translate("MainWindow", u"Install", None))
-        self.actionUpdateMod.setText(QCoreApplication.translate("MainWindow", u"Update", None))
-        self.actionAboutThisApp.setText(QCoreApplication.translate("MainWindow", u"About this app...", None))
-        self.actionHelpGamebanana.setText(QCoreApplication.translate("MainWindow", u"Gamebanana", None))
-        self.actionHelpGitHub.setText(QCoreApplication.translate("MainWindow", u"GitHub", None))
-        self.actionShowChangelog.setText(QCoreApplication.translate("MainWindow", u"View Changelog", None))
-        self.actionAboutQt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
-        self.actionHelpDiscord.setText(QCoreApplication.translate("MainWindow", u"Discord Server", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Target:", None))
-        self.sdRootText.setInputMask("")
-        self.sdRootText.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Path to 3DS/Citra SD Card", None))
-        self.sdBrowseButton.setText(QCoreApplication.translate("MainWindow", u"Browse", None))
-        self.sdDetectButton.setText(QCoreApplication.translate("MainWindow", u"Detect", None))
-        self.miscInfoLabel.setText(QCoreApplication.translate("MainWindow", u"[Some information here]", None))
-        self.installButton.setText(QCoreApplication.translate("MainWindow", u"Install", None))
-        self.updateButton.setText(QCoreApplication.translate("MainWindow", u"Update", None))
-        self.progressInfoLabel.setText(QCoreApplication.translate("MainWindow", u"Progress Info", None))
-        self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
-        self.menuExperimental.setTitle(QCoreApplication.translate("MainWindow", u"Experiments", None))
-        self.menuAbout.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
-        self.menuGetHelp.setTitle(QCoreApplication.translate("MainWindow", u"Get help...", None))
-    # retranslateUi
-
