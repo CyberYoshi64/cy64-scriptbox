@@ -40,7 +40,6 @@
     "appExit": "Schließen",
     "integChk": "Integritätsprüfung",
     "barInstall": "Installieren",
-    "barUninstall": "Deinstallieren",
     "barUpdate": "Aktualisieren",
     "showChangelog": "Versionshistorie ansehen",
     "aboutThisApp": "Über diese Anwendung",
@@ -87,14 +86,10 @@
     "aboutThisAppTitle": "Über den CTGP-7-Installer",
     "aboutThisAppText": "%0\n\nHast du Probleme mit diesem Programm? Suche dir Hilfe (auf Englisch) im %1.",
 
-    "intCheck": "Integritätsprüfung",
-    "intCheckFilePick": "Anzahl der veränderten Dateien: %0\n\nBitte wähle die aus, welche du neu herunterladen möchtest.",
     "intCheckPrep": "Die Integritätsprüfung wird vorbereitet...",
     "intCheckNotUpToDate": "Diese Installation ist nicht aktuell.\n\nAktualisiere zuerst, bevor die Integrität geprüft werden kann.",
-    "intCheckProg": "Datei %1 von %2: '%0' (%3%%)",
-    "intCheckOK": "Diese Installation ist in Ordnung. Es wurden keine Probleme gefunden.",
-    "intCheckNoneSelected": "Es wurden keine Dateien zum Herunterladen ausgewählt, daher wurden keine Änderungen durchgeführt.",
-    "intCheckSuccess": "Die ausgewählten Dateien wurden erfolgreich heruntergeladen.\n\nEs werden außerdem MyStuff-Patches beim Starten des Mods neu angewendet.",
+    "intCheckProg": "",
+    "intCheckNothingToDo": "Diese Installation ist in Ordnung. Es wurden keine Probleme gefunden.",
 
     "logInitialize": "Vorbereitung läuft...",
     "prepareInstall": "Installation wird vorbereitet...",
@@ -106,11 +101,6 @@
     "abortUpdate": "Update wird pausiert...",
     "installFinishing": "Verwaltung wird beendet...",
     "installWiping": "Vorherige Installation wird gelöscht...",
-    
-    "unInstallQuestion": "Du bist dabei, CTGP-7 zu deinstallieren.\n\nMöchtest du die Speicherdaten sichern und fortfahren?",
-    "unInstallQuestionNoSave": "Du bist dabei, CTGP-7 zu deinstallieren.\n\nMöchtest du fortfahren?",
-    "unInstallError": "Konnte die Installation nicht entfernen: %0",
-    "unInstallOK": "CTGP-7 wurde erfolgreich deinstalliert.",
 
     "chgLogViewTitle": "Versionshistorie-Anzeige",
     "chgLogViewDownload": "Daten werden heruntergeladen...",

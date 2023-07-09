@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main-experimentHrFxtA.ui'
+## Form generated from reading UI file 'main-experimentbakAmd.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.9
+## Created by: Qt User Interface Compiler version 5.15.10
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -12,7 +12,7 @@ from PySide2.QtCore import *  # type: ignore
 from PySide2.QtGui import *  # type: ignore
 from PySide2.QtWidgets import *  # type: ignore
 
-from . import resources_rc
+import UI.resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -45,6 +45,10 @@ class Ui_MainWindow(object):
         self.actionAboutQt.setObjectName(u"actionAboutQt")
         self.actionHelpDiscord = QAction(MainWindow)
         self.actionHelpDiscord.setObjectName(u"actionHelpDiscord")
+        self.actionUninstall = QAction(MainWindow)
+        self.actionUninstall.setObjectName(u"actionUninstall")
+        self.actionDummy1 = QAction(MainWindow)
+        self.actionDummy1.setObjectName(u"actionDummy1")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -173,10 +177,12 @@ class Ui_MainWindow(object):
         self.menuBar.addAction(self.menuAbout.menuAction())
         self.menuFile.addAction(self.actionInstallMod)
         self.menuFile.addAction(self.actionUpdateMod)
+        self.menuFile.addAction(self.actionUninstall)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuExperimental.addAction(self.actionShowChangelog)
         self.menuExperimental.addAction(self.actionIntegChk)
+        self.menuExperimental.addAction(self.actionDummy1)
         self.menuAbout.addAction(self.actionAboutThisApp)
         self.menuAbout.addAction(self.actionAboutQt)
         self.menuAbout.addSeparator()
@@ -184,5 +190,5 @@ class Ui_MainWindow(object):
         self.menuGetHelp.addAction(self.actionHelpDiscord)
         self.menuGetHelp.addAction(self.actionHelpGamebanana)
         self.menuGetHelp.addAction(self.actionHelpGitHub)
-
         QMetaObject.connectSlotsByName(MainWindow)
+    # setupUi

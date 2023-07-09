@@ -11,9 +11,99 @@ import CTGP7UpdaterApp.utils as utils
 from UI.ui_main import Ui_MainWindow
 from UI.ui_dialog01 import Ui_Dialog as Ui_Dialog1
 from UI.ui_chglogvwr import Ui_Dialog as Ui_ChglogVwr
+from UI.ui_intChkPick import Ui_Dialog as Ui_IntChkPick
 from CTGP7UpdaterApp.dialogTemplate1 import ThreadedDialog
 from CTGP7UpdaterApp.CTGP7Updater import CTGP7Updater
 from CTGP7UpdaterApp.installationInfo import CTGP7InstallationInformation
+
+class IntCheckWorkerSignals(QObject):
+    progress = Signal(dict)
+    error = Signal(str)
+    prematureExit = Signal(str)
+    success = Signal(list)
+    stop = Signal()
+
+class IntCheckWorker(QRunnable):
+
+    def __init__(self, basedir, isCitra):
+        super(IntCheckWorker, self).__init__()
+        self.signals = IntCheckWorkerSignals()
+        self.basedir = basedir
+        self.isCitra = isCitra
+        self.signals.stop.connect(self.onStop)
+        self.updater = None
+        self.finished = False
+
+    def logData(self, data: dict):
+        self.signals.progress.emit(data)
+    
+    def onStop(self):
+        if (self.updater):
+            self.updater.stop()
+
+    @Slot()  # QtCore.Slot
+    def run(self):
+        try:
+            self.logData({"m": lang.get("logInitialize")})
+            self.updater = CTGP7Updater(const._MODE_INTCHECK, self.isCitra)
+            self.updater.fetchDefaultCDNURL()
+            self.updater.setLogFunction(self.logData)
+            self.updater.getLatestVersion()
+            self.updater.setBaseDirectory(self.basedir)
+            self.updater.loadUpdateInfo()
+        except Exception as e:
+            if e.args[0]!=False:
+                self.signals.error.emit(str(e))
+            else:
+                self.signals.prematureExit.emit(str(e.args[1]))
+        else:
+            files = []
+            for i in self.updater.fileList:
+                files.append((i.fileMethod, i.filePath[len(self.basedir)+len(const._BASE_MOD_FOLDER_PATH)+1:]))
+            self.signals.success.emit(files)
+        self.finished = True
+
+class IntCheckWorker_Step2(QRunnable):
+
+    def __init__(self, basedir, isCitra, flist):
+        super(IntCheckWorker_Step2, self).__init__()
+        self.signals = WorkerSignals()
+        self.basedir = basedir
+        self.isCitra = isCitra
+        self.flist = flist
+        self.signals.stop.connect(self.onStop)
+        self.updater = None
+        self.finished = False
+
+    def logData(self, data: dict):
+        self.signals.progress.emit(data)
+    
+    def onStop(self):
+        if (self.updater):
+            self.updater.stop()
+
+    @Slot()  # QtCore.Slot
+    def run(self):
+        if not len(self.flist):
+            self.signals.prematureExit.emit(lang.get("intCheckNoneSelected"))
+            self.finished = True
+            return
+        try:
+            self.logData({"m": lang.get("logInitialize")})
+            self.updater = CTGP7Updater(const._MODE_DOWNLOAD, self.isCitra)
+            self.updater.fetchDefaultCDNURL()
+            self.updater.setLogFunction(self.logData)
+            self.updater.setBaseDirectory(self.basedir)
+            self.updater.fileList = self.updater._parseAndSortDlList(self.flist)
+            self.updater.startUpdate()
+        except Exception as e:
+            if e.args[0]!=False:
+                self.signals.error.emit(str(e))
+            else:
+                self.signals.prematureExit.emit(str(e.args[1]))
+        else:
+            self.signals.success.emit("")
+        self.finished = True
 
 class ChangeLogViewerRun(QRunnable, QThread):
     def __init__(self) -> None:
@@ -144,13 +234,18 @@ class Window(QMainWindow, Ui_MainWindow):
 
     def setDefaultText(self):
         self.setWindowTitle("{} v{}".format(lang.get("windowTitle"), CTGP7Updater.displayProgramVersion()))
-        self.actionExit.setText(lang.get("appExit"))
-        self.actionIntegChk.setText(lang.get("integChk"))
+        self.menuFile.setTitle(lang.get("barFile"))
         self.actionInstallMod.setText(lang.get("barInstall"))
         self.actionUpdateMod.setText(lang.get("barUpdate"))
+        self.actionUninstall.setText(lang.get("barUninstall"))
+        self.actionExit.setText(lang.get("appExit"))
+        self.menuExperimental.setTitle(lang.get("barExperimental"))
+        self.actionIntegChk.setText(lang.get("integChk"))
         self.actionShowChangelog.setText(lang.get("showChangelog"))
+        self.menuAbout.setTitle(lang.get("barAbout"))
         self.actionAboutThisApp.setText(lang.get("aboutThisApp"))
         self.actionAboutQt.setText(lang.get("aboutQt"))
+        self.menuGetHelp.setTitle(lang.get("menuGetHelp"))
         self.actionHelpGamebanana.setText(lang.get("helpGamebanana"))
         self.actionHelpGitHub.setText(lang.get("helpGitHub"))
         self.actionHelpDiscord.setText(lang.get("helpDiscord"))
@@ -163,10 +258,6 @@ class Window(QMainWindow, Ui_MainWindow):
         self.installButton.setText(lang.get("btnInstall"))
         self.updateButton.setText(lang.get("btnUpdate"))
         self.progressInfoLabel.setText("")
-        self.menuFile.setTitle(lang.get("barFile"))
-        self.menuExperimental.setTitle(lang.get("barExperimental"))
-        self.menuAbout.setTitle(lang.get("barAbout"))
-        self.menuGetHelp.setTitle(lang.get("menuGetHelp"))
 
     def checkOwnVersion(self):
         try:
@@ -186,11 +277,10 @@ class Window(QMainWindow, Ui_MainWindow):
                         "<a href='{}'>{}</a>".format(self.HELP_DISCORD_LINK, lang.get("discordURLName"))
                 ).replace("\n","<br>")
             )
-            msg.setDetailedText(
-                msg.setDetailedText("{}\n\n{}: {}".format(
+            msg.setDetailedText("{}\n\n{}: {}".format(
                 str(e), lang.get("installerVerDesc"),
                 CTGP7Updater.displayProgramVersion()
-            )))
+            ))
             msg.setWindowTitle(lang.get("updateCheck"))
             for b in msg.buttons():
                 if (msg.buttonRole(b) == QMessageBox.ActionRole):
@@ -204,6 +294,17 @@ class Window(QMainWindow, Ui_MainWindow):
         if "p" in data:
             self.progressBar.setEnabled(True)
             self.progressBar.setValue((data["p"][0] / data["p"][1]) * 100)
+        if "i" in data:
+            msg = QMessageBox(self)
+            msg.setIcon(QMessageBox.Information)
+            msg.setWindowTitle(lang.get("info"))
+            msg.setText(data["i"][0])
+            msg.setDetailedText(data["i"][1])
+            for b in msg.buttons():
+                if (msg.buttonRole(b) == QMessageBox.ActionRole):
+                    b.click()
+                    break
+            msg.exec_()
  
     def reSetup(self):
         self.progressBar.setEnabled(False)
@@ -215,11 +316,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.menuFile.setEnabled(True)
         self.menuExperimental.setEnabled(True)
 
-    def prepareForWorker(self):
-        self.installerworker.signals.progress.connect(self.reportProgress)
-        self.installerworker.signals.success.connect(self.installOnSuccess)
-        self.installerworker.signals.error.connect(self.installOnError)
-        self.installerworker.signals.prematureExit.connect(self.installPrematureExit)
+    def prepateForWorker_Common(self):
         self.progressBar.setEnabled(True)
         self.sdBrowseButton.setEnabled(False)
         self.sdDetectButton.setEnabled(False)
@@ -228,7 +325,75 @@ class Window(QMainWindow, Ui_MainWindow):
         self.menuExperimental.setEnabled(False)
         self.miscInfoLabel.setText("")
         self.setInstallBtnState(4)
+
+    def prepareForWorker(self):
+        self.installerworker.signals.progress.connect(self.reportProgress)
+        self.installerworker.signals.success.connect(self.installOnSuccess)
+        self.installerworker.signals.error.connect(self.installOnError)
+        self.installerworker.signals.prematureExit.connect(self.installPrematureExit)
+        self.prepateForWorker_Common()
     
+    def prepareForIntCheckWorker1(self):
+        self.installerworker.signals.progress.connect(self.reportProgress)
+        self.installerworker.signals.success.connect(self.intCheckStep2)
+        self.installerworker.signals.error.connect(self.intCheckError)
+        self.installerworker.signals.prematureExit.connect(self.intCheckMessage)
+        self.prepateForWorker_Common()
+    
+    def prepareForIntCheckWorker2(self):
+        self.installerworker.signals.progress.connect(self.reportProgress)
+        self.installerworker.signals.success.connect(self.intCheckSuccess)
+        self.installerworker.signals.error.connect(self.intCheckError)
+        self.installerworker.signals.prematureExit.connect(self.intCheckMessage)
+        self.prepateForWorker_Common()
+    
+    def intCheckStep2(self, l:list):
+        msg = QDialog(self)
+        Ui_IntChkPick.setupUi(msg)
+        msg.setWindowTitle(lang.get("intCheck"))
+        msg.label.setText(utils.strfmt(lang.get("intCheckFilePick"), len(l)))
+        for i in l:
+            m = QListWidgetItem(msg.listWidget)
+            m.setText(i[1])
+            m.setCheckState(Qt.Unchecked)
+            msg.listWidget.addItem(m)
+        if msg.exec_():
+            exclude = []
+            for i in range(len(l)):
+                m = msg.listWidget.item(i)
+                if m.checkState() != Qt.Checked:
+                    exclude.append(i)
+            while len(exclude):
+                l.pop(exclude.pop())
+            self.installerworker = IntCheckWorker_Step2(self.sdRootText.text(), self.isCitraPath, l)
+            self.prepareForIntCheckWorker2()
+            self.threadPool.start(self.installerworker)
+            return
+        self.reSetup()
+
+    def intCheckSuccess(self, l:list):
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Information)
+        msg.setText(lang.get("intCheckSuccess"))
+        msg.exec_()
+        self.reSetup()
+
+    def intCheckMessage(self, err:str):
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText(err)
+        msg.setWindowTitle(lang.get("warning"))
+        msg.exec_()
+        self.reSetup()
+
+    def intCheckError(self, err:str):
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText(err)
+        msg.setWindowTitle(lang.get("error"))
+        msg.exec_()
+        self.reSetup()
+
     def installOnError(self, err:str):
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Critical)
@@ -254,7 +419,7 @@ class Window(QMainWindow, Ui_MainWindow):
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Warning)
         msg.setText(err)
-        msg.setWindowTitle("Warning")
+        msg.setWindowTitle(lang.get("warning"))
         msg.exec_()
         self.reSetup()#self.close()
     
@@ -358,27 +523,51 @@ class Window(QMainWindow, Ui_MainWindow):
         self.prepareForWorker()
         self.threadPool.start(self.installerworker)
     
-    def performIntegrityCheck(self):
+    def removeButtonPress(self):
+        haveSave = os.path.exists(os.path.join(self.sdRootText.text(), *const._SAVEBAK_MOD_PATH))
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Warning)
-        msg.addButton(QMessageBox.Yes)
-        msg.addButton(QMessageBox.No)
-        msg.setDefaultButton(QMessageBox.No)
+        if haveSave:
+            msg.addButton(QMessageBox.Yes)
+            msg.addButton(QMessageBox.No)
+        else:
+            msg.addButton(QMessageBox.StandardButton.Ok)
+        msg.addButton(QMessageBox.Cancel)
+        msg.setDefaultButton(QMessageBox.Cancel)
         msg.setWindowTitle(lang.get("warning"))
-        msg.setText( # This is temporary anyway...
-            "Integrity Check is a W.I.P. feature.\n"+
-            "It can currently only redownload missing files."+
-            
-            #"\n\nAny modifications that are done outside of MyStuff "+
-            #"will be replaced."
-            "\n\nDo you want to continue?"
-        )
-        if msg.exec_() == QMessageBox.No: return
+        if haveSave:
+            msg.setText(lang.get("unInstallQuestion"))
+        else:
+            msg.setText(lang.get("unInstallQuestionNoSave"))
+        res = msg.exec_()
+        if res == QMessageBox.Cancel: return
+        if haveSave:
+            if res == QMessageBox.Yes:
+                if not self.doSaveBackup(): return
 
+        self.reportProgress({"m": lang.get("installWiping")})
+        self.setInstallBtnState(0)
+        try:
+            updater = CTGP7Updater()
+            updater.setLogFunction(self.reportProgress)
+            updater.setBaseDirectory(self.sdRootText.text())
+            updater.cleanInstallFolder()
+        except Exception as e:
+            self.installOnError(utils.strfmt(lang.get("unInstallError"),str(e)))
+        else:
+            msg = QMessageBox(self)
+            msg.setIcon(QMessageBox.Information)
+            msg.setWindowTitle(lang.get("info"))
+            msg.setText(lang.get("unInstallOK"))
+            msg.exec_()
+            self.reSetup()
+        
+
+    def performIntegrityCheck(self):
         self.workerMode = const._MODE_INTCHECK
         self.miscInfoLabel.setText("")
-        self.installerworker = CTGP7InstallerWorker(self.sdRootText.text(), self.workerMode, self.isCitraPath)
-        self.prepareForWorker()
+        self.installerworker = IntCheckWorker(self.sdRootText.text(), self.isCitraPath)
+        self.prepareForIntCheckWorker1()
         self.threadPool.start(self.installerworker)
     
     def installButtonPress(self):
@@ -450,6 +639,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.miscInfoLabel.setText("")
         self.setInstallBtnState(0)
         self.isCitraPath = CTGP7Updater.isCitraDirectory(folder)
+        self.actionUninstall.setEnabled(False)
         if (os.path.exists(folder)):
             self.installationInfo = CTGP7InstallationInformation(folder)
             self.miscInfoLabel.setText(utils.strfmt(
@@ -457,6 +647,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 self.installationInfo.stateDescription()
             ))
             
+            self.actionUninstall.setEnabled(CTGP7Updater.doesInstallExist(folder))
             if self.installationInfo.good():
                 self.hasPending = self.installationInfo.hasPendingUpdate
                 self.miscInfoLabel.setStyleSheet("color: #480")
@@ -582,6 +773,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.updateButton.clicked.connect(self.updateButtonPress)
         self.actionInstallMod.triggered.connect(self.installButtonPress)
         self.actionUpdateMod.triggered.connect(self.updateButtonPress)
+        self.actionUninstall.triggered.connect(self.removeButtonPress)
         self.actionExit.triggered.connect(self.quitApp)
         self.actionAboutQt.triggered.connect(self.aboutQt)
         self.actionHelpDiscord.triggered.connect(self.openDiscord)

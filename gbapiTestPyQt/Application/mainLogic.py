@@ -1,10 +1,11 @@
-import os, sys, hashlib
-import shutil, psutil
-import urllib3, struct
+import os
+import urllib3
+import shutil
+import psutil
+import struct
 from typing import List
-from CTGP7UpdaterApp.constants import CONSTANT as const
-import CTGP7UpdaterApp.utils as utils
-import CTGP7UpdaterApp.lang as lang
+from Application.constants import CONSTANT as const
+import Application.utils as utils
 
 urlmgr = urllib3.PoolManager(headers={"Connection":"Keep-Alive"})
 def urlopen(url:str, **kwarg):
@@ -201,13 +202,10 @@ class CTGP7Updater:
         return 0 if not self.downloadSize else max(0, self.downloadSize + const._SLACK_FREE_SPACE - diskSpace)
 
     @staticmethod
-    def _downloadString(url: str, encoding="utf-8", errors="replace"):
+    def _downloadString(url: str) -> str:
         try:
             output = urlopen(url, timeout=10).read()
-            if encoding!="raw":
-                return output.decode(encoding, errors)
-            else:
-                return output
+            return output.decode('utf-8')
         except Exception as e:
             raise Exception(utils.strfmt(lang.get("failDownloadStr"), url, e))
 
@@ -217,24 +215,14 @@ class CTGP7Updater:
     def _isStoppedCallback(self):
         return self.isStopped
 
-    def _logCheckProgressCallback(self, fileIndex, fileCount, fileCurr, fileSize, fileOnlyName):
-        self._logprog(utils.strfmt(
-            lang.get("intCheckProg"),
-            fileOnlyName,
-            fileIndex, fileCount,
-            int((fileCurr / fileSize) * 1000) / 10
-        ) + "\r"*(fileCurr<fileSize),
-        fileIndex, fileCount)
-
     def _logFileProgressCallback(self, fileDownCurr, fileDownSize, fileOnlyName):
-        self._logprog(utils.strfmt(
+        self._log(utils.strfmt(
             lang.get("installProg"),
             fileOnlyName,
             self.currDownloadCount, self.downloadCount,
             int((fileDownCurr / fileDownSize) * 1000) / 10
-        ) + "\r"*(fileDownCurr<fileDownSize),
-        self.currDownloadCount, self.downloadCount)
-
+        ) + "\r"*(fileDownCurr<fileDownSize))
+    
     def setBaseURL(self, url):
         self.baseURL = url
 
@@ -248,14 +236,6 @@ class CTGP7Updater:
     def _prog(self, curr: float, tot: float):
         if (self.logFunction):
             self.logFunction({"p":(curr, tot)})
-
-    def _logprog(self, msg: str, curr: float, tot: float):
-        if (self.logFunction):
-            self.logFunction({"m":msg, "p":(curr, tot)})
-
-    def _info(self, msg: str, substr=None):
-        if (self.logFunction):
-            self.logFunction({"i":(msg, substr)})
 
     @staticmethod
     def _isValidNintendo3DSSDCard(path:str):
@@ -370,7 +350,7 @@ class CTGP7Updater:
 
                     except Exception as e:
                         raise Exception(utils.strfmt(lang.get("failGetFileList"), e))
-        elif (self.operationMode == const._MODE_INTCHECK):
+        if (self.operationMode == const._MODE_INTCHECK):
             try:
                 patchFlag = os.path.join(self.basePath, const._BASE_MOD_FOLDER_PATH, *const._PATCHFLAG_PATH)
                 self.fileDelete(patchFlag)
@@ -391,65 +371,20 @@ class CTGP7Updater:
                 raise Exception(False, lang.get("intCheckNotUpToDate"))
 
             self._log(lang.get("intCheckPrep"))
-            
-            hashName, hashHash = [],[]
-            try:
-                h = self._downloadString(self.baseURL + const._INTCHECK_HASH_URL).split("\n")
-                for i in h:
-                    if len(i)<64 or i.find("\t")<0: continue
-                    j = i.split("\t")
-                    hashName.append(j[0])
-                    hashHash.append(j[1])
-            except: pass
-            
-            suffixExclude = [".flag", "/empty.txt","/expectedVer.bin"]
             try:
                 fileList = self._downloadString(self.baseURL + const._INSTALLER_FILE_DIFF).split("\n")
                 for file in fileList:
-                    fileName = file[1:].strip()
-                    fileNameF = fileName[fileName.rfind("/")+1:]
-                    if self._isStoppedCallback(): raise Exception(lang.get("userCancel"))
-                    if len(file)<3: continue
-                    try:
-                        for i in suffixExclude:
-                            if fileName.endswith(i): raise InterruptedError()
-                    except InterruptedError: continue
-                    except Exception as e: raise e
-                    if "MC".find(file[0])>=0:
-                        if self.isCitra:
-                            try:
-                                assert file[0]!="C"
-                                fileList.index("C"+fileName)
-                                continue
-                            except: pass
-                        else:
-                            if file[0]=="C": continue
-                        if fileName.find("tooInstall")>0:
-                            fileName = fileName.replace("tooInstall", const._BASE_MOD_NAME)
-                        filePath = os.path.join(self.basePath, const._BASE_MOD_FOLDER_PATH+fileName.replace("/",os.sep))
-                        isOK = os.path.exists(filePath)
-                        if isOK:
-                            try:
-                                i = hashName.index(file)
-                                h = hashHash[i]
-                                with open(filePath,"rb") as f:
-                                    size = f.seek(0,2)
-                                    f.seek(0)
-                                    ch = hashlib.sha256()
-                                    while f.tell()<size:
-                                        ch.update(f.read(32768))
-                                        self._logCheckProgressCallback(fileList.index(file), len(fileList), f.tell(), size, fileNameF)
-                                isOK = ch.digest()==bytes.fromhex(h)
-                            except: pass
-                        if not isOK:
-                            fileModeList.append((file[0],file[1:]))
-                self._logprog(lang.get("intCheckPrep"),1,1)
+                    if file=="": continue
+                    if file[0]!="S":
+                        fileName = file[1:].strip()
+                        if fileName.find("tooInstall")<0 and fileName[-5:]!=".flag" and not os.path.exists(
+                            os.path.join(self.basePath, const._BASE_MOD_FOLDER_PATH+fileName.replace("/",os.sep))
+                        ):
+                            fileModeList.append((file[0],fileName))
                 self.fileList = self._parseAndSortDlList(fileModeList)
-            except KeyboardInterrupt:
-                raise Exception(lang.get("userCancel"))
             except Exception as e:
                 raise Exception(utils.strfmt(lang.get("failPrepIntCheck"), e))
-            if not len(fileModeList):
+        if not len(fileModeList):
                 raise Exception(False, lang.get("intCheckOK"))
 
     def verifySpaceAvailable(self):
@@ -503,27 +438,17 @@ class CTGP7Updater:
     def checkProgramVersion():
         baseURL = CTGP7Updater.getDefaultCdnUrlAsString()
         cver = const.VERSION_NUMBER
-        nver = CTGP7Updater._downloadString(baseURL + const._INSTALLER_VERSION, "raw").strip()
+        nver = CTGP7Updater._downloadString(baseURL + const._INSTALLER_VERSION).strip()
         try:
-            if len(nver)>4:
-                nver = nver.decode("ascii","replace").split("-", 1)
-                chk = nver[0].split(".")
-                while (len(chk)<3): chk.append("0")
-                if (int(chk[0]) > cver["major"]):
-                    return True
-                if (int(chk[1]) > cver["minor"]):
-                    return True
-                if (int(chk[2]) > cver["micro"]):
-                    return True
-            else:
-                chk = int.from_bytes(nver[:3],"big")
-                chk = (chk>>20&15, chk>>12&255, chk&4095)
-                if (chk[0] > cver["major"]):
-                    return True
-                if (chk[1] > cver["minor"]):
-                    return True
-                if (chk[2] > cver["micro"]):
-                    return True
+            nver = nver.split("-", 1)
+            chk = nver[0].split(".")
+            while (len(chk)<3): chk.append("0")
+            if (int(chk[0]) > cver["major"]):
+                return True
+            if (int(chk[1]) > cver["minor"]):
+                return True
+            if (int(chk[2]) > cver["micro"]):
+                return True
             return False
         except Exception as e:
             raise Exception(utils.strfmt(lang.get("updateCheckFailParse"), e))
@@ -588,15 +513,14 @@ class CTGP7Updater:
         
         self._log(lang.get("installFinishing"))
 
-        if self.operationMode != const._MODE_DOWNLOAD:
-            try:
-                configPath = os.path.join(mainfolder, *const._VERSION_FILE_PATH)
-                self.mkFoldersForFile(configPath)
-                with open(configPath, "wb") as vf:
-                    vf.write(self.latestVersion.encode("ascii"))
-            except Exception as e:
-                self.makeReinstallFlag()
-                raise Exception(utils.strfmt(lang.get("failWriteVerInfo"), e))
+        try:
+            configPath = os.path.join(mainfolder, *const._VERSION_FILE_PATH)
+            self.mkFoldersForFile(configPath)
+            with open(configPath, "wb") as vf:
+                vf.write(self.latestVersion.encode("ascii"))
+        except Exception as e:
+            self.makeReinstallFlag()
+            raise Exception(utils.strfmt(lang.get("failWriteVerInfo"), e))
         
         try:
             self.fileDelete(os.path.join(self.basePath, const._BASE_MOD_FOLDER_PATH, *const._PENDINGUPDATE_PATH))

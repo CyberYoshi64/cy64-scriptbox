@@ -11,12 +11,12 @@ class CONSTANT:
 
     _BASE_MOD_FOLDER_PATH = "CTGP-7"
     _BASE_MOD_NAME = "CTGP-7"
+    # _BASE_URL_DYN_LINK = "http://localhost:42069/CY-6-RC/baseURL.txt"
     _BASE_URL_DYN_LINK = "https://ctgp7.page.link/baseCDNURL"
     _INSTALLER_VERSION = "installerver"
     _INSTALLER_FILE_DIFF = "installinfo.txt"
     _UPDATER_CHGLOG_FILE = "changeloglist"
     _UPDATER_FILE_URL = "fileListPrefix.txt"
-    _INTCHECK_HASH_URL = "hashes.txt"
     _FILES_LOCATION = "data"
     _FILES_LOCATION_CITRA = "dataCitra"
     _LATEST_VER_LOCATION = "latestver"
@@ -40,5 +40,4 @@ class CONSTANT:
     _APPPACKAGE_HBL_PATH2 = ["3ds", "CTGP-7.3dsx"]
     _APPPACKAGE_HBL_TEMP = [_BASE_MOD_FOLDER_PATH, "cia", "tooInstall.3dsx"]
 
-    _MODE_INSTALL, _MODE_UPDATE, _MODE_INTCHECK, \
-    _MODE_DOWNLOAD = range(4)
+    _MODE_INSTALL, _MODE_UPDATE, _MODE_INTCHECK = range(3)

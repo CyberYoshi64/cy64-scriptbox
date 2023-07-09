@@ -41,7 +41,6 @@
     "integChk": "Integrity Check",
     "barInstall": "Install",
     "barUpdate": "Update",
-    "barUninstall": "Uninstall",
     "showChangelog": "View Changelog",
     "aboutThisApp": "About this app",
     "aboutQt": "About Qt",
@@ -87,14 +86,10 @@
     "aboutThisAppTitle": "About the CTGP-7 Installer",
     "aboutThisAppText": "%0\n\nHaving issues? Ask for help in the %1.",
 
-    "intCheck": "Integrity Check",
-    "intCheckFilePick": "Detected modified files: %0\n\nPlease select the files you wish to redownload.",
     "intCheckPrep": "Preparing integrity check...",
     "intCheckNotUpToDate": "This installation is not up-to-date.\n\nPlease update this installation before performing an integrity check.",
-    "intCheckProg": "File %1/%2: '%0' (%3%%)",
-    "intCheckOK": "This installation is clean. No file was modified or missing.",
-    "intCheckNoneSelected": "No files were selected for re-download. No changes were made.",
-    "intCheckSuccess": "The selected files were successfully redownloaded.\n\nThe mod is also configured to apply patches upon startup.",
+    "intCheckProg": "",
+    "intCheckNothingToDo": "This installation is clean. No file was modified or missing.",
 
     "logInitialize": "Initializing...",
     "prepareInstall": "Preparing installation...",
@@ -106,11 +101,6 @@
     "abortUpdate": "Suspending update...",
     "installFinishing": "Finishing up...",
     "installWiping": "Removing previous installation...",
-    
-    "unInstallQuestion": "You're about to uninstall CTGP-7.\n\nDo you want to back up the save data before wiping the installation?",
-    "unInstallQuestionNoSave": "You're about to uninstall CTGP-7.\n\nDo you want to continue?",
-    "unInstallError": "Failed to remove installation: %0",
-    "unInstallOK": "Installation was successfully removed.",
 
     "chgLogViewTitle": "Changelog Viewer",
     "chgLogViewDownload": "Downloading changelog...",
