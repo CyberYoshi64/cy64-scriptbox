@@ -24,3 +24,9 @@ A backup of the download repo of the SmileBASIC Download Station.
 - latest - broken build but most up-to-date source
 
 **Plan:** Merge it with [SmileBASIC-CYX](https://github.com/CyberYoshi64/PTC3-Plugin) inside a dedicated launcher. Alternatively, just use [SBServer](https://github.com/Trinitro21/sbserver) and a web API.
+
+### nw4c-textureConverter.py
+
+This is made by observations of TGA files made by `NW4C_TextureConverter.exe` and improves it slightly.
+
+Requirements: `pillow`
