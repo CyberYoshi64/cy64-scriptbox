@@ -19,15 +19,18 @@ def get(key:str) -> str:
 
 def tryLoadLangJson(n):
     try:
-        with open(n, "r") as f: return json.load(f)
+        with open(n, "r", encoding="utf-8") as f: return json.load(f)
     except:
         return None
 
 def Initialize():
     global lang, data
-    locale.setlocale(locale.LC_ALL, "")
-    if not lang:
-        lang = locale.getlocale(locale.LC_MESSAGES)[0]
+    if os.name != "nt":
+        locale.setlocale(locale.LC_ALL, "")
+        if not lang:
+            lang = locale.getlocale(locale.LC_MESSAGES)[0]
+    else:
+        lang = locale.getlocale()[0]
     
     path = getAppPath()
     data = {}
