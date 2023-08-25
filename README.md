@@ -25,8 +25,15 @@ A backup of the download repo of the SmileBASIC Download Station.
 
 **Plan:** Merge it with [SmileBASIC-CYX](https://github.com/CyberYoshi64/PTC3-Plugin) inside a dedicated launcher. Alternatively, just use [SBServer](https://github.com/Trinitro21/sbserver) and a web API.
 
+### makerom
+
+Forked from [3DSGuy/Project_CTR](https://github.com/3DSGuy/Project_CTR/makerom)
+
+This version changes NCCH creation to allow manual CFA's to properly build.
+
 ### nw4c-textureConverter.py
 
 This is made by observations of TGA files made by `NW4C_TextureConverter.exe` and improves it slightly.
 
 Requirements: `pillow`
+

@@ -1,0 +1,61 @@
+"storeInfo": {
+		"title": "StreetPass-Shop",
+		"author": "MattTheTekie",
+		"url": "https://raw.githubusercontent.com/CyberYoshi64/unistore-ctgp7thm/master/CTGP7ThemeStore.unistore",
+		"file": "CTGP7ThemeStore.unistore",
+		"sheet": "CTGP7ThemeStore.t3x",
+		"sheetURL": "https://raw.githubusercontent.com/CyberYoshi64/unistore-ctgp7thm/master/CTGP7ThemeStore.t3x",
+		"description": "This unistore contains CTGP-7 themes you can download straight from the console.",
+		"version": 3,
+		"revision": 1
+	},
+	"storeContent": [
+		{
+			"info": {
+				"title": "CY64's Theme",
+				"author": "CyberYoshi64",
+				"description": "CyberYoshi64's own theme #1",
+				"category": [
+					"3DS"
+				],
+				"console": [
+					"3DS"
+				],
+				"icon_index": 0,
+				"sheet_index": 0,
+				"last_updated": "2000-01-01",
+				"version": "v1.0.0"
+			},
+			"theme.zip": [
+				{
+					"type": "downloadFile",
+					"file": "https://gamebanana.com/dl/1042244",
+					"output": "sdmc:/temp.zip"
+				},
+				{
+					"type": "mkdir",
+					"directory": "sdmc:/CTGP-7/MyStuff/LauncherFS/",
+				},
+				{
+					"type": "extractFile",
+					"file": "/temp.zip",
+					"input": "",
+					"output": "/CTGP-7/MyStuff/LauncherFS/",
+				},
+				{
+					"type": "deleteFile",
+					"file": "sdmc:/temp.zip"
+				},
+				{
+					"type": "promptMessage",
+					"message": "Installation complete?\n\nDo you want to boot into CTGP-7?"
+				},
+				{
+					"type": "bootTitle",
+					"TitleID": "0x0004000003070C00",
+					"NAND": false
+				},
+			]
+		}
+	]
+}
