@@ -8,7 +8,6 @@ class CONSTANT:
         "micro": 3,
         "category": VERSION_CAT_DEV
     }
-
     _BASE_MOD_FOLDER_PATH = "CTGP-7"
     _BASE_MOD_NAME = "CTGP-7"
     _BASE_URL_DYN_LINK = "https://ctgp7.page.link/baseCDNURL"

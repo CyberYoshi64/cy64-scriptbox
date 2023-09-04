@@ -28,6 +28,7 @@
     "updateCheckFailParse": "Failed parsing the latest version info for this installer: %0",
 
     "nonEnglishWarn": "The data shown is in English and has no translation available.",
+    "chglogWarning": "The rendering of the changelog may not be accurate and formatting might break.",
 
     "btn3DS": "Nintendo 3DS",
     "btnCitra": "Citra",
@@ -79,6 +80,7 @@
 
     "sdFoundOnlyCitra": "Couldn't detect a SD Card but a Citra build was found.\n\nIf you wanted to manage an installation for a 3DS, make sure the SD Card is inserted into your device and mounted.",
     "sdNoneDetected": "No SD Card could be detected.\n\nMake sure the SD Card is inserted into your device and mounted.",
+    "citraNoSD": "A Citra installation was detected, however its virtual SD Card is disabled.\n\nIn order to install for Citra, open Citra Settings (Emulation > Configure...) and check if 'System > Storage > Use Virtual SD' is ticked.",
     "cantExitWorkerActive": "The installer worker is currently running. Please stop the worker by pressing the 'Cancel' button before closing this window.",
 
     "sdDetectionTitle": "SD Card Detection",
@@ -92,7 +94,7 @@
     "intCheckPrep": "Preparing integrity check...",
     "intCheckNotUpToDate": "This installation is not up-to-date.\n\nPlease update this installation before performing an integrity check.",
     "intCheckProg": "File %1/%2: '%0' (%3%%)",
-    "intCheckOK": "This installation is clean. No file was modified or missing.",
+    "intCheckOK": "This installation is clean. No file is modified or missing.",
     "intCheckNoneSelected": "No files were selected for re-download. No changes were made.",
     "intCheckSuccess": "The selected files were successfully redownloaded.\n\nThe mod is also configured to apply patches upon startup.",
 

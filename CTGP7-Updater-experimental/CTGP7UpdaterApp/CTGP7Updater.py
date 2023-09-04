@@ -127,12 +127,6 @@ class CTGP7Updater:
     @staticmethod
     def isDev() -> bool:
         return const.VERSION_NUMBER["category"] == const.VERSION_CAT_DEV
-
-    @staticmethod
-    def getCitraDir() -> str:
-        if os.name == "nt": return "%s\\Citra\\sdmc"%os.environ['APPDATA']
-        if os.name == "posix": return "%s/.local/share/citra-emu/sdmc"%os.environ['HOME']
-        return "./sdmc"
     
     @staticmethod
     def fileDelete(file:str) -> None:
@@ -616,36 +610,3 @@ class CTGP7Updater:
         if (os.path.exists(mainfolder)):
             self._log(lang.get("installWiping"))
             shutil.rmtree(mainfolder)
-
-    """
-    Check, if the SD specified is for Citra.
-
-    Return values:
-        True  - Path is Citra SD
-        False - Path is not Citra (3DS)
-        None  - Uncertain, ask in front-end
-
-        FIXME: Can only detect locally installed on main
-               drive; fails if Citra is installed externally.
-
-        TODO: Figure out how to read Citra config
-    """
-    @staticmethod
-    def isCitraDirectory(path:str):
-        if os.name == "nt":
-            citraPath = os.path.join(os.environ["APPDATA"],"Citra","sdmc")
-        else:
-            citraPath = os.path.join(os.environ["HOME"],".local","share","citra-emu","sdmc")
-        
-        try:
-            if os.path.samefile(path, citraPath): # Linux is case-sensitive, Windows may use inconsistent casing, ruining simple checks
-                                                  # Added bonus: symlinks would work this way too.
-                return True
-            else:
-                if os.path.exists(os.path.join(path, "boot.firm")):
-                    return False
-                if os.path.exists(os.path.join(path, *const._ISCITRAFLAG_PATH)):
-                    return True
-            return None
-        except:
-            return None

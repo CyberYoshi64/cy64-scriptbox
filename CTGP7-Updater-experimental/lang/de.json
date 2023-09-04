@@ -28,6 +28,7 @@
     "updateCheckFailParse": "Fehler beim Analysieren der Versionsinformation des PC-Installers: %0",
 
     "nonEnglishWarn": "Die Daten, die gezeigt werden, sind auf Englisch und haben keine Übersetzungen vorhanden.",
+    "chglogWarning": "Die Anzeige der Versionshistorie könnte fehlerhaft sein, beispielsweise könnte Text inkorrekt formattiert sein.",
 
     "btn3DS": "Nintendo 3DS",
     "btnCitra": "Citra",
@@ -79,6 +80,7 @@
 
     "sdFoundOnlyCitra": "Es konnte zwar keine 3DS-SD-Karte gefunden werden, aber dafür eine Citra-Installation.\n\nFalls du für eine 3DS-Konsole eine Installation verwalten möchtest, stelle sicher, dass die SD-Karte eingesteckt ist und vom Betriebssystem erkannt wird.",
     "sdNoneDetected": "Es wurde keine 3DS-SD-Karte gefunden.\n\nStelle sicher, dass die SD-Karte eingesteckt ist und vom Betriebssystem erkannt wird.",
+    "citraNoSD": "Eine Citra-Installation wurde gefunden, jedoch ist dessen virtuelle SD-Karte ausgeschalten.\n\nUm auf Citra zu installieren überprüfe die Einstellungen.\nEmulation > Configure... > System > Storage > Use Virtual SD",
     "cantExitWorkerActive": "Es wird zurzeit eine Installation verwaltet. Bitte klicke den \"Abbrechen\"-Knopf, bevor du dieses Fenster schließen kannst.",
 
     "sdDetectionTitle": "SD-Karten-Erkennung",

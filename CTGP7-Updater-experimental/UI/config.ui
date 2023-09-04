@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>576</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>576</width>
+    <height>360</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Tab 1</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout"/>
+     </widget>
+     <widget class="QWidget" name="tabAdvanced">
+      <attribute name="title">
+       <string>Advanced</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>539</width>
+            <height>750</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="4" column="0" colspan="2">
+            <widget class="QFrame" name="frameAdvCDN">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="3" column="0">
+               <widget class="QLabel" name="labChgLogData">
+                <property name="text">
+                 <string>Change Log Data</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="editModVerChk">
+                <property name="maxLength">
+                 <number>256</number>
+                </property>
+                <property name="placeholderText">
+                 <string>latestver</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="labHashList">
+                <property name="text">
+                 <string>[Experimental] Hash List</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="labInstVerChk">
+                <property name="minimumSize">
+                 <size>
+                  <width>184</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Installer Version Check</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="editInstInfo">
+                <property name="maxLength">
+                 <number>256</number>
+                </property>
+                <property name="placeholderText">
+                 <string>installinfo.txt</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="labModUpd">
+                <property name="text">
+                 <string>Mod Update Data</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="labModUpdCitra">
+                <property name="text">
+                 <string>Mod Update Data (Citra)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="editFileListPrefix">
+                <property name="maxLength">
+                 <number>256</number>
+                </property>
+                <property name="placeholderText">
+                 <string>fileListPrefix.txt</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0" colspan="2">
+               <widget class="Line" name="line_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLineEdit" name="editModUpd">
+                <property name="maxLength">
+                 <number>256</number>
+                </property>
+                <property name="placeholderText">
+                 <string>data</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="labFileListPrefix">
+                <property name="text">
+                 <string>File List Prefix</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLineEdit" name="editModUpdCitra">
+                <property name="maxLength">
+                 <number>256</number>
+                </property>
+                <property name="placeholderText">
+                 <string>dataCitra</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="labInstInfo">
+                <property name="text">
+                 <string>Install Information</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labModVerChk">
+                <property name="text">
+                 <string>Mod Version Check</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLineEdit" name="editHashList">
+                <property name="maxLength">
+                 <number>256</number>
+                </property>
+                <property name="placeholderText">
+                 <string>hashes.txt</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="editInstVerChk">
+                <property name="maxLength">
+                 <number>256</number>
+                </property>
+                <property name="placeholderText">
+                 <string>installerinfo</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="editChgLogData">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="maxLength">
+                 <number>256</number>
+                </property>
+                <property name="placeholderText">
+                 <string>changeloglist</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" rowspan="9">
+               <widget class="QPushButton" name="btnHelpAdvCDN">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>?</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QFrame" name="frameAdvLocal">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="editModHome">
+                <property name="maxLength">
+                 <number>128</number>
+                </property>
+                <property name="placeholderText">
+                 <string>CTGP-7</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labModHome">
+                <property name="text">
+                 <string>Mod Home Folder
+(relative to SD root)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="labPatchFlag">
+                <property name="text">
+                 <string>Patching Flag</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="labLocalVer">
+                <property name="text">
+                 <string>Local Version</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" colspan="2">
+               <widget class="Line" name="line">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLineEdit" name="editReinstFlag">
+                <property name="maxLength">
+                 <number>300</number>
+                </property>
+                <property name="placeholderText">
+                 <string>config/forceInstall.flag@W:x</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLineEdit" name="editPendUpd">
+                <property name="maxLength">
+                 <number>300</number>
+                </property>
+                <property name="placeholderText">
+                 <string>config/pendingUpdate.bin@W:s</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2">
+               <widget class="QLabel" name="labHdrConfig">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>### Config Locations (relative to Mod Home Folder)</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::MarkdownText</enum>
+                </property>
+                <property name="margin">
+                 <number>4</number>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="QLineEdit" name="editCitraFlag">
+                <property name="maxLength">
+                 <number>300</number>
+                </property>
+                <property name="placeholderText">
+                 <string>config/citra.flag@W:x</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="editModSaveBak">
+                <property name="maxLength">
+                 <number>128</number>
+                </property>
+                <property name="placeholderText">
+                 <string>CTGP-7savebak</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="labCitraFlag">
+                <property name="text">
+                 <string>Citra Flag</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="labPendUpd">
+                <property name="text">
+                 <string>Pending Update Binary</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLineEdit" name="editLocalVer">
+                <property name="maxLength">
+                 <number>300</number>
+                </property>
+                <property name="placeholderText">
+                 <string>config/version.bin@W:s</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="labModSaveBak">
+                <property name="text">
+                 <string>Mod Save Backup Path
+(relative to SD root)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="labModName">
+                <property name="minimumSize">
+                 <size>
+                  <width>184</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Mod Name</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="labReinstFlag">
+                <property name="text">
+                 <string>Re-install Flag</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLineEdit" name="editPatchFlag">
+                <property name="maxLength">
+                 <number>300</number>
+                </property>
+                <property name="placeholderText">
+                 <string>config/forcePatch.flag@W:x</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="editModName">
+                <property name="maxLength">
+                 <number>64</number>
+                </property>
+                <property name="placeholderText">
+                 <string>CTGP-7</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2" rowspan="5">
+               <widget class="QPushButton" name="btnAdvLocalConf">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>?</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" rowspan="3">
+               <widget class="QPushButton" name="btnAdvLocalName">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>?</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="labBaseCDN">
+             <property name="minimumSize">
+              <size>
+               <width>200</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Base CDN URL</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="QCheckBox" name="showAdvCDN">
+             <property name="text">
+              <string>Show Advanced Options (Remote CDN Files)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QCheckBox" name="showAdvLocal">
+             <property name="text">
+              <string>Show Advanced Options (Local Files)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="editBaseCDN">
+             <property name="maxLength">
+              <number>256</number>
+             </property>
+             <property name="placeholderText">
+              <string>https://ctgp7.page.link/baseCDNURL</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" colspan="2">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Discard|QDialogButtonBox::Reset</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

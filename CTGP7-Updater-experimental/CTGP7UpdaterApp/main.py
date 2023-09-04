@@ -1,8 +1,8 @@
-import sys, os, shutil, ctypes
+import sys, os, shutil, ctypes, configparser
 
-from PySide2.QtWidgets import *
-from PySide2.QtCore import *
-from PySide2.QtGui import *
+from PySide2.QtWidgets import * # type: ignore
+from PySide2.QtCore import * # type: ignore
+from PySide2.QtGui import * # type: ignore
 
 from CTGP7UpdaterApp.constants import CONSTANT as const
 import CTGP7UpdaterApp.lang as lang
@@ -10,7 +10,6 @@ import CTGP7UpdaterApp.utils as utils
 
 from UI.ui_main import Ui_MainWindow
 from UI.ui_dialog01 import Ui_Dialog as Ui_Dialog1
-from UI.ui_chglogvwr import Ui_Dialog as Ui_ChglogVwr
 from UI.ui_intChkPick import Ui_Dialog as Ui_IntChkPick
 from CTGP7UpdaterApp.dialogTemplate1 import ThreadedDialog
 from CTGP7UpdaterApp.CTGP7Updater import CTGP7Updater
@@ -226,8 +225,8 @@ class Window(QMainWindow, Ui_MainWindow):
         self.installerworker = None
         self.installationInfo = None
         self.checkOwnVersion()
-        self.scanForNintendo3DSSD()
         self.reSetup()
+        self.scanForNintendo3DSSD()
         self.threadPool = QThreadPool()
         self.windowPool = []
         self.isInit = False
@@ -307,6 +306,8 @@ class Window(QMainWindow, Ui_MainWindow):
             msg.exec_()
  
     def reSetup(self):
+        try:    self.citraDir = self.getCitraDir()
+        except: self.citraDir = None
         self.progressBar.setEnabled(False)
         self.sdBrowseButton.setEnabled(True)
         self.sdDetectButton.setEnabled(True)
@@ -486,11 +487,13 @@ class Window(QMainWindow, Ui_MainWindow):
 
     def scanForNintendo3DSSD(self):
         fol = CTGP7Updater.findNintendo3DSRoot()
-        citraDir = CTGP7Updater.getCitraDir()
-        doesCitraExist = os.path.exists(citraDir)
-        if (doesCitraExist): fol.append(citraDir)
+        if self.citraDir == False:
+            QMessageBox.information(self, lang.get("warning"), lang.get("citraNoSD"))
+        elif self.citraDir:
+            doesCitraExist = os.path.exists(self.citraDir)
+            if (doesCitraExist): fol.append(self.citraDir)
         if self.isInit and (len(fol)==1):
-            if (fol[0] == citraDir):
+            if (fol[0] == self.citraDir):
                 QMessageBox.information(self, lang.get("warning"), lang.get("sdFoundOnlyCitra"))
             self.sdRootText.setText(fol[0])
         elif (len(fol)<1):
@@ -561,7 +564,6 @@ class Window(QMainWindow, Ui_MainWindow):
             msg.setText(lang.get("unInstallOK"))
             msg.exec_()
             self.reSetup()
-        
 
     def performIntegrityCheck(self):
         self.workerMode = const._MODE_INTCHECK
@@ -638,7 +640,7 @@ class Window(QMainWindow, Ui_MainWindow):
     def applySDFolder(self, folder: str):
         self.miscInfoLabel.setText("")
         self.setInstallBtnState(0)
-        self.isCitraPath = CTGP7Updater.isCitraDirectory(folder)
+        self.isCitraPath = self.isCitraDirectory(folder)
         self.actionUninstall.setEnabled(False)
         if (os.path.exists(folder)):
             self.installationInfo = CTGP7InstallationInformation(folder)
@@ -671,8 +673,7 @@ class Window(QMainWindow, Ui_MainWindow):
     # You never know when people don't know what "root" is
     # in terms of directories
     def tryCorrectSDPath(self, f:str) -> str:
-        p = ['3ds', 'Nintendo 3DS', 'cias', 'CTGP-7', 'luma', 'gm9', 'private']
-        c = ["AppData",".local","Roaming" ,"share", "Citra", "citra-emu", "sdmc"]
+        p = ['3ds', 'Nintendo 3DS', 'cias', 'cia', 'CTGP-7', 'gamefs', 'savefs', 'config', 'resources', 'MyStuff', 'luma', 'gm9', 'private']
         ff = f.split(os.sep)
         if os.name!="nt": ff[0]="/" # Linux needs this for absolute path
         run = True; l = len(ff)
@@ -683,23 +684,47 @@ class Window(QMainWindow, Ui_MainWindow):
                     if ff[j]==i: ff.pop()
             if len(ff) == l: break
             l = len(ff)
-        for i in c:
-            try: assert os.path.exists(os.path.join(*ff, i))
-            except: pass
-            else: ff.append(i)
         newf = ""
         for i in ff:
             if i=="/": newf="/"
             else: newf += "%s%s" % (i, os.sep)
         return newf
 
+    def getCitraDir(self) -> str:
+        c = configparser.ConfigParser() # INI
+        if os.name == "nt":
+            p="%s\\Citra\\sdmc"%os.environ['APPDATA']
+            c.read("%s\\Citra\\config\\qt-config.ini"%os.environ['APPDATA'])
+        elif os.name == "posix":
+            p="%s/.local/share/citra-emu/sdmc"%os.environ['HOME']
+            c.read("%s/.config/citra-emu/qt-config.ini"%os.environ['HOME'])
+
+        if not c.getboolean("Data%20Storage","use_virtual_sd"): return False
+        if c.getboolean("Data%20Storage","use_custom_storage"):
+            p = c.get("Data%20Storage","sdmc_directory")
+        return p
+    
+    def isCitraDirectory(self, path:str):
+        try:
+            if os.path.samefile(path, self.citraDir): # Linux is case-sensitive, Windows may use inconsistent casing, ruining simple checks
+                                                      # Added bonus: symlinks would work this way too.
+                return True
+            else:
+                if os.path.exists(os.path.join(path, "Nintendo 3DS", "0"*32)):
+                    return True
+                if os.path.exists(os.path.join(path, *const._ISCITRAFLAG_PATH)):
+                    return True
+            return None
+        except:
+            return None
+
+
     def selectSDDirectory(self):
         dialog = QFileDialog()
         folder_path = dialog.getExistingDirectory(self, lang.get("sdSelectDest"), self.sdRootText.text())
         if (folder_path != ""):
             folder_path = folder_path.replace("/", os.path.sep).replace("\\", os.path.sep)
-            folder_path = self.tryCorrectSDPath(folder_path)
-            self.sdRootText.setText(folder_path)
+            self.sdRootText.setText(self.tryCorrectSDPath(folder_path))
     
     def dialogClose(self, dlg):
         try:
@@ -730,6 +755,7 @@ class Window(QMainWindow, Ui_MainWindow):
         
     def changeLogViewer(self):
         if not lang.isNative(): QMessageBox.warning(self, lang.get("warning"), lang.get("nonEnglishWarn"))
+        QMessageBox.warning(self, lang.get("warning"), lang.get("chglogWarning"))
         self.spawnThreadedDialog(ChangeLogViewerRun(), Qt.WindowModality.NonModal)
 
     def showHelpDialog(self):
