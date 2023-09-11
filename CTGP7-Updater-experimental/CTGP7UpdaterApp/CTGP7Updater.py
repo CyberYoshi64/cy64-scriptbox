@@ -499,7 +499,7 @@ class CTGP7Updater:
         cver = const.VERSION_NUMBER
         nver = CTGP7Updater._downloadString(baseURL + const._INSTALLER_VERSION, "raw").strip()
         try:
-            if len(nver)>4:
+            if len(nver)>=3:
                 nver = nver.decode("ascii","replace").split("-", 1)
                 chk = nver[0].split(".")
                 while (len(chk)<3): chk.append("0")
@@ -509,15 +509,7 @@ class CTGP7Updater:
                     return True
                 if (int(chk[2]) > cver["micro"]):
                     return True
-            else:
-                chk = int.from_bytes(nver[:3],"big")
-                chk = (chk>>20&15, chk>>12&255, chk&4095)
-                if (chk[0] > cver["major"]):
-                    return True
-                if (chk[1] > cver["minor"]):
-                    return True
-                if (chk[2] > cver["micro"]):
-                    return True
+            else: return True
             return False
         except Exception as e:
             raise Exception(utils.strfmt(lang.get("updateCheckFailParse"), e))

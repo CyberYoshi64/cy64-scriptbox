@@ -473,6 +473,8 @@ class Window(QMainWindow, Ui_MainWindow):
             return False
 
     def selectSDFromList(self, l:list)->str:
+        try:    self.citraDir = self.getCitraDir()
+        except: self.citraDir = None
         dlg = QDialog(self)
         Ui_Dialog1.setupUi(dlg)
         dlg.setWindowTitle(lang.get("sdDetectionTitle"))
@@ -673,7 +675,11 @@ class Window(QMainWindow, Ui_MainWindow):
     # You never know when people don't know what "root" is
     # in terms of directories
     def tryCorrectSDPath(self, f:str) -> str:
-        p = ['3ds', 'Nintendo 3DS', 'cias', 'cia', 'CTGP-7', 'gamefs', 'savefs', 'config', 'resources', 'MyStuff', 'luma', 'gm9', 'private']
+        p = [
+            '3ds', 'Nintendo 3DS', 'cias', 'cia', 'luma', 'gm9', 'private', # General SD
+            'CTGP-7', 'gamefs', 'savefs', 'config', 'resources', 'MyStuff', # CTGP-7
+            '0'*32 # Citra ID0/ID1 (how would you ever need this? but apparently, some do)
+        ]
         ff = f.split(os.sep)
         if os.name!="nt": ff[0]="/" # Linux needs this for absolute path
         run = True; l = len(ff)
@@ -700,8 +706,7 @@ class Window(QMainWindow, Ui_MainWindow):
             c.read("%s/.config/citra-emu/qt-config.ini"%os.environ['HOME'])
 
         if not c.getboolean("Data%20Storage","use_virtual_sd"): return False
-        if c.getboolean("Data%20Storage","use_custom_storage"):
-            p = c.get("Data%20Storage","sdmc_directory")
+        p = c.get("Data%20Storage","sdmc_directory")
         return p
     
     def isCitraDirectory(self, path:str):

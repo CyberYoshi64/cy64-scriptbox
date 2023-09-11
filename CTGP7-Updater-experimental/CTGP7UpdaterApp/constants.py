@@ -6,7 +6,7 @@ class CONSTANT:
         "major": 1,
         "minor": 1,
         "micro": 3,
-        "category": VERSION_CAT_DEV
+        "category": VERSION_CAT_RC
     }
     _BASE_MOD_FOLDER_PATH = "CTGP-7"
     _BASE_MOD_NAME = "CTGP-7"
