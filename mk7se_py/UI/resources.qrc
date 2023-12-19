@@ -1,0 +1,5 @@
+<RCC>
+  <qresource lang="Display fonts" prefix="fonts">
+  </qresource>
+  <qresource lang="Icons" prefix="images"/>
+</RCC>

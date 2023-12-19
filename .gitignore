@@ -3,7 +3,10 @@
 *.old
 *.cywbak
 *.bak
+*.log
 CY64SBFP2/
 __pycache__
 CY64PTCFP2/
 makeromd/
+mk7se_py/system*
+mk7se_py/out*

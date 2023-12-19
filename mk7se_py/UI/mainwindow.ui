@@ -1,0 +1,3943 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0" idbasedtr="true">
+ <author>Jason H. (CyberYoshi64)</author>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>982</width>
+    <height>532</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1172</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="palette">
+   <palette>
+    <active>
+     <colorrole role="WindowText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>36</red>
+        <green>44</green>
+        <blue>63</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Light">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>54</red>
+        <green>66</green>
+        <blue>94</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Midlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>45</red>
+        <green>55</green>
+        <blue>78</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Dark">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>18</red>
+        <green>22</green>
+        <blue>31</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Mid">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>24</red>
+        <green>29</green>
+        <blue>42</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="BrightText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>18</red>
+        <green>22</green>
+        <blue>31</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>36</red>
+        <green>44</green>
+        <blue>63</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Shadow">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Highlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>175</red>
+        <green>88</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="HighlightedText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Link">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>170</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="LinkVisited">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>85</red>
+        <green>170</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>18</red>
+        <green>22</green>
+        <blue>31</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ToolTipBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ToolTipText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="PlaceholderText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="128">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </active>
+    <inactive>
+     <colorrole role="WindowText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>36</red>
+        <green>44</green>
+        <blue>63</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Light">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>54</red>
+        <green>66</green>
+        <blue>94</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Midlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>45</red>
+        <green>55</green>
+        <blue>78</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Dark">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>18</red>
+        <green>22</green>
+        <blue>31</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Mid">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>24</red>
+        <green>29</green>
+        <blue>42</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="BrightText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>18</red>
+        <green>22</green>
+        <blue>31</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>36</red>
+        <green>44</green>
+        <blue>63</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Shadow">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Highlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>175</red>
+        <green>88</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="HighlightedText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>251</red>
+        <green>251</green>
+        <blue>250</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Link">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>170</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="LinkVisited">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>85</red>
+        <green>170</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>18</red>
+        <green>22</green>
+        <blue>31</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ToolTipBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ToolTipText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="PlaceholderText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="128">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </inactive>
+    <disabled>
+     <colorrole role="WindowText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="160">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>36</red>
+        <green>44</green>
+        <blue>63</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Light">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>54</red>
+        <green>66</green>
+        <blue>94</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Midlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>45</red>
+        <green>55</green>
+        <blue>78</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Dark">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>18</red>
+        <green>22</green>
+        <blue>31</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Mid">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>24</red>
+        <green>29</green>
+        <blue>42</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="160">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="BrightText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="192">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="160">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>36</red>
+        <green>44</green>
+        <blue>63</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>36</red>
+        <green>44</green>
+        <blue>63</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Shadow">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Highlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>91</red>
+        <green>66</green>
+        <blue>22</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="HighlightedText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="160">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Link">
+      <brush brushstyle="SolidPattern">
+       <color alpha="160">
+        <red>0</red>
+        <green>170</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="LinkVisited">
+      <brush brushstyle="SolidPattern">
+       <color alpha="160">
+        <red>85</red>
+        <green>170</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>36</red>
+        <green>44</green>
+        <blue>63</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ToolTipBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ToolTipText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>161</red>
+        <green>161</green>
+        <blue>161</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="PlaceholderText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="128">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </disabled>
+   </palette>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+    <stylestrategy>PreferAntialias</stylestrategy>
+   </font>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <stylestrategy>PreferAntialias</stylestrategy>
+    </font>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <stylestrategy>PreferAntialias</stylestrategy>
+       </font>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>General</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="9" column="1">
+         <widget class="QLabel" name="genMisc">
+          <property name="text">
+           <string>Miscellaneous Options</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="1" colspan="2">
+         <widget class="Line" name="line_2">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>12</height>
+           </size>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLabel" name="genCecMeets">
+          <property name="text">
+           <string>StreetPass Encounters</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <spacer name="horizontalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="genCoins">
+          <property name="text">
+           <string>Coin Count</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="genVR">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>312</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>312</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Versus Rating</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="genCecComment">
+          <property name="text">
+           <string>StreetPass Comment</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="genLosses">
+          <property name="text">
+           <string>Losses</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="genWins">
+          <property name="text">
+           <string>Wins</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLabel" name="genMiiData">
+          <property name="text">
+           <string>Mii Data</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <spacer name="horizontalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="2">
+         <widget class="QSpinBox" name="genVRVal">
+          <property name="minimumSize">
+           <size>
+            <width>412</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="suffix">
+           <string> VR</string>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>99999</number>
+          </property>
+          <property name="value">
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QSpinBox" name="genWinsVal">
+          <property name="suffix">
+           <string> win(s)</string>
+          </property>
+          <property name="maximum">
+           <number>99999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QSpinBox" name="genLossesVal">
+          <property name="suffix">
+           <string> loss(es)</string>
+          </property>
+          <property name="maximum">
+           <number>99999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QSpinBox" name="genCoinsVal">
+          <property name="suffix">
+           <string> coin(s)</string>
+          </property>
+          <property name="maximum">
+           <number>2147483647</number>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QSpinBox" name="genCecMeetsVal">
+          <property name="suffix">
+           <string> encounter(s)</string>
+          </property>
+          <property name="maximum">
+           <number>2147483647</number>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QLineEdit" name="genCecCommentVal">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>&lt;p&gt;This is the comment displayed in a speech bubble in the Mario Kart Channel.&lt;/p&gt;&lt;p&gt;If left empty, the speech bubble is not displayed.&lt;/p&gt;&lt;p&gt;This field is limited to 16 characters.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Recommendation: &lt;/b&gt;Have some moral decency and don't use inappropriate words, such as slurs.&lt;/p&gt;</string>
+          </property>
+          <property name="maxLength">
+           <number>16</number>
+          </property>
+          <property name="placeholderText">
+           <string>[Speech bubble will not appear]</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="2">
+         <widget class="QPushButton" name="genMiiDataEdit">
+          <property name="toolTip">
+           <string>&lt;p&gt;View and edit a handful of values of your Mii.&lt;/p&gt;&lt;p&gt;Such include exporting the Mii or editing the Mii name.&lt;/p&gt;</string>
+          </property>
+          <property name="text">
+           <string>Edit Mii data...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="2">
+         <widget class="QCommandLinkButton" name="genMaxValueBtn">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="statusTip">
+           <string>This option unlocks all characters and kart parts, as well as set the stats to their maximum.</string>
+          </property>
+          <property name="text">
+           <string>Maximize all values / Unlock everything</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="2">
+         <widget class="QCommandLinkButton" name="genResetSaveBtn">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>&lt;p&gt;&lt;b&gt;Note: &lt;/b&gt;Your Mii will not be removed.&lt;/p&gt;</string>
+          </property>
+          <property name="statusTip">
+           <string>This option will revert all settings, wipe the opponents list and relock kart parts and characters.</string>
+          </property>
+          <property name="text">
+           <string>Reset save data to defaults</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="2">
+         <widget class="QCommandLinkButton" name="genRandomSaveBtn">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>&lt;p&gt;&lt;b&gt;Note: &lt;/b&gt;Your and opponents' Miis will not be affected.&lt;/p&gt;</string>
+          </property>
+          <property name="statusTip">
+           <string>This option will try randomize all values safely.</string>
+          </property>
+          <property name="text">
+           <string>Randomize save data</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabUnlocks">
+       <attribute name="title">
+        <string>Unlocks</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="1" column="0">
+         <layout class="QVBoxLayout" name="unlChar">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="unlCharLabel">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>RodinNTLG2</family>
+              <pointsize>13</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+              <stylestrategy>PreferAntialias</stylestrategy>
+             </font>
+            </property>
+            <property name="text">
+             <string>Characters</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListWidget" name="unlCharList">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="currentRow">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Mario</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Luigi</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Peach</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Yoshi</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bowser</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Donkey Kong</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Toad</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Koopa Troopa</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Daisy</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wario</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosalina</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Metal Mario</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Shy Guy</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Honey Queen</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wiggler</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Lakitu</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Mii</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1">
+         <layout class="QVBoxLayout" name="unlBody">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="unlBodyLabel">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>RodinNTLG2</family>
+              <pointsize>13</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+              <stylestrategy>PreferAntialias</stylestrategy>
+             </font>
+            </property>
+            <property name="text">
+             <string>Karts</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListWidget" name="unlBodyList">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="currentRow">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Standard Kart</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bolt Buggy</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Birthday Girl / Royal Ribbon</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Egg 1</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Tiny Tug</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Cloud 9</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Zucchini / Gherkin</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B Dasher</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bruiser / Growlster</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bumble V</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Koopa Clown</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Pipe Frame</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Blue Seven</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Cact X</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Barrel Train</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Soda Jet</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gold Standard Kart</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="2">
+         <layout class="QVBoxLayout" name="unlTire">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="unlTireLabel">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>RodinNTLG2</family>
+              <pointsize>13</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+              <stylestrategy>PreferAntialias</stylestrategy>
+             </font>
+            </property>
+            <property name="text">
+             <string>Tires</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListWidget" name="unlTireList">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="currentRow">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Standard / Normal</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Monster</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Roller</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Slick</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Slim</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Sponge</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Red Monster</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Mushroom</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wood / Wooden</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gold Tires</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="3">
+         <layout class="QVBoxLayout" name="unlGlider">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="unlGliderLabel">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>RodinNTLG2</family>
+              <pointsize>13</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+              <stylestrategy>PreferAntialias</stylestrategy>
+             </font>
+            </property>
+            <property name="text">
+             <string>Gliders</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListWidget" name="unlGliderList">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="currentRow">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Standard</string>
+             </property>
+             <property name="toolTip">
+              <string>This element cannot be unchecked.</string>
+             </property>
+             <property name="checkState">
+              <enum>PartiallyChecked</enum>
+             </property>
+             <property name="flags">
+              <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Paraglider / Parafoil</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Peach Parasol</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Flower Glider</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Swooper / Swoop</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Beast Glider / Ghastly Glider</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gold Glider</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0" colspan="4">
+         <widget class="QLabel" name="label_8">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Tick the entries you want to have unlocked. Some entries may not be togglable.</string>
+          </property>
+          <property name="margin">
+           <number>4</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabGP">
+       <attribute name="title">
+        <string>Grand Prix</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item row="1" column="1" colspan="4">
+           <widget class="QWidget" name="widget" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <layout class="QHBoxLayout" name="cupHdr">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>64</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="cupHdrEngineLbl">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Current engine class</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="cupHdrEngineSel">
+               <property name="minimumSize">
+                <size>
+                 <width>96</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>256</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="statusTip">
+                <string>Select engine class: 50cc, 100cc, 150cc and Mirror</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>50 cc</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>100 cc</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>150 cc</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Mirror</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="cupHdrApplyCupAll">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="statusTip">
+                <string>Apply the trophies and ranks of this engine class to all engine classes.</string>
+               </property>
+               <property name="text">
+                <string>Apply current engine class to all</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>64</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>16</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="7" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="5" column="1">
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>12</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="0">
+           <spacer name="horizontalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="5">
+           <spacer name="horizontalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="1">
+           <widget class="QWidget" name="cup1" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <widget class="QLabel" name="cup1Icon">
+             <property name="geometry">
+              <rect>
+               <x>88</x>
+               <y>20</y>
+               <width>64</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-----
+cup icon
+------</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup1Label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>88</y>
+               <width>200</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Mushroom Cup</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cup1Rank">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No rank</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1 Star</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Stars</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Stars</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="cup1Tro">
+             <property name="geometry">
+              <rect>
+               <x>118</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No trophy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bronze</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Silver</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gold</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QCheckBox" name="cup1Active">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>8</x>
+               <y>8</y>
+               <width>24</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>&lt;p&gt;This cup cannot be toggled.&lt;/p&gt;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QWidget" name="cup2" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <widget class="QLabel" name="cup2Icon">
+             <property name="geometry">
+              <rect>
+               <x>88</x>
+               <y>20</y>
+               <width>64</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-----
+cup icon
+------</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup2Label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>88</y>
+               <width>200</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Flower Cup</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cup2Rank">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No rank</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1 Star</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Stars</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Stars</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="cup2Tro">
+             <property name="geometry">
+              <rect>
+               <x>118</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No trophy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bronze</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Silver</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gold</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QCheckBox" name="cup2Active">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>24</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QWidget" name="cup3" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <widget class="QLabel" name="cup3Icon">
+             <property name="geometry">
+              <rect>
+               <x>88</x>
+               <y>20</y>
+               <width>64</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-----
+cup icon
+------</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup3Label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>88</y>
+               <width>200</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Star Cup</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cup3Rank">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No rank</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1 Star</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Stars</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Stars</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="cup3Tro">
+             <property name="geometry">
+              <rect>
+               <x>118</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No trophy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bronze</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Silver</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gold</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QCheckBox" name="cup3Active">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>24</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QWidget" name="cup4" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <widget class="QLabel" name="cup4Icon">
+             <property name="geometry">
+              <rect>
+               <x>88</x>
+               <y>20</y>
+               <width>64</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-----
+cup icon
+------</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup4Label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>88</y>
+               <width>200</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Special Cup</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cup4Rank">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No rank</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1 Star</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Stars</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Stars</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="cup4Tro">
+             <property name="geometry">
+              <rect>
+               <x>118</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No trophy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bronze</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Silver</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gold</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QCheckBox" name="cup4Active">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>24</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QWidget" name="cup5" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <widget class="QCheckBox" name="cup5Active">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>8</x>
+               <y>8</y>
+               <width>24</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>&lt;p&gt;This cup cannot be toggled.&lt;/p&gt;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup5Icon">
+             <property name="geometry">
+              <rect>
+               <x>88</x>
+               <y>20</y>
+               <width>64</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-----
+cup icon
+------</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup5Label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>88</y>
+               <width>200</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Shell Cup</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cup5Rank">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No rank</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1 Star</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Stars</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Stars</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="cup5Tro">
+             <property name="geometry">
+              <rect>
+               <x>118</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No trophy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bronze</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Silver</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gold</string>
+              </property>
+             </item>
+            </widget>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QWidget" name="cup6" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <widget class="QLabel" name="cup6Icon">
+             <property name="geometry">
+              <rect>
+               <x>88</x>
+               <y>20</y>
+               <width>64</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-----
+cup icon
+------</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup6Label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>88</y>
+               <width>200</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Banana Cup</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cup6Rank">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No rank</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1 Star</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Stars</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Stars</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="cup6Tro">
+             <property name="geometry">
+              <rect>
+               <x>118</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No trophy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bronze</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Silver</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gold</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QCheckBox" name="cup6Active">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>24</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="6" column="3">
+           <widget class="QWidget" name="cup7" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <widget class="QLabel" name="cup7Icon">
+             <property name="geometry">
+              <rect>
+               <x>88</x>
+               <y>20</y>
+               <width>64</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-----
+cup icon
+------</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup7Label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>88</y>
+               <width>200</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Leaf Cup</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cup7Rank">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No rank</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1 Star</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Stars</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Stars</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="cup7Tro">
+             <property name="geometry">
+              <rect>
+               <x>118</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No trophy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bronze</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Silver</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gold</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QCheckBox" name="cup7Active">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>24</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="6" column="4">
+           <widget class="QWidget" name="cup8" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>240</width>
+              <height>172</height>
+             </size>
+            </property>
+            <widget class="QLabel" name="cup8Icon">
+             <property name="geometry">
+              <rect>
+               <x>88</x>
+               <y>20</y>
+               <width>64</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-----
+cup icon
+------</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="cup8Label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>88</y>
+               <width>200</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Lightning Cup</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cup8Rank">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No rank</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A (unused)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1 Star</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Stars</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Stars</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="cup8Tro">
+             <property name="geometry">
+              <rect>
+               <x>118</x>
+               <y>120</y>
+               <width>112</width>
+               <height>40</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>No trophy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Bronze</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Silver</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gold</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QCheckBox" name="cup8Active">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>24</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabOpponent">
+       <attribute name="title">
+        <string>Opponents</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <spacer name="horizontalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QWidget" name="oppPicker" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_5">
+             <item row="8" column="0" colspan="3">
+              <widget class="QListWidget" name="opponents">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>300</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>300</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="10" column="0" colspan="3">
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QPushButton" name="oppPickToTop">
+                 <property name="maximumSize">
+                  <size>
+                   <width>48</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="statusTip">
+                  <string>Move this opponent to the top of the list</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Alt+Home</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="oppPickToBot">
+                 <property name="maximumSize">
+                  <size>
+                   <width>48</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="statusTip">
+                  <string>Move this opponent up one entry</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Alt+Up</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="oppPickDown">
+                 <property name="maximumSize">
+                  <size>
+                   <width>48</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="statusTip">
+                  <string>Move this opponent down one entry</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Alt+Down</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="oppPickUp">
+                 <property name="maximumSize">
+                  <size>
+                   <width>48</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="statusTip">
+                  <string>Move this opponent to the bottom of the list</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Alt+End</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="0" colspan="3">
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <spacer name="horizontalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="oppCurrent">
+                 <property name="minimumSize">
+                  <size>
+                   <width>64</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>64</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>RodinNTLG2</family>
+                   <pointsize>16</pointsize>
+                   <stylestrategy>PreferAntialias</stylestrategy>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="oppLblSlash">
+                 <property name="maximumSize">
+                  <size>
+                   <width>64</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>RodinNTLG2</family>
+                   <pointsize>13</pointsize>
+                   <stylestrategy>PreferAntialias</stylestrategy>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>/</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="oppTotal">
+                 <property name="minimumSize">
+                  <size>
+                   <width>64</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>64</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>RodinNTLG2</family>
+                   <pointsize>10</pointsize>
+                   <stylestrategy>PreferAntialias</stylestrategy>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item row="11" column="0">
+              <widget class="QPushButton" name="oppExport">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="statusTip">
+                <string>Export this opponent</string>
+               </property>
+               <property name="text">
+                <string>E&amp;xport</string>
+               </property>
+              </widget>
+             </item>
+             <item row="11" column="1">
+              <widget class="QPushButton" name="oppImport">
+               <property name="statusTip">
+                <string>Import an opponent</string>
+               </property>
+               <property name="text">
+                <string>&amp;Import</string>
+               </property>
+              </widget>
+             </item>
+             <item row="11" column="2">
+              <widget class="QPushButton" name="oppRemove">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="statusTip">
+                <string>Remove this opponent from the list</string>
+               </property>
+               <property name="text">
+                <string>Remo&amp;ve</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>8</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QFrame" name="oppFrame">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="8" column="2">
+            <widget class="QWidget" name="oppCountryView" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>320</width>
+               <height>44</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>512</width>
+               <height>80</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>&lt;p&gt;This is a rough demonstration of what Mario Kart 7 would show in the Opponents List.&lt;/p&gt;</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: white; background-color: #112; border-radius: 8px</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>8</number>
+              </property>
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="rightMargin">
+               <number>8</number>
+              </property>
+              <property name="bottomMargin">
+               <number>2</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="oppCountyLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Country (i.e. Deutschland)
+Hier könnte Ihre Werbung stehen.</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::PlainText</enum>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="18" column="1">
+            <widget class="QLabel" name="oppUnlock">
+             <property name="text">
+              <string>Opponent's Game Unlocks</string>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="1">
+            <widget class="QLabel" name="oppOwnWin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Opponent's own wins</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1" rowspan="2">
+            <widget class="QLabel" name="oppCountry">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Country / Area</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="oppLosses">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Losses</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="1" colspan="2">
+            <widget class="QLabel" name="oppHdr2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>28</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>RodinNTLG2</family>
+               <pointsize>14</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+               <stylestrategy>PreferAntialias</stylestrategy>
+              </font>
+             </property>
+             <property name="text">
+              <string>Stats not shown in-game</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="oppWins">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>232</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Wins</string>
+             </property>
+            </widget>
+           </item>
+           <item row="16" column="1">
+            <widget class="QLabel" name="oppOwnLoss">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Opponent's own losses</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="2">
+            <widget class="QLabel" name="oppHdr1">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>28</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>RodinNTLG2</family>
+               <pointsize>14</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+               <stylestrategy>PreferAntialias</stylestrategy>
+              </font>
+             </property>
+             <property name="text">
+              <string>In-game properties</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1" colspan="2">
+            <widget class="Line" name="line">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>12</height>
+              </size>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLabel" name="oppMiiData">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Mii Data</string>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="1">
+            <widget class="QLabel" name="oppVR">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Versus Rating</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QSpinBox" name="oppWinsVal">
+             <property name="suffix">
+              <string> win(s)</string>
+             </property>
+             <property name="minimum">
+              <number>-999</number>
+             </property>
+             <property name="maximum">
+              <number>999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QSpinBox" name="oppLossesVal">
+             <property name="suffix">
+              <string> loss(es)</string>
+             </property>
+             <property name="minimum">
+              <number>-999</number>
+             </property>
+             <property name="maximum">
+              <number>999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QPushButton" name="oppEditMii">
+             <property name="toolTip">
+              <string>&lt;p&gt;View and edit a handful of values of this opponent's Mii.&lt;/p&gt;&lt;p&gt;Such include exporting the Mii or editing the Mii name.&lt;/p&gt;</string>
+             </property>
+             <property name="text">
+              <string>Edit Mii data...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
+            <widget class="QWidget" name="oppCountyFrm" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QSpinBox" name="oppCountryVal">
+                <property name="prefix">
+                 <string>ID </string>
+                </property>
+                <property name="minimum">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <number>255</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="oppAreaVal">
+                <property name="prefix">
+                 <string>Sub ID </string>
+                </property>
+                <property name="maximum">
+                 <number>255</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="13" column="2">
+            <widget class="QSpinBox" name="oppVRVal">
+             <property name="suffix">
+              <string> VR</string>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>99999</number>
+             </property>
+             <property name="value">
+              <number>1000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="2">
+            <widget class="QSpinBox" name="oppOwnWinVal">
+             <property name="suffix">
+              <string> win(s)</string>
+             </property>
+             <property name="maximum">
+              <number>99999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="16" column="2">
+            <widget class="QSpinBox" name="oppOwnLossVal">
+             <property name="suffix">
+              <string> loss(es)</string>
+             </property>
+             <property name="maximum">
+              <number>99999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="18" column="2">
+            <widget class="QPushButton" name="oppUnlockMng">
+             <property name="toolTip">
+              <string>Editing them has no impact, but if you want, you can duplicate them for yourself.</string>
+             </property>
+             <property name="text">
+              <string>View Unlocks</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>982</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionDummy1"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <widget class="QMenu" name="menuContact">
+     <property name="title">
+      <string>&amp;Contact</string>
+     </property>
+     <addaction name="actionHelpGitHub"/>
+    </widget>
+    <addaction name="actionAboutThisApp"/>
+    <addaction name="actionAboutQt"/>
+    <addaction name="separator"/>
+    <addaction name="menuContact"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="statusTip">
+    <string>Open an existing save file</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="statusTip">
+    <string>Save changes to the file</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>S&amp;ave As...</string>
+   </property>
+   <property name="statusTip">
+    <string>Save as a different format or another file</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="statusTip">
+    <string>Exit the application (unsaved changes will be lost)</string>
+   </property>
+  </action>
+  <action name="actionDummy1">
+   <property name="text">
+    <string>Dummy1</string>
+   </property>
+   <property name="statusTip">
+    <string>This action does nothing. IDK what to put here honestly</string>
+   </property>
+  </action>
+  <action name="actionAboutThisApp">
+   <property name="text">
+    <string>&amp;About This App</string>
+   </property>
+   <property name="statusTip">
+    <string>Show application version and credits</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About &amp;Qt</string>
+   </property>
+   <property name="statusTip">
+    <string>Show active Qt version used by this application</string>
+   </property>
+  </action>
+  <action name="actionHelpGitHub">
+   <property name="text">
+    <string>File a &amp;GitHub issue...</string>
+   </property>
+   <property name="toolTip">
+    <string>GitHub</string>
+   </property>
+   <property name="statusTip">
+    <string>Visit the GitHub repository to submit an issue</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="0"/>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>genVRVal</tabstop>
+  <tabstop>genWinsVal</tabstop>
+  <tabstop>genLossesVal</tabstop>
+  <tabstop>genCoinsVal</tabstop>
+  <tabstop>genCecMeetsVal</tabstop>
+  <tabstop>genCecCommentVal</tabstop>
+  <tabstop>genMiiDataEdit</tabstop>
+  <tabstop>genMaxValueBtn</tabstop>
+  <tabstop>genResetSaveBtn</tabstop>
+  <tabstop>genRandomSaveBtn</tabstop>
+  <tabstop>unlCharList</tabstop>
+  <tabstop>unlBodyList</tabstop>
+  <tabstop>unlTireList</tabstop>
+  <tabstop>unlGliderList</tabstop>
+  <tabstop>cupHdrEngineSel</tabstop>
+  <tabstop>cupHdrApplyCupAll</tabstop>
+  <tabstop>cup1Rank</tabstop>
+  <tabstop>cup1Tro</tabstop>
+  <tabstop>cup2Rank</tabstop>
+  <tabstop>cup2Tro</tabstop>
+  <tabstop>cup3Rank</tabstop>
+  <tabstop>cup3Tro</tabstop>
+  <tabstop>cup4Rank</tabstop>
+  <tabstop>cup4Tro</tabstop>
+  <tabstop>cup5Rank</tabstop>
+  <tabstop>cup5Tro</tabstop>
+  <tabstop>cup6Rank</tabstop>
+  <tabstop>cup6Tro</tabstop>
+  <tabstop>cup7Rank</tabstop>
+  <tabstop>cup7Tro</tabstop>
+  <tabstop>cup8Rank</tabstop>
+  <tabstop>cup8Tro</tabstop>
+  <tabstop>cup1Active</tabstop>
+  <tabstop>cup2Active</tabstop>
+  <tabstop>cup3Active</tabstop>
+  <tabstop>cup4Active</tabstop>
+  <tabstop>cup5Active</tabstop>
+  <tabstop>cup6Active</tabstop>
+  <tabstop>cup7Active</tabstop>
+  <tabstop>cup8Active</tabstop>
+  <tabstop>opponents</tabstop>
+  <tabstop>oppPickToTop</tabstop>
+  <tabstop>oppPickToBot</tabstop>
+  <tabstop>oppPickDown</tabstop>
+  <tabstop>oppPickUp</tabstop>
+  <tabstop>oppExport</tabstop>
+  <tabstop>oppImport</tabstop>
+  <tabstop>oppRemove</tabstop>
+  <tabstop>oppWinsVal</tabstop>
+  <tabstop>oppLossesVal</tabstop>
+  <tabstop>oppEditMii</tabstop>
+  <tabstop>oppCountryVal</tabstop>
+  <tabstop>oppAreaVal</tabstop>
+  <tabstop>oppVRVal</tabstop>
+  <tabstop>oppOwnWinVal</tabstop>
+  <tabstop>oppOwnLossVal</tabstop>
+  <tabstop>oppUnlockMng</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../../../../../../data/0/home/CyberYoshi64/github/cy64-scriptbox/mk7se_py/UI/resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>265</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

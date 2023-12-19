@@ -1,0 +1,209 @@
+'''systemX.dat''' is the name of [[Mario Kart 7]]'s save data file. It is stored on the cartridge or on the SD card, depending where the game is booted from. Usually, two of these files are stored in the save filesystem: '''systemX.dat''' and '''systemX+1.dat''', where "X" = a number from 0 to 9. ''systemX+1.dat'' is the latest save data while '''systemX.dat''' serves as a backup, if the former is to be rejected. If both files are rejected or missing, the game formats the save data and generates a new save file with default values with number 1. Most of the time, the number will increment after the game writes to the save, wrapping around to 0, if the number would be greater than 9.
+
+The class that controls this file in the code is '''System::SystemSaveData'''
+
+== File Format ==
+The file has a fixed size of 0x50D4 bytes.
+
+{|class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x00 || 4 || '''File magic'''. ''SSDC'' in ASCII (''CDSS'' in big endian). '''C'''TR '''D'''ash '''S'''ystem '''S'''ave
+|-
+| 0x04 || 2 || {{Unknown-left|'''Unknown'''. Always 5?}}
+|-
+| 0x06 || 1 || {{Unknown-left|'''Unknown'''. Related to ''System::PlayerData''?}}
+|-
+| 0x07 || 1 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x08 || 0x60 || Driver's '''[https://www.3dbrew.org/wiki/Mii#Mii_format Mii data]'''. The exact format of this Mii data is '''CFSD''', as it contains a [https://www.3dbrew.org/wiki/Mii#Checksum 2-byte checksum] at the end of the data.
+|-
+| 0x68 || 0x10 || {{Unknown-left|'''Unknown'''. Related to ''System::PlayerID''}}
+|-
+| 0x78 || 0x20 || '''CecComment'''. Player's comment from the Mario Kart Channel stats, encoded in UTF-16.
+|-
+| 0x98 || 2 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x9A || 0x4E || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0xE8 || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0xEC || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0xF0 || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0xF4 || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0xF8 || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0xFC || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x100 || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x104 || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x108 || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x10C || 0x600 || '''RankingSaveData'''
+|-
+| 0x70C || 0x20 || '''GrandPrixData'''
+|-
+| 0x72C || 4 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x730 || 0x41A0 || '''OpponentList'''
+|-
+| 0x48D0 || 0x800 || '''PlayerFlagSaveData'''
+|-
+| 0x50D0 || 4 || '''CRC-32''' of the entire file up to that point, in little endian.
+|}
+
+=== RankingSaveData ===
+
+=== GrandPrixData ===
+'''GrandPrixData''' contains a list of 32 bytes, one for every cup and every engine class. It stores different settings, such as the trophy obtained and the star ranking. Each bit is formatted as follows:
+
+TTTS SSSC
+
+where:
+* '''TTT''' = Trophy type
+* '''SSSS''' = Rank (RaceSys::EGrandPrixRecord)
+* '''C''' = Completed flag. 0 = not completed, 1 = completed.
+
+==== Trophy type ====
+{| class="wikitable"
+|-
+! ID !! Description
+|-
+| 0x00 || No trophy
+|-
+| 0x01 || Bronze
+|-
+| 0x02 || Silver
+|-
+| 0x03 || Gold
+|}
+
+==== Rank (RaceSys::EGrandPrixRecord) ====
+{| class="wikitable"
+|-
+! ID !! Description
+|-
+| 0x00 || No rank
+|-
+| 0x01 || {{Unknown-left|Unused}}
+|-
+| 0x02 || {{Unknown-left|Unused}}
+|-
+| 0x03 || {{Unknown-left|Unused}}
+|-
+| 0x04 || 1 star
+|-
+| 0x05 || 2 stars
+|-
+| 0x06 || 3 stars
+|}
+
+=== OpponentList ===
+'''OpponentList''' consists of a list of 100 '''OpponentData''' entries, each representing an opponent found online. This is the list of Miis seen in the Friend / Opponents list from the Online menu.
+
+==== OpponentData ====
+Each entry corresponds to an opponent found online. It is 0xA8 bytes long.
+
+{|class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x00 || 8 || {{Unknown-left|'''Unknown'''. Seems to be a boolean determining the end of the list.}} ''~ CY64''
+|-
+| 0x08 || 4 || VR
+|-
+| 0x0C || 4 || Number of wins from the opponent's Mario Kart Channel stats.
+|-
+| 0x10 || 4 || Number of losses from the opponent's Mario Kart Channel stats.
+|-
+| 0x14 || 4 || Number of losses against the opponent.
+|-
+| 0x18 || 4 || Number of wins against the opponent.
+|-
+| 0x1C || 2 || Character Unlock bitmask. ''~ CY64''
+|-
+| 0x1E || 2 || Kart Unlock bitmask. ''~ CY64''
+|-
+| 0x20 || 2 || Tire Unlock bitmask. ''~ CY64''
+|-
+| 0x22 || 2 || Glider Unlock bitmask. ''~ CY64''
+|-
+| 0x24 || 0x18 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x3C || 2 || '''[https://www.3dbrew.org/wiki/Country_Code_List Country code]'''.
+|-
+| 0x3E || 2 || '''Globe coordinates (latitude)'''. The latitude of the physical coordinates on the Wi-Fi / Mario Kart Channel globe the Mii appears on.
+|-
+| 0x40 || 2 || '''Globe coordinates (longitude)'''. The longitude of the physical coordinates on the Wi-Fi / Mario Kart Channel globe the Mii appears on.
+|-
+| 0x42 || 1 || '''Area code'''. ''~ CY64''
+|-
+| 0x43 || 1 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x44 || 0x60 || Driver's '''[https://www.3dbrew.org/wiki/Mii#Mii_format Mii data]'''. The exact format of this Mii data is '''CFSD''', as it contains a [https://www.3dbrew.org/wiki/Mii#Checksum 2-byte checksum] at the end of the data.
+|-
+| 0xA4 || 4 || {{Unknown-left|'''Unknown'''. Seems to be a boolean determining the end of the list.}} ''~ CY64''
+|}
+
+=== PlayerFlagSaveData ~ CY64 ===
+inb4 only the middle of this section has been figured out barely.
+
+{| class="wikitable"
+|-
+! Offset !! Size !! Description
+|-
+| 0x000 || 0x358 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x358 || 4 || '''Coins collected'''. Limited in signed 32-bit integer range.
+|-
+| 0x35C || 0x1F8 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x554 || 4 || Number of '''StreetPass encounters'''. Limited in signed 32-bit integer range.
+|-
+| 0x558 || 0xC || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x564 || 4 || Number of '''wins'''. The save data is rejected if this value is greater than 99999.
+|-
+| 0x568 || 4 || Number of '''losses'''. The save data is rejected if this value is greater than 99999.
+|-
+| 0x56C || 4 || bit 0-16: VR. The save data is rejected if this value is greater than 99999.<br/>bit 17-23: '''Unknown.'''<br/>bit 24-31: Cup Unlock bitmask.
+|-
+| 0x570 || 2 || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x572 || 4 || Character Unlock bitmask.
+|-
+| 0x576 || 2 || Character fresh Unlock bitmask. (1)
+|-
+| 0x578 || 2 || Kart Unlock bitmask.
+|-
+| 0x57A || 2 || Kart fresh Unlock bitmask. (1)
+|-
+| 0x57C || 2 || Tire Unlock bitmask.
+|-
+| 0x57E || 2 || Tire fresh Unlock bitmask. (1)
+|-
+| 0x580 || 2 || Glider Unlock bitmask.
+|-
+| 0x582 || 2 || Glider fresh Unlock bitmask. (1)
+|-
+| 0x584 || 0xC || {{Unknown-left|'''Unknown'''.}}
+|-
+| 0x590 || 100 || {{Unknown-left|'''Unknown'''. Boolean array?}}
+|-
+| 0x5f4 || 0x20C || {{Unknown-left|'''Unknown'''.}}
+|}
+
+(1): These values are responsible for the unlock animation in the menu.
+Note that the game only checks for one bit, starting with the characters from the most-significant bit to the least-significant bit.
+If the dedicated bit in the main bitmask is not set, the bit is ignored.
+
+== Tools ==
+The following tools can handle ''systemX.dat'' files:
+* [https://www.marcrobledo.com/savegame-editors/mario-kart-7/ Savegame Editor], by Marc Robledo.
+* [https://github.com/hax0kartik/Mk7se Mk7se], by hax0kartik.
+
+[[Category:File Format/Other]]

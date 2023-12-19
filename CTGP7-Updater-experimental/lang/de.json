@@ -1,6 +1,4 @@
 {
-    "englishNative": false,
-    
     "warning": "Warnung",
     "error": "Fehler",
     "success": "Erfolg",
@@ -27,8 +25,8 @@
     "updateCheckFail": "Während dem Suchen nach Updates ist ein Fehler aufgetreten.\nStelle sicher, dass dein Gerät mit dem Internet verbunden ist.\n\nSollten Probleme weiterhin bestehen bleiben, suche dir Hilfe (auf Englisch) im %0.",
     "updateCheckFailParse": "Fehler beim Analysieren der Versionsinformation des PC-Installers: %0",
 
-    "nonEnglishWarn": "Die Daten, die gezeigt werden, sind auf Englisch und haben keine Übersetzungen vorhanden.",
-    "chglogWarning": "Die Anzeige der Versionshistorie könnte fehlerhaft sein, beispielsweise könnte Text inkorrekt formattiert sein.",
+    "nonEnglishWarn": "Die Daten, die gezeigt werden, sind auf Englisch. Leider sind keine Übersetzungen vorhanden. Wir bitten um Entschuldigung für diese Unannehmlichkeit.",
+    "chglogWarning": "Die Anzeige der Versionshistorie könnte fehlerhaft sein, beispielsweise könnte Text fehlerhaft formattiert sein.",
 
     "btn3DS": "Nintendo 3DS",
     "btnCitra": "Citra",
@@ -78,9 +76,9 @@
     "pendUpdate": "Ein pausiertes Update wurde erkannt.",
     "pendUpdateContinue": "Es muss zuerst abgeschlossen werden, bevor nach neuen Updates gesucht werden kann.\nMöchtest du fortfahren?",
 
-    "sdFoundOnlyCitra": "Es konnte zwar keine 3DS-SD-Karte gefunden werden, aber dafür eine Citra-Installation.\n\nFalls du für eine 3DS-Konsole eine Installation verwalten möchtest, stelle sicher, dass die SD-Karte eingesteckt ist und vom Betriebssystem erkannt wird.",
+    "sdFoundOnlyCitra": "Es konnte zwar keine 3DS-SD-Karte, aber dafür eine Citra-Installation gefunden werden.\n\nFalls du für eine 3DS-Konsole eine Installation verwalten möchtest, stelle sicher, dass die SD-Karte eingesteckt ist und vom Betriebssystem erkannt wird.",
     "sdNoneDetected": "Es wurde keine 3DS-SD-Karte gefunden.\n\nStelle sicher, dass die SD-Karte eingesteckt ist und vom Betriebssystem erkannt wird.",
-    "citraNoSD": "Eine Citra-Installation wurde gefunden, jedoch ist dessen virtuelle SD-Karte ausgeschalten.\n\nUm auf Citra zu installieren überprüfe die Einstellungen.\nEmulation > Configure... > System > Storage > Use Virtual SD",
+    "citraNoSD": "Eine Citra-Installation wurde gefunden, jedoch ist dessen virtuelle SD-Karte ausgeschalten.\n\nUm auf Citra zu installieren überprüfe die Einstellungen.\nEmulation → Konfigurieren... → System → Speicher → Virtuelle SD benutzen",
     "cantExitWorkerActive": "Es wird zurzeit eine Installation verwaltet. Bitte klicke den \"Abbrechen\"-Knopf, bevor du dieses Fenster schließen kannst.",
 
     "sdDetectionTitle": "SD-Karten-Erkennung",

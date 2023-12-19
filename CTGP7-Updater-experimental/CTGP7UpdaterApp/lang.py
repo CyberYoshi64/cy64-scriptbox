@@ -11,7 +11,7 @@ def getAppPath():
 
 def isNative()->bool:
     global data
-    return data.get("englishNative", True)
+    return lang[:2]=="en"
 
 def get(key:str) -> str:
     global data
@@ -36,11 +36,12 @@ def Initialize():
     data = {}
     flist = (
         os.path.join(path, "lang", "en.json"),
-        os.path.join(path, "lang", "{}.json".format(lang.split("_")[0])),
-        os.path.join(path, "lang", "{}.json".format(lang))
+        os.path.join(path, "lang", "{}.json".format(lang)),
+        os.path.join(path, "lang", "{}.json".format(lang.split("_")[0]))
     )
     for i in flist:
         tdata = tryLoadLangJson(i)
         if tdata != None:
+            lang = i[i.rfind(os.sep)+1:-5]
             for k in tdata.keys():
                 data[k] = tdata[k]
