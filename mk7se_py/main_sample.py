@@ -5,11 +5,10 @@ import ctr, ctrdash
 
 with open(sys.argv[1],"rb") as fd:
 	cdss = ctrdash.cdss.CDSS(fd)
-	print(cdss.str())
 
-cdss.cec_comment = "Hello there."
 cdss.miiData.miiName = "ＣＹ６４ιαsοη"
-cdss.miiData.miiID = 0x80001337
+cdss.miiData.miiID = 0x8d228187
+cdss.cec_comment = "Hello there."
 cdss.flagData.vr = 99999
 cdss.flagData.wins = 99999
 cdss.flagData.losses = 99999
