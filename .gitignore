@@ -8,8 +8,9 @@ __pycache__
 mk7se_py/system*
 mk7se_py/out*
 CustomFormats/CYCFG/test*
+CTGP7-MyStuffConv/assets/**/*.bcsar
+CTGP7-MyStuffConv/assets/**/*.bcgrp
 
 # Pending projects
 CY64SBFP2/
-CTGP7-MyStuffConv/
 CY64PTCFP2/
