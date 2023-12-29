@@ -6,7 +6,7 @@ import os, sys
 from ioHelper import IOHelper
 from glob import glob
 
-root = "/data/0/data/sd/CTGP-7"
+root = "/data/0/data/Citra/sdmc/CTGP-7"
 
 import shutil
 
@@ -17,7 +17,7 @@ assets = os.path.join(
 )
 myst = os.path.join(root, "MyStuff", "Characters")
 
-for i in glob("*", root_dir=myst):
+for i in glob("*/", root_dir=myst):
     c = ctgp7tools.mystuff.character.v1.Character(
         os.path.join(myst, i)
     )
@@ -25,4 +25,4 @@ for i in glob("*", root_dir=myst):
     print(i)
 
     ctgp7tools.mystuff.character.v2.convertV1(c, assets)
-    os.rename("out.sarc",f"{i}.chpack")
+    os.rename("out.sarc",f"{i[:-1]}.chpack")

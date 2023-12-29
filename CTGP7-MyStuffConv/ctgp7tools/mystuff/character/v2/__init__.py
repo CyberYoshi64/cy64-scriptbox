@@ -111,7 +111,7 @@ class Character:
             if self.sarc.hasFile(i):
                 self.sounds.append(i)
 
-def convertV1(src:v1.Character, bcsp):
+def convertV1(src:v1.Character, bcsp, replaceGraphics=False):
     cr = src.charRoot
     charID = CharacterUINames.index(src.cfg_origChar)
     
@@ -136,9 +136,7 @@ def convertV1(src:v1.Character, bcsp):
         sarc.setFile("emblem_lod.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_{src.cfg_origChar}_lod", f"emblem_{src.cfg_origChar}_lod.bcmdl"))
 
     p = "Thankyou3D.szs/{0}/{0}.bcmdl".format(src.cfg_origChar)
-    if src.ui_assets.hasFile(p):
-        sarc.setFile("thankyou_anim.bcmdl", src.ui_assets.getFile(p).data)
-
+    
     for i in BodyNames:
         p = [f"body_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}", f"body_{i}.bcmdl")]
         sarc.setFile(*p)
@@ -167,46 +165,65 @@ def convertV1(src:v1.Character, bcsp):
         p = [f"screw_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Screw", f"screw_{i}_lod", f"screw_{i}_lod.bcmdl")]
         sarc.setFile(*p)
 
-    try:
-        data = src.ui_assets.getFile(
-            f"UI/menu.szs/select_{CharacterNames[charID]}.bclim"
-        ).data
-        if len(data) != 0x2028 and len(data) != 0x2048:
-            raise Exception("Bad file size - is the BCLIM set in a proper format?")
-        sarc.setFile("select.bclim", data)
-    except Exception as e:
-        print("!! NOTE: select.bclim is unusable; using repalcement. Reason: "+str(e))
-        sarc.setFile("select.bclim", "assets/select.bclim")
+    if src.ui_assets != None:
+        if src.ui_assets.hasFile(p):
+            sarc.setFile("thankyou_anim.bcmdl", src.ui_assets.getFile(p).data)
 
-    try:
-        data = src.ui_assets.getFile(
-            f"UI/race.szs/map_{CharacterNames[charID]}_r90.bclim"
-        ).data
-        if len(data) != 0x828 and len(data) != 0x848:
-            raise Exception("Bad file size - is the BCLIM set in a proper format?")
-        sarc.setFile("maprace.bclim", data)
-    except Exception as e:
-        print("!! WARNING: maprace.bclim is unusable. Reason: "+str(e))
+        try:
+            data = src.ui_assets.getFile(
+                f"UI/menu.szs/select_{CharacterNames[charID]}.bclim"
+            ).data
+            if len(data) != 0x2028 and len(data) != 0x2048:
+                raise Exception("Bad file size - is the BCLIM set in a proper format?")
+            sarc.setFile("select.bclim", data)
+        except Exception as e:
+            if replaceGraphics:
+                print("!! NOTE: select.bclim is unusable; using replacement. Reason: "+str(e))
+                sarc.setFile("select.bclim", "assets/select.bclim")
+            else:
+                print("!! WARNING: select.bclim is unusable. Reason: "+str(e))
 
-    try:
-        data = src.ui_assets.getFile(
-            f"UI/race.szs/rank_{CharacterNames[charID]}_r90.bclim"
-        ).data
-        if len(data) != 0x1028 and len(data) != 0x1048:
-            raise Exception("Bad file size - is the BCLIM set in a proper format?")
-        sarc.setFile("rankrace.bclim", data)
-    except Exception as e:
-        print("!! WARNING: rankrace.bclim is unusable. Reason: "+str(e))
+        try:
+            data = src.ui_assets.getFile(
+                f"UI/race.szs/map_{CharacterNames[charID]}_r90.bclim"
+            ).data
+            if len(data) != 0x828 and len(data) != 0x848:
+                raise Exception("Bad file size - is the BCLIM set in a proper format?")
+            sarc.setFile("maprace.bclim", data)
+        except Exception as e:
+            if replaceGraphics:
+                print("!! NOTE: maprace.bclim is unusable; using replacement. Reason: "+str(e))
+                sarc.setFile("maprace.bclim", "assets/maprace.bclim")
+            else:
+                print("!! WARNING: maprace.bclim is unusable. Reason: "+str(e))
 
-    try:
-        data = src.ui_assets.getFile(
-            f"UI/menu.szs/rank_{CharacterNames[charID]}.bclim"
-        ).data
-        if len(data) != 0x1028 and len(data) != 0x1048:
-            raise Exception("Bad file size - is the BCLIM set in a proper format?")
-        sarc.setFile("rankmenu.bclim", data)
-    except Exception as e:
-        print("!! WARNING: rankmenu.bclim is unusable. Reason: "+str(e))
+        try:
+            data = src.ui_assets.getFile(
+                f"UI/race.szs/rank_{CharacterNames[charID]}_r90.bclim"
+            ).data
+            if len(data) != 0x1028 and len(data) != 0x1048:
+                raise Exception("Bad file size - is the BCLIM set in a proper format?")
+            sarc.setFile("rankrace.bclim", data)
+        except Exception as e:
+            if replaceGraphics:
+                print("!! NOTE: rankrace.bclim is unusable; using replacement. Reason: "+str(e))
+                sarc.setFile("rankrace.bclim", "assets/rankrace.bclim")
+            else:
+                print("!! WARNING: rankrace.bclim is unusable. Reason: "+str(e))
+
+        try:
+            data = src.ui_assets.getFile(
+                f"UI/menu.szs/rank_{CharacterNames[charID]}.bclim"
+            ).data
+            if len(data) != 0x1028 and len(data) != 0x1048:
+                raise Exception("Bad file size - is the BCLIM set in a proper format?")
+            sarc.setFile("rankmenu.bclim", data)
+        except Exception as e:
+            if replaceGraphics:
+                print("!! NOTE: rankmenu.bclim is unusable; using replacement. Reason: "+str(e))
+                sarc.setFile("rankmenu.bclim", "assets/rankmenu.bclim")
+            else:
+                print("!! WARNING: rankmenu.bclim is unusable. Reason: "+str(e))
 
     import shutil
     from ctgp7tools.misc.cwav import CWAV
