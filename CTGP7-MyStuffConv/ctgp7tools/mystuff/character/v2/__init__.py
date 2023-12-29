@@ -114,13 +114,11 @@ class Character:
 def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=False):
     cr = src.charRoot
     charID = CharacterUINames.index(src.cfg_origChar)
-    
     isShyGuy = src.cfg_origChar[:2]=="sh"
-
-    if len(src.cfgkeys.get("achievementLevel","")):
-        print("!! WARN: This character is tied to an achievement and may not be converted properly.")
-
     sarc = SARC()
+
+    err_bclim_badsize = "Bad file size - Ensure BCLIM is in proper format"
+    err_no_file = "File doesn't exist in source data"
 
     sarc.setFile("config.ini", os.path.join(cr, "config.ini"), True)
     sarc.setFile("stdWingColor.ips", os.path.join(cr, "stdWingColor.ips"))
@@ -170,11 +168,12 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
             sarc.setFile("thankyou_anim.bcmdl", src.ui_assets.getFile(p).data)
 
         try:
-            data = src.ui_assets.getFile(
-                f"UI/menu.szs/select_{CharacterNames[charID]}.bclim"
-            ).data
+            n = f"UI/menu.szs/select_{CharacterNames[charID]}.bclim"
+            if not src.ui_assets.hasFile(n):
+                raise Exception(err_no_file)
+            data = src.ui_assets.getFile(n).data
             if len(data) != 0x2028 and len(data) != 0x2048:
-                raise Exception("Bad file size - is the BCLIM set in a proper format?")
+                raise Exception(err_bclim_badsize)
             sarc.setFile("select.bclim", data)
         except Exception as e:
             if replaceGraphics:
@@ -184,11 +183,12 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                 print("!! WARNING: select.bclim is unusable. Reason: "+str(e))
 
         try:
-            data = src.ui_assets.getFile(
-                f"UI/race.szs/map_{CharacterNames[charID]}_r90.bclim"
-            ).data
+            n = f"UI/race.szs/map_{CharacterNames[charID]}_r90.bclim"
+            if not src.ui_assets.hasFile(n):
+                raise Exception(err_no_file)
+            data = src.ui_assets.getFile(n).data
             if len(data) != 0x828 and len(data) != 0x848:
-                raise Exception("Bad file size - is the BCLIM set in a proper format?")
+                raise Exception(err_bclim_badsize)
             sarc.setFile("maprace.bclim", data)
         except Exception as e:
             if replaceGraphics:
@@ -198,11 +198,12 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                 print("!! WARNING: maprace.bclim is unusable. Reason: "+str(e))
 
         try:
-            data = src.ui_assets.getFile(
-                f"UI/race.szs/rank_{CharacterNames[charID]}_r90.bclim"
-            ).data
+            n = f"UI/race.szs/rank_{CharacterNames[charID]}_r90.bclim"
+            if not src.ui_assets.hasFile(n):
+                raise Exception(err_no_file)
+            data = src.ui_assets.getFile(n).data
             if len(data) != 0x1028 and len(data) != 0x1048:
-                raise Exception("Bad file size - is the BCLIM set in a proper format?")
+                raise Exception(err_bclim_badsize)
             sarc.setFile("rankrace.bclim", data)
         except Exception as e:
             if replaceGraphics:
@@ -212,11 +213,14 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                 print("!! WARNING: rankrace.bclim is unusable. Reason: "+str(e))
 
         try:
+            n = f"UI/menu.szs/rank_{CharacterNames[charID]}.bclim"
+            if not src.ui_assets.hasFile(n):
+                raise Exception(err_no_file)
             data = src.ui_assets.getFile(
-                f"UI/menu.szs/rank_{CharacterNames[charID]}.bclim"
+                n
             ).data
             if len(data) != 0x1028 and len(data) != 0x1048:
-                raise Exception("Bad file size - is the BCLIM set in a proper format?")
+                raise Exception(err_bclim_badsize)
             sarc.setFile("rankmenu.bclim", data)
         except Exception as e:
             if replaceGraphics:
