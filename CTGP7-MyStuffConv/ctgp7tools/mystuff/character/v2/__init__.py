@@ -2,9 +2,10 @@ from ctgp7tools.mystuff.character import v1
 from ctgp7tools.misc.csarData import *
 from ctgp7tools.misc.sarc import SARC
 from ctgp7tools.misc.gameEnum import *
+from ctgp7tools.misc.cwav import CWAV
 from ioHelper import IOHelper
 
-import os
+import os, shutil
 
 class Character:
 
@@ -111,7 +112,14 @@ class Character:
             if self.sarc.hasFile(i):
                 self.sounds.append(i)
 
-def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=False):
+def convertV1(src:v1.Character, bcsp, outName="out.chPack"):
+    """
+    `src` — v1 Character object
+    
+    `bcsp` — Path to BCSAR / extData (romfs:/Sound)
+
+    `outName` — Output file name of SARC
+    """
     cr = src.charRoot
     charID = CharacterUINames.index(src.cfg_origChar)
     isShyGuy = src.cfg_origChar[:2]=="sh"
@@ -176,11 +184,7 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                 raise Exception(err_bclim_badsize)
             sarc.setFile("select.bclim", data)
         except Exception as e:
-            if replaceGraphics:
-                print("!! NOTE: select.bclim is unusable; using replacement. Reason: "+str(e))
-                sarc.setFile("select.bclim", "assets/select.bclim")
-            else:
-                print("!! WARNING: select.bclim is unusable. Reason: "+str(e))
+            print("!! WARNING: select.bclim is unusable. Reason: "+str(e))
 
         try:
             n = f"UI/race.szs/map_{CharacterNames[charID]}_r90.bclim"
@@ -191,11 +195,7 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                 raise Exception(err_bclim_badsize)
             sarc.setFile("maprace.bclim", data)
         except Exception as e:
-            if replaceGraphics:
-                print("!! NOTE: maprace.bclim is unusable; using replacement. Reason: "+str(e))
-                sarc.setFile("maprace.bclim", "assets/maprace.bclim")
-            else:
-                print("!! WARNING: maprace.bclim is unusable. Reason: "+str(e))
+            print("!! WARNING: maprace.bclim is unusable. Reason: "+str(e))
 
         try:
             n = f"UI/race.szs/rank_{CharacterNames[charID]}_r90.bclim"
@@ -206,11 +206,7 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                 raise Exception(err_bclim_badsize)
             sarc.setFile("rankrace.bclim", data)
         except Exception as e:
-            if replaceGraphics:
-                print("!! NOTE: rankrace.bclim is unusable; using replacement. Reason: "+str(e))
-                sarc.setFile("rankrace.bclim", "assets/rankrace.bclim")
-            else:
-                print("!! WARNING: rankrace.bclim is unusable. Reason: "+str(e))
+            print("!! WARNING: rankrace.bclim is unusable. Reason: "+str(e))
 
         try:
             n = f"UI/menu.szs/rank_{CharacterNames[charID]}.bclim"
@@ -223,14 +219,7 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                 raise Exception(err_bclim_badsize)
             sarc.setFile("rankmenu.bclim", data)
         except Exception as e:
-            if replaceGraphics:
-                print("!! NOTE: rankmenu.bclim is unusable; using replacement. Reason: "+str(e))
-                sarc.setFile("rankmenu.bclim", "assets/rankmenu.bclim")
-            else:
-                print("!! WARNING: rankmenu.bclim is unusable. Reason: "+str(e))
-
-    import shutil
-    from ctgp7tools.misc.cwav import CWAV
+            print("!! WARNING: rankmenu.bclim is unusable. Reason: "+str(e))
 
     shutil.rmtree("temp", True)
     shutil.copytree(bcsp, "temp", dirs_exist_ok=True)
