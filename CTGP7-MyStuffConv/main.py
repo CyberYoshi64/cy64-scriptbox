@@ -6,11 +6,6 @@ import os, sys
 from ioHelper import IOHelper
 from glob import glob
 
-c = ctgp7tools.mystuff.character.v1.Config()
-
-with open("test/characterCfg.bin","rb") as f:
-    c.load(f)
-
 root = "/data/0/data/sd/CTGP-7"
 
 import shutil

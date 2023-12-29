@@ -148,17 +148,17 @@ def convertV1(src:v1.Character, bcsp):
         sarc.setFile(*p)
 
     for i in TireNames:
-        p = [f"tire_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"tire_{i}", f"tire_{i}.bcmdl")]
+        p = [f"tire_{i}.bcmdl", os.path.join(cr, "Kart", "Tire", f"tire_{i}", f"tire_{i}.bcmdl")]
         sarc.setFile(*p)
-        p = [f"tire_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Body", f"tire_{i}_lod", f"tire_{i}_lod.bcmdl")]
+        p = [f"tire_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Tire", f"tire_{i}_lod", f"tire_{i}_lod.bcmdl")]
         sarc.setFile(*p)
-        p = [f"tire_{i}_shadow.bcmdl", os.path.join(cr, "Kart", "Body", f"tire_{i}_shadow", f"tire_{i}_shadow.bcmdl")]
+        p = [f"tire_{i}_shadow.bcmdl", os.path.join(cr, "Kart", "Tire", f"tire_{i}_shadow", f"tire_{i}_shadow.bcmdl")]
         sarc.setFile(*p)
 
     for i in WingNames:
-        p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"wing_{i}", f"wing_{i}.bcmdl")]
+        p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}", f"wing_{i}.bcmdl")]
         sarc.setFile(*p)
-        p = [f"wing_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Body", f"wing_{i}_lod", f"wing_{i}_lod.bcmdl")]
+        p = [f"wing_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}_lod", f"wing_{i}_lod.bcmdl")]
         sarc.setFile(*p)
 
     for i in ScrewNames:
