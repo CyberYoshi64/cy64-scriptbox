@@ -237,8 +237,7 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
 
     bcso = BCSAR_ORDER[charID]
 
-    try:
-        src.sounds.index("bcsarSoundData")
+    if "bcsarSoundData" in src.sounds:
         with open(os.path.join("temp","ctr_dash.bcsar"),"rb") as f:
             for warc in range(bcso[0], bcso[0]+bcso[1]):
                 for sid in range(len(CWAV_OFF[warc])):
@@ -256,11 +255,9 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                         cw = CWAV(f)
                         sarc.setFile(p, cw.data)
                         sid += 1
-    except: pass
+    
     if not isShyGuy:
-        
-        try:
-            src.sounds.index("voiceSoundData")
+        if "voiceSoundData" in src.sounds:
             warc = bcso[2]
             if warc>0:
                 with open(os.path.join("temp","extData",f"GRP_VO_{src.cfg_origChar.upper()}_GOL.bcgrp"),"rb") as f:
@@ -271,10 +268,8 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                             "SND_{:02}_{:02}.bcwav".format(warc, sid),
                             cw.data
                         )
-        except: pass
 
-        try:
-            src.sounds.index("menuSoundData")
+        if "menuSoundData" in src.sounds:
             warc = "menu"
             sid = bcso[3]
             if sid>=0:
@@ -284,7 +279,6 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=Fals
                         cw = CWAV(f)
                         sarc.setFile(p, cw.data)
                         sid += 1
-        except: pass
 
     with open(outName, "wb") as f:
         sarc.pack(IOHelper(f))
