@@ -111,7 +111,7 @@ class Character:
             if self.sarc.hasFile(i):
                 self.sounds.append(i)
 
-def convertV1(src:v1.Character, bcsp, replaceGraphics=False):
+def convertV1(src:v1.Character, bcsp, outName="out.chPack", replaceGraphics=False):
     cr = src.charRoot
     charID = CharacterUINames.index(src.cfg_origChar)
     
@@ -237,27 +237,10 @@ def convertV1(src:v1.Character, bcsp, replaceGraphics=False):
 
     bcso = BCSAR_ORDER[charID]
 
-    with open(os.path.join("temp","ctr_dash.bcsar"),"rb") as f:
-        for warc in range(bcso[0], bcso[0]+bcso[1]):
-            for sid in range(len(CWAV_OFF[warc])):
-                f.seek(CWAV_OFF[warc][sid])
-                cw = CWAV(f)
-                sarc.setFile(
-                    "SND_{:02}_{:02}.bcwav".format(warc, sid),
-                    cw.data
-                )
-        if isShyGuy:
-            warc = bcso[3]
-            sid = 0
-            for p in ["SND_select.bcwav","SND_go.bcwav"]:
-                    f.seek(CWAV_OFF[warc][sid])
-                    cw = CWAV(f)
-                    sarc.setFile(p, cw.data)
-                    sid += 1
-    if not isShyGuy:
-        warc = bcso[2]
-        if warc>0:
-            with open(os.path.join("temp","extData",f"GRP_VO_{src.cfg_origChar.upper()}_GOL.bcgrp"),"rb") as f:
+    try:
+        src.sounds.index("bcsarSoundData")
+        with open(os.path.join("temp","ctr_dash.bcsar"),"rb") as f:
+            for warc in range(bcso[0], bcso[0]+bcso[1]):
                 for sid in range(len(CWAV_OFF[warc])):
                     f.seek(CWAV_OFF[warc][sid])
                     cw = CWAV(f)
@@ -265,16 +248,43 @@ def convertV1(src:v1.Character, bcsp, replaceGraphics=False):
                         "SND_{:02}_{:02}.bcwav".format(warc, sid),
                         cw.data
                     )
-
-        warc = "menu"
-        sid = bcso[3]
-        if sid>=0:
-            with open(os.path.join("temp","extData",f"GRP_VO_MENU.bcgrp"),"rb") as f:
+            if isShyGuy:
+                warc = bcso[3]
+                sid = 0
                 for p in ["SND_select.bcwav","SND_go.bcwav"]:
-                    f.seek(CWAV_OFF[warc][sid])
-                    cw = CWAV(f)
-                    sarc.setFile(p, cw.data)
-                    sid += 1
+                        f.seek(CWAV_OFF[warc][sid])
+                        cw = CWAV(f)
+                        sarc.setFile(p, cw.data)
+                        sid += 1
+    except: pass
+    if not isShyGuy:
+        
+        try:
+            src.sounds.index("voiceSoundData")
+            warc = bcso[2]
+            if warc>0:
+                with open(os.path.join("temp","extData",f"GRP_VO_{src.cfg_origChar.upper()}_GOL.bcgrp"),"rb") as f:
+                    for sid in range(len(CWAV_OFF[warc])):
+                        f.seek(CWAV_OFF[warc][sid])
+                        cw = CWAV(f)
+                        sarc.setFile(
+                            "SND_{:02}_{:02}.bcwav".format(warc, sid),
+                            cw.data
+                        )
+        except: pass
 
-    with open("out.sarc", "wb") as f:
+        try:
+            src.sounds.index("menuSoundData")
+            warc = "menu"
+            sid = bcso[3]
+            if sid>=0:
+                with open(os.path.join("temp","extData",f"GRP_VO_MENU.bcgrp"),"rb") as f:
+                    for p in ["SND_select.bcwav","SND_go.bcwav"]:
+                        f.seek(CWAV_OFF[warc][sid])
+                        cw = CWAV(f)
+                        sarc.setFile(p, cw.data)
+                        sid += 1
+        except: pass
+
+    with open(outName, "wb") as f:
         sarc.pack(IOHelper(f))
