@@ -9,10 +9,6 @@ from glob import glob
 root = "/data/0/data/Citra/sdmc/CTGP-7"
 prgwd = os.path.dirname(__file__)
 
-import shutil
-
-shutil.rmtree("temp", True)
-
 assets = os.path.join(
     prgwd, "assets/romfs"
 )
@@ -25,8 +21,11 @@ for i in glob("*/", root_dir=myst):
 
     print(i)
 
-    ctgp7tools.mystuff.character.v2.convertV1(
-        src = c,
-        bcsp = assets,
-        outName=f"{i[:-1]}.chpack"
-    )
+    try:
+        ctgp7tools.mystuff.character.v2.convertV1(
+            src = c,
+            bcsp = assets,
+            outName=f"{i[:-1]}.chpack"
+        )
+    except Exception as e:
+        print(f"FAIL: {e}")
