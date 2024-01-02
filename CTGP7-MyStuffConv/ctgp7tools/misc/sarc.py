@@ -6,16 +6,25 @@ import os
 
 from ctgp7tools import vprint
 
+def nametrunc(s:str):
+    r = 0
+    r = s.rfind(os.sep, 0, r-1)
+    r = s[s.rfind(os.sep, 0, r-1)+1:]
+    if len(s)!=len(r): r = ".../"+r
+    return r
+
 class SFATEntry:
     _SIZE_ = 16
     
     def __init__(self, fd:IOHelper=None, dataOff=0, mul=101):
         self.mul = mul
         self.name = 0
+        self.humanName = ""
         self.strOff = 0
         self.data = b''
         if fd:
             self.name = fd.readInt(32)
+            self.humanName = f"{self.name:08X}.bin"
             self.strOff = fd.readInt(32)
 
             dataStart = fd.readInt(32)
@@ -108,6 +117,7 @@ class SARC:
         
         def add(self, name, data):
             s = SFATEntry(mul=self.multiplier)
+            s.humanName = name
             s.name = SARC.hash(name, s.mul)
             s.data = data
             s.strOff = 0
@@ -149,7 +159,7 @@ class SARC:
         return self.sfat.getFile(name)!=None
 
     def getFile(self, name):
-        vprint(f"SARC.getFile: {name}")
+        vprint(f"SARC.getFile[{nametrunc(self.name)}]: {name}")
         return self.sfat.getFile(name)
     
     def setFile(self, name, data, raiseErr=False):
@@ -166,7 +176,7 @@ class SARC:
         else:
             fd = data
         
-        vprint(f"SARC.setFile: {name}")
+        vprint(f"SARC.setFile[{nametrunc(self.name)}]: {name}")
         
         if self.hasFile(name):
             self.sfat.remove(name)
@@ -174,6 +184,7 @@ class SARC:
         self.sfat.add(name, fd.read())
 
     def __init__(self, data=None, key=101):
+        self.name = "new"
         if data:
             self.load(data)
         else:
@@ -182,10 +193,12 @@ class SARC:
 
     def load(self, data):
         if not isinstance(data, IOHelper):
+            self.name = "<bytes>"
             f = IOHelper(data, False)
         else:
             f = data
         
+        if hasattr(f.fd, "name"): self.name = f.fd.name
         assert(f.readRaw(4)==b"SARC")
         f.readInt(16)
         f.readBOM()
@@ -199,7 +212,7 @@ class SARC:
         self.sfnt = SARC.SFNT(f)
 
     def pack(self, fd:IOHelper):
-        vprint(f"Packing SARC to {fd.name if hasattr(fd,'name') else '<bytes>'}...")
+        vprint(f"Packing SARC to {fd.fd.name if hasattr(fd.fd,'name') else '<bytes>'}...")
         fd.setSize(0)
         dataOff = (self._HDR_SIZE_ + self.sfat.calcsize() + self.sfnt._SIZE_ + 255) & ~255
         

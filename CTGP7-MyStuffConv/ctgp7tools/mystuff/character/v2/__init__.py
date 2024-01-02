@@ -112,13 +112,11 @@ class Character:
             if self.sarc.hasFile(i):
                 self.sounds.append(i)
 
-def convertV1(src:v1.Character, bcsp, outName="out.chPack"):
+def convertV1(src:v1.Character, bcsp):
     """
     `src` — v1 Character object
     
     `bcsp` — Path to BCSAR / extData (romfs:/Sound)
-
-    `outName` — Output file name of SARC
     """
     cr = src.charRoot
     charID = CharacterUINames.index(src.cfg_origChar)
@@ -141,13 +139,17 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack"):
         sarc.setFile("emblem.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_{src.cfg_origChar}", f"emblem_{src.cfg_origChar}.bcmdl"))
         sarc.setFile("emblem_lod.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_{src.cfg_origChar}_lod", f"emblem_{src.cfg_origChar}_lod.bcmdl"))
 
-    p = "Thankyou3D.szs/{0}/{0}.bcmdl".format(src.cfg_origChar)
-    
     for i in BodyNames:
-        p = [f"body_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}", f"body_{i}.bcmdl")]
+        p = [f"body_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}", f"body_{i}_{src.cfg_origChar}.bcmdl")]
         sarc.setFile(*p)
-        p = [f"body_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}_lod", f"body_{i}_lod.bcmdl")]
+        if not sarc.hasFile(p[0]):
+            p = [f"body_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}", f"body_{i}.bcmdl")]
+            sarc.setFile(*p)
+        p = [f"body_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}_lod", f"body_{i}_lod_{src.cfg_origChar}.bcmdl")]
         sarc.setFile(*p)
+        if not sarc.hasFile(p[0]):
+            p = [f"body_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}_lod", f"body_{i}_lod.bcmdl")]
+            sarc.setFile(*p)
         p = [f"body_{i}_shadow.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}_shadow", f"body_{i}_shadow.bcmdl")]
         sarc.setFile(*p)
 
@@ -160,10 +162,16 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack"):
         sarc.setFile(*p)
 
     for i in WingNames:
-        p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}", f"wing_{i}.bcmdl")]
+        p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}", f"wing_{i}_{src.cfg_origChar}.bcmdl")]
         sarc.setFile(*p)
-        p = [f"wing_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}_lod", f"wing_{i}_lod.bcmdl")]
+        if not sarc.hasFile(p[0]):
+            p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}", f"wing_{i}.bcmdl")]
+            sarc.setFile(*p)
+        p = [f"wing_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}_lod", f"wing_{i}_lod_{src.cfg_origChar}.bcmdl")]
         sarc.setFile(*p)
+        if not sarc.hasFile(p[0]):
+            p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}_lod", f"wing_{i}_lod.bcmdl")]
+            sarc.setFile(*p)
 
     for i in ScrewNames:
         p = [f"screw_{i}.bcmdl", os.path.join(cr, "Kart", "Screw", f"screw_{i}", f"screw_{i}.bcmdl")]
@@ -172,6 +180,7 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack"):
         sarc.setFile(*p)
 
     if src.ui_assets != None:
+        p = "Thankyou3D.szs/{0}/{0}.bcmdl".format(src.cfg_origChar)
         if src.ui_assets.hasFile(p):
             sarc.setFile("thankyou_anim.bcmdl", src.ui_assets.getFile(p).data)
 
@@ -273,5 +282,4 @@ def convertV1(src:v1.Character, bcsp, outName="out.chPack"):
                         sarc.setFile(p, cw.data)
                         sid += 1
 
-    with open(outName, "wb") as f:
-        sarc.pack(IOHelper(f))
+    return sarc

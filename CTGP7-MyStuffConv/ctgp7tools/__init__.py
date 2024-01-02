@@ -4,11 +4,7 @@
 
 VERBOSE = False
 
-if VERBOSE:
-    def vprint(*s, **kwd):
-        print(*s, **kwd)
-else:
-    def vprint(*s, **kwd):
-        pass
+def vprint(*s, **kwd):
+    if VERBOSE: print(*s, **kwd)
 
 from . import mystuff, misc
