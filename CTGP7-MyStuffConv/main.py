@@ -27,6 +27,7 @@ argp.add_argument("-m", "--mystpath", metavar="dir", default="", help="Alternati
 argp.add_argument("-v", "--verbose", action="store_true", help="Output exactly what's being done")
 argp.add_argument("-o", "--output", default="{}.chpack", help="Output path; for multiple characters, use '{}'.")
 argp.add_argument("-d", "--dir", action="store_true", help="Output path is a folder")
+argp.add_argument("-b", "--bclimtool", action="store_true", help="[Experiment] Modify bad BCLIM's using 'bclimtool' (https://github.com/dnasdw/bclimtool)")
 argp.add_argument("characters", nargs="*", help="If specified, only convert specified characters")
 
 arg = argp.parse_args()
@@ -63,6 +64,8 @@ for i in characters:
         s = ctgp7tools.mystuff.character.v2.convertV1(
             src = c,
             bcsp = assets,
+            hasBclimTool=arg.bclimtool
+            #excludeBad=(not outIsDirectory)
         )
         if outIsDirectory:
             os.makedirs(out.format(name),exist_ok=True)

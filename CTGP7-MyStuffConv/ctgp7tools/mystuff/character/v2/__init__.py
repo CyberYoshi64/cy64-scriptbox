@@ -1,5 +1,6 @@
 from ctgp7tools.mystuff.character import v1
 from ctgp7tools.misc.csarData import *
+from ctgp7tools import vprint
 from ctgp7tools.misc.sarc import SARC
 from ctgp7tools.misc.gameEnum import *
 from ctgp7tools.misc.cwav import CWAV
@@ -112,11 +113,13 @@ class Character:
             if self.sarc.hasFile(i):
                 self.sounds.append(i)
 
-def convertV1(src:v1.Character, bcsp):
+def convertV1(src:v1.Character, bcsp, excludeBad=True, hasBclimTool=False):
     """
     `src` — v1 Character object
     
     `bcsp` — Path to BCSAR / extData (romfs:/Sound)
+
+    `excludeBad` — Don't add bad data
     """
     cr = src.charRoot
     charID = CharacterUINames.index(src.cfg_origChar)
@@ -126,6 +129,11 @@ def convertV1(src:v1.Character, bcsp):
 
     err_bclim_badsize = "Bad file size - Ensure BCLIM is in proper format"
     err_no_file = "File doesn't exist in source data"
+
+    os.makedirs("temp", exist_ok=True)
+
+    if hasBclimTool:
+        from PIL import Image
 
     sarc.setFile("config.ini", os.path.join(cr, "config.ini"), True)
     sarc.setFile("stdWingColor.ips", os.path.join(cr, "stdWingColor.ips"))
@@ -191,7 +199,23 @@ def convertV1(src:v1.Character, bcsp):
                 raise Exception(err_no_file)
             data = src.ui_assets.getFile(n).data
             if len(data) != 0x2028 and len(data) != 0x2048:
-                raise Exception(err_bclim_badsize)
+                if hasBclimTool:
+                    vprint("Converting image data to PNG...")
+                    with open(os.path.join("temp","c.bclim"),"wb") as f:
+                        f.write(data)
+                    os.system("bclimtool -dvfp temp{0}c.bclim temp{0}c.png".format(os.sep))
+                    vprint("Manipulating image data...")
+                    im = Image.open(os.path.join("temp","c.png"))
+                    im.copy().resize((64,64)).save(os.path.join("temp","d.png"))
+                    im.close()
+                    vprint("Creating and reading BCLIM...")
+                    os.system("bclimtool -cvtfp RGBA4444 temp{0}c.bclim temp{0}d.png".format(os.sep))
+                    with open(os.path.join("temp","c.bclim"),"rb") as f:
+                        data = f.read()
+                else:
+                    if excludeBad: raise Exception(err_bclim_badsize)
+                    else: print("!! WARN: select.bclim is unusable due to a size mismatch, including it anyway.")
+
             sarc.setFile("select.bclim", data)
         except Exception as e:
             print("!! WARNING: select.bclim is unusable. Reason: "+str(e))
@@ -202,7 +226,22 @@ def convertV1(src:v1.Character, bcsp):
                 raise Exception(err_no_file)
             data = src.ui_assets.getFile(n).data
             if len(data) != 0x828 and len(data) != 0x848:
-                raise Exception(err_bclim_badsize)
+                if hasBclimTool:
+                    vprint("Converting image data to PNG...")
+                    with open(os.path.join("temp","c.bclim"),"wb") as f:
+                        f.write(data)
+                    os.system("bclimtool -dvfp temp{0}c.bclim temp{0}c.png".format(os.sep))
+                    vprint("Manipulating image data...")
+                    im = Image.open(os.path.join("temp","c.png"))
+                    im.copy().resize((32,32)).save(os.path.join("temp","d.png"))
+                    im.close()
+                    vprint("Creating and reading BCLIM...")
+                    os.system("bclimtool -cvtfp RGBA4444 temp{0}c.bclim temp{0}d.png".format(os.sep))
+                    with open(os.path.join("temp","c.bclim"),"rb") as f:
+                        data = f.read()
+                else:
+                    if excludeBad: raise Exception(err_bclim_badsize)
+                    else: print("!! WARN: maprace.bclim is unusable due to a size mismatch, including it anyway.")
             sarc.setFile("maprace.bclim", data)
         except Exception as e:
             print("!! WARNING: maprace.bclim is unusable. Reason: "+str(e))
@@ -213,7 +252,22 @@ def convertV1(src:v1.Character, bcsp):
                 raise Exception(err_no_file)
             data = src.ui_assets.getFile(n).data
             if len(data) != 0x1028 and len(data) != 0x1048:
-                raise Exception(err_bclim_badsize)
+                if hasBclimTool:
+                    vprint("Converting image data to PNG...")
+                    with open(os.path.join("temp","c.bclim"),"wb") as f:
+                        f.write(data)
+                    os.system("bclimtool -dvfp temp{0}c.bclim temp{0}c.png".format(os.sep))
+                    vprint("Manipulating image data...")
+                    im = Image.open(os.path.join("temp","c.png"))
+                    im.copy().resize((22,22)).save(os.path.join("temp","d.png"))
+                    im.close()
+                    vprint("Creating and reading BCLIM...")
+                    os.system("bclimtool -cvtfp RGBA8888 temp{0}c.bclim temp{0}d.png".format(os.sep))
+                    with open(os.path.join("temp","c.bclim"),"rb") as f:
+                        data = f.read()
+                else:
+                    if excludeBad: raise Exception(err_bclim_badsize)
+                    else: print("!! WARN: rankrace.bclim is unusable due to a size mismatch, including it anyway.")
             sarc.setFile("rankrace.bclim", data)
         except Exception as e:
             print("!! WARNING: rankrace.bclim is unusable. Reason: "+str(e))
@@ -226,12 +280,25 @@ def convertV1(src:v1.Character, bcsp):
                 n
             ).data
             if len(data) != 0x1028 and len(data) != 0x1048:
-                raise Exception(err_bclim_badsize)
+                if hasBclimTool:
+                    vprint("Converting image data to PNG...")
+                    with open(os.path.join("temp","c.bclim"),"wb") as f:
+                        f.write(data)
+                    os.system("bclimtool -dvfp temp{0}c.bclim temp{0}c.png".format(os.sep))
+                    vprint("Manipulating image data...")
+                    im = Image.open(os.path.join("temp","c.png"))
+                    im.copy().resize((22,22)).save(os.path.join("temp","d.png"))
+                    im.close()
+                    vprint("Creating and reading BCLIM...")
+                    os.system("bclimtool -cvtfp RGBA8888 temp{0}c.bclim temp{0}d.png".format(os.sep))
+                    with open(os.path.join("temp","c.bclim"),"rb") as f:
+                        data = f.read()
+                else:
+                    if excludeBad: raise Exception(err_bclim_badsize)
+                    else: print("!! WARN: rankmenu.bclim is unusable due to a size mismatch, including it anyway.")
             sarc.setFile("rankmenu.bclim", data)
         except Exception as e:
             print("!! WARNING: rankmenu.bclim is unusable. Reason: "+str(e))
-
-    os.makedirs("temp", exist_ok=True)
     
     if "bcsarSoundData" in src.sounds:
         shutil.copyfile(
