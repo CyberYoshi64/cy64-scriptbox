@@ -155,16 +155,14 @@ class Character:
         except: 
             pass
 
-    def patchSound(self, bcsar:str, bcgrp_dir:str):
+    def patchSound(self, bcsar:str, menugrp:str, voicegrp:str):
         if "bcsarSoundData" in self.sounds:
             with open(bcsar, "r+b") as f:
                 IPS.patch(f, self.sounds["bcsarSoundData"])
         if "menuSoundData" in self.sounds:
-            p = os.path.join(bcgrp_dir, "GRP_VO_MENU.bcgrp")
-            with open(p, "r+b") as f:
+            with open(menugrp, "r+b") as f:
                 IPS.patch(f, self.sounds["menuSoundData"])
         if "voiceSoundData" in self.sounds:
-            p = os.path.join(bcgrp_dir, f"GRP_VO_{self.cfg_origChar.upper()}_GOL.bcgrp")
-            with open(p, "r+b") as f:
+            with open(voicegrp, "r+b") as f:
                 IPS.patch(f, self.sounds["voiceSoundData"])
         

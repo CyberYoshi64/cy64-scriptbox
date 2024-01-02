@@ -121,6 +121,7 @@ def convertV1(src:v1.Character, bcsp):
     cr = src.charRoot
     charID = CharacterUINames.index(src.cfg_origChar)
     isShyGuy = src.cfg_origChar[:2]=="sh"
+    charMainName = "sh_red" if isShyGuy else src.cfg_origChar
     sarc = SARC()
 
     err_bclim_badsize = "Bad file size - Ensure BCLIM is in proper format"
@@ -134,18 +135,18 @@ def convertV1(src:v1.Character, bcsp):
         sarc.setFile("emblem.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_sh", f"emblem_sh.bcmdl"))
         sarc.setFile("emblem_lod.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_sh_lod", f"emblem_sh_lod.bcmdl"))
     else:
-        sarc.setFile("driver.bcmdl", os.path.join(cr, "Driver", src.cfg_origChar, f"{src.cfg_origChar}.bcmdl"))
-        sarc.setFile("driver_lod.bcmdl", os.path.join(cr, "Driver", f"{src.cfg_origChar}_lod", f"{src.cfg_origChar}_lod.bcmdl"))
-        sarc.setFile("emblem.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_{src.cfg_origChar}", f"emblem_{src.cfg_origChar}.bcmdl"))
-        sarc.setFile("emblem_lod.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_{src.cfg_origChar}_lod", f"emblem_{src.cfg_origChar}_lod.bcmdl"))
+        sarc.setFile("driver.bcmdl", os.path.join(cr, "Driver", charMainName, f"{charMainName}.bcmdl"))
+        sarc.setFile("driver_lod.bcmdl", os.path.join(cr, "Driver", f"{charMainName}_lod", f"{charMainName}_lod.bcmdl"))
+        sarc.setFile("emblem.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_{charMainName}", f"emblem_{charMainName}.bcmdl"))
+        sarc.setFile("emblem_lod.bcmdl", os.path.join(cr, "Kart", "Emblem", f"emblem_{charMainName}_lod", f"emblem_{charMainName}_lod.bcmdl"))
 
     for i in BodyNames:
-        p = [f"body_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}", f"body_{i}_{src.cfg_origChar}.bcmdl")]
+        p = [f"body_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}", f"body_{i}_{charMainName}.bcmdl")]
         sarc.setFile(*p)
         if not sarc.hasFile(p[0]):
             p = [f"body_{i}.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}", f"body_{i}.bcmdl")]
             sarc.setFile(*p)
-        p = [f"body_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}_lod", f"body_{i}_lod_{src.cfg_origChar}.bcmdl")]
+        p = [f"body_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}_lod", f"body_{i}_lod_{charMainName}.bcmdl")]
         sarc.setFile(*p)
         if not sarc.hasFile(p[0]):
             p = [f"body_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Body", f"body_{i}_lod", f"body_{i}_lod.bcmdl")]
@@ -162,12 +163,12 @@ def convertV1(src:v1.Character, bcsp):
         sarc.setFile(*p)
 
     for i in WingNames:
-        p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}", f"wing_{i}_{src.cfg_origChar}.bcmdl")]
+        p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}", f"wing_{i}_{charMainName}.bcmdl")]
         sarc.setFile(*p)
         if not sarc.hasFile(p[0]):
             p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}", f"wing_{i}.bcmdl")]
             sarc.setFile(*p)
-        p = [f"wing_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}_lod", f"wing_{i}_lod_{src.cfg_origChar}.bcmdl")]
+        p = [f"wing_{i}_lod.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}_lod", f"wing_{i}_lod_{charMainName}.bcmdl")]
         sarc.setFile(*p)
         if not sarc.hasFile(p[0]):
             p = [f"wing_{i}.bcmdl", os.path.join(cr, "Kart", "Wing", f"wing_{i}_lod", f"wing_{i}_lod.bcmdl")]
@@ -230,11 +231,28 @@ def convertV1(src:v1.Character, bcsp):
         except Exception as e:
             print("!! WARNING: rankmenu.bclim is unusable. Reason: "+str(e))
 
-    shutil.rmtree("temp", True)
-    shutil.copytree(bcsp, "temp", dirs_exist_ok=True)
+    os.makedirs("temp", exist_ok=True)
+    
+    if "bcsarSoundData" in src.sounds:
+        shutil.copyfile(
+            os.path.join(bcsp, "ctr_dash.bcsar"),
+            os.path.join("temp","ctr_dash.bcsar")
+        )
+    if "menuSoundData" in src.sounds:
+        shutil.copyfile(
+            os.path.join(bcsp, "extData", "GRP_VO_MENU.bcgrp"),
+            os.path.join("temp","menu.bcgrp")
+        )
+    if "voiceSoundData" in src.sounds:
+        shutil.copyfile(
+            os.path.join(bcsp, "extData", f"GRP_VO_{src.cfg_origChar.upper()}_GOL.bcgrp"),
+            os.path.join("temp","voice.bcgrp")
+        )
+    
     src.patchSound(
         os.path.join("temp","ctr_dash.bcsar"),
-        os.path.join("temp","extData")
+        os.path.join("temp","menu.bcgrp"),
+        os.path.join("temp","voice.bcgrp")
     )
 
     bcso = BCSAR_ORDER[charID]
@@ -262,7 +280,7 @@ def convertV1(src:v1.Character, bcsp):
         if "voiceSoundData" in src.sounds:
             warc = bcso[2]
             if warc>0:
-                with open(os.path.join("temp","extData",f"GRP_VO_{src.cfg_origChar.upper()}_GOL.bcgrp"),"rb") as f:
+                with open(os.path.join("temp","voice.bcgrp"),"rb") as f:
                     for sid in range(len(CWAV_OFF[warc])):
                         f.seek(CWAV_OFF[warc][sid])
                         cw = CWAV(f)
@@ -275,7 +293,7 @@ def convertV1(src:v1.Character, bcsp):
             warc = "menu"
             sid = bcso[3]
             if sid>=0:
-                with open(os.path.join("temp","extData",f"GRP_VO_MENU.bcgrp"),"rb") as f:
+                with open(os.path.join("temp","menu.bcgrp"),"rb") as f:
                     for p in ["SND_select.bcwav","SND_go.bcwav"]:
                         f.seek(CWAV_OFF[warc][sid])
                         cw = CWAV(f)
