@@ -25,9 +25,10 @@ argp = argparse.ArgumentParser()
 argp.add_argument("-r", "--root", metavar="dir", default=root, help="Alternative CTGP-7 root, defaults to standard Citra install")
 argp.add_argument("-m", "--mystpath", metavar="dir", default="", help="Alternative MyStuff root, default is '(root)/MyStuff/Characters'")
 argp.add_argument("-v", "--verbose", action="store_true", help="Output exactly what's being done")
-argp.add_argument("-o", "--output", default="{}.chpack", help="Output path; for multiple characters, use '{}'.")
+argp.add_argument("-o", "--output", default="out/{}.chpack", help="Output path; for multiple characters, use '{}'.")
 argp.add_argument("-d", "--dir", action="store_true", help="Output path is a folder")
 argp.add_argument("-b", "--bclimtool", action="store_true", help="[Experiment] Modify bad BCLIM's using 'bclimtool' (https://github.com/dnasdw/bclimtool)")
+argp.add_argument("-c", "--compress", "--combine-dup", action="store_true", help="Merge files with duplicate data")
 argp.add_argument("characters", nargs="*", help="If specified, only convert specified characters")
 
 arg = argp.parse_args()
@@ -39,7 +40,7 @@ if arg.mystpath=="":
 else:
     myst = arg.mystpath
 
-out = arg.output.replace("/",os.sep)
+out:str = arg.output.replace("/",os.sep)
 outIsDirectory = bool(arg.dir)
 
 if not len(arg.characters):
@@ -65,7 +66,6 @@ for i in characters:
             src = c,
             bcsp = assets,
             hasBclimTool=arg.bclimtool
-            #excludeBad=(not outIsDirectory)
         )
         if outIsDirectory:
             os.makedirs(out.format(name),exist_ok=True)
@@ -73,8 +73,9 @@ for i in characters:
                 with open(os.path.join(out.format(name), j.humanName), "wb") as f:
                     f.write(j.data)
         else:
-            os.makedirs(out[:out.rfind(os.sep)],exist_ok=True)
+            if out.find(os.sep)>=0:
+                os.makedirs(out[:out.rfind(os.sep)].format(name),exist_ok=True)
             with open(out.format(name), "wb") as f:
-                s.pack(IOHelper(f))
+                s.pack(IOHelper(f), arg.compress)
     except Exception as e:
         print(f"FAIL: {e}")

@@ -95,6 +95,24 @@ class IOHelper:
         if self.closed: return
         self.fd.write(b[:len].ljust(len,fill))
     
+    def readRawTillNull(self, alignment=1, offset=0) -> bytes:
+        if self.closed: return
+        if alignment <= 0: return
+        b = b''
+        o = offset % alignment
+        while True:
+            c = self.fd.read(alignment-o)
+            if o: o = 0
+            if not len(c): break
+            b += c
+            if b.find(b'\0')>=0: break
+        return b
+
+    def writeRawPadded(self, b:bytes, alignment=1):
+        if self.closed: return
+        if alignment <= 0: return
+        self.fd.write(b.ljust(((len(b) + alignment) // alignment) * alignment,b'\0'))
+    
     def getSize(self):
         self.size = max(self.size, self.fd.tell())
         return self.size

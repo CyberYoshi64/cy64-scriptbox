@@ -10,6 +10,7 @@ mk7se_py/out*
 CustomFormats/CYCFG/test*
 CTGP7-MyStuffConv/out
 CTGP7-MyStuffConv/temp
+CTGP7-MyStuffConv/*.saht
 CTGP7-MyStuffConv/**/*.bcsar
 CTGP7-MyStuffConv/**/*.bcgrp
 CTGP7-MyStuffConv/**/*.chpack
