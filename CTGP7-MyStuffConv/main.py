@@ -76,6 +76,11 @@ for i in characters:
             if out.find(os.sep)>=0:
                 os.makedirs(out[:out.rfind(os.sep)].format(name),exist_ok=True)
             with open(out.format(name), "wb") as f:
-                s.pack(IOHelper(f), arg.compress)
+                s.pack(
+                    fd = IOHelper(f),
+                    combineDup = arg.compress,
+                    saveSFNT = False,
+                    forcePad = None
+                )
     except Exception as e:
         print(f"FAIL: {e}")

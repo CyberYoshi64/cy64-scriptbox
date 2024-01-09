@@ -34,10 +34,10 @@ class Application:
     args = None
     log = Logger()
 
-    def __init__(self, args):
+    def __init__(self, args, isConsole=True):
         self.args = args
-        #if self.args.console:
-        #    self.log.func = Logger.logFile
+        if isConsole:
+            self.log.func = Logger.logFile
         if self.args.input:
             try:
                 self.load(self.args.input)

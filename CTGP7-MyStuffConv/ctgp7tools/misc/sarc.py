@@ -72,15 +72,15 @@ class SAHT:
         
         for h in badKeys:
             if removeKey:
-                print(f"SAHT: Removed key {h:08X}({self.hashes[h]})")
+                vprint(f"SAHT: Removed key {h:08X}({self.hashes[h]})")
                 self.hashes.pop(h)
             if fixHash:
                 nh = SARC.hash(n, self.key)
-                print(f"SAHT: Fixed key {h:08X} -> {nh:08X}({self.hashes[h]})")
+                vprint(f"SAHT: Fixed key {h:08X} -> {nh:08X}({self.hashes[h]})")
                 self.hashes.pop(h)
                 self.hashes[nh] = n
         return out
-    def getName(self, key):
+    def getName(self, key) -> str:
         return self.hashes.get(key, "")
     def __add__(self, key):
         self.hashes[SARC.hash(key, self.key)] = key
@@ -124,7 +124,7 @@ class SFATEntry:
             self.data = fd.readRaw(dataLength)
             fd.setOffset(fo)
     
-    def pack(self, fd:IOHelper, off, mainOff, combineDup=False, shahash:dict={}):
+    def pack(self, fd:IOHelper, off, mainOff, combineDup=False, shahash:dict={}, forcePad:int=None):
         if type(self.name)==str:
             fd.writeInt(SARC.hash(self.name, self.mul), 32)
         else:
@@ -144,7 +144,11 @@ class SFATEntry:
         fd.writeInt(self.fileOff, 32)
         fd.writeInt(self.fileEnd, 32)
         
-        pad = 7
+        if forcePad:
+            pad = forcePad
+        else:
+            pad = 7
+            # File-specific padding options here
 
         pad = (2**pad) - 1
         dataLen = len(self.data) + pad & ~pad
@@ -178,14 +182,19 @@ class SARC:
                 self.unk1 = fd.readInt(16)
                 self.data = fd.readRaw(dataOff)
         
+        def calcsize(self):
+            return 8 + (len(self.data)+4)//4*4 if self.data else 8
+        
         def pack(self, fd:IOHelper, sfat=None):
             fd.writeRaw(b'SFNT', 4)
             fd.writeInt(self._SIZE_, 16)
             fd.writeInt(self.unk1, 16)
-            fd.writeRawPadded(self.data, 4)
+            if self.data: fd.writeRawPadded(self.data, 4)
     
     class SFAT:
         _SIZE_ = 0xC
+        multiplier = 101
+        nodes:list[SFATEntry] = None
         
         def __init__(self, fd:IOHelper = None, dataOff = 0):
             self.multiplier = 101
@@ -220,8 +229,13 @@ class SARC:
         
         def add(self, name, data):
             s = SFATEntry(mul=self.multiplier)
-            s.humanName = name
-            s.name = SARC.hash(name, s.mul)
+            if type(name) is str:
+                s.name = SARC.hash(name, s.mul)
+                s.humanName = name
+            else:
+                s.name = name
+                s.humanName = ""
+
             s.data = data
             s.strOff = 0
             self.nodes.append(s)
@@ -229,23 +243,55 @@ class SARC:
         def calcsize(self):
             return self._SIZE_ + SFATEntry._SIZE_ * len(self.nodes)
 
-        def pack(self, fd:IOHelper, dataOff:int, combineDup=False):
+        def packSFNTData(self):
+            b = b''
+            for i in self.nodes:
+                i.strOff = 0
+                if SARC.hash(i.humanName, self.multiplier) == i.name:
+                    i.strOff = 1<<24 | len(b)//4
+                    n = i.humanName.encode("utf-8","ignore")
+                    b += n.ljust((len(n)+4)//4*4,b'\0')
+            return b
+
+        def prepareExport(self):
+            self.nodes.sort()
+
+        def pack(self, fd:IOHelper, dataOff:int, combineDup=False, forcePad:int=None):
             fd.writeRaw(b'SFAT', 4)
             fd.writeInt(self._SIZE_, 16)
             fd.writeInt(len(self.nodes), 16)
             fd.writeInt(self.multiplier, 32)
 
             off = dataOff
-            self.nodes.sort()
             shaHash = dict()
             for i in self.nodes:
-                i.pack(fd, off, dataOff, combineDup, shaHash)
+                i.pack(fd, off, dataOff, combineDup, shaHash, forcePad)
                 off = fd.getSize()
 
-    sfnt = SFNT()
-    sfat = SFAT()
+    sfnt:SFNT = None
+    sfat:SFAT = None
     _HDR_SIZE_ = 20
     version = 256
+
+    @staticmethod
+    def guessExt(data:bytes):
+        if data[-0x28:-0x24]==b"CLIM": return "bclim"
+        if data[:4]==b"BADC": return "div"
+        if data[:4]==b"DMDC": return "kmp"
+        if data[:4]==b"Yaz0": return "yaz0"
+        if data[:4]==b"SARC": return "sarc"
+        if data[:4]==b"DARC": return "darc"
+        if data[:4]==b"SMDH": return "smdh"
+        if data[:4]==b"CLYT": return "bclyt"
+        if data[:4]==b"CLAN": return "bclan"
+        if data[:4]==b"CBMD": return "cbmd"
+        if data[:4]==b"CGFX": return "cgfx"
+        if data[:4]==b"CWAV": return "bcwav"
+        if data[:4]==b"CFNT": return "bcfnt"
+        if data[:8]==b"MsgStdBn": return "msbt"
+        if data[:8]==b"MsgPrjBn": return "msbp"
+        if data[:2]==b"YB": return "byml"
+        return "bin"
 
     @staticmethod
     def hash(name, multiplier):
@@ -287,13 +333,26 @@ class SARC:
         
         self.sfat.add(name, fd.read())
 
-    def __init__(self, data=None, key=101):
+    def __init__(self, data=None, saht:SAHT=None):
         self.name = "new"
         if data:
             self.load(data)
         else:
             self.sfat = SARC.SFAT()
             self.sfnt = SARC.SFNT()
+        
+        self.resolveHumanNames(saht)
+
+    def resolveHumanNames(self, saht:SAHT=None):
+        sfnt:bytes = self.sfnt.data
+        useHT = saht and self.sfat.multiplier == 101 # SAHT hardcodes this for whatever reason (custom format?)
+        for i in self.sfat.nodes:
+            i:SFATEntry
+            i.humanName = sfnt[i.strOff*4:sfnt.find(b'\0', i.strOff*4)].strip(b'\0').decode("utf-8","ignore")
+            if useHT:
+                i.humanName = saht.getName(i.name)
+            if not len(i.humanName):
+                i.humanName = f"0x{i.name:08X}.{SARC.guessExt(i.data)}"
 
     def load(self, data):
         if not isinstance(data, IOHelper):
@@ -315,10 +374,15 @@ class SARC:
         self.sfat = SARC.SFAT(f, dataOff)
         self.sfnt = SARC.SFNT(f, dataOff)
 
-    def pack(self, fd:IOHelper, combineDup=False):
+    def pack(self, fd:IOHelper, combineDup=False, saveSFNT=False, forcePad:int=None):
         vprint(f"Packing SARC to {fd.fd.name if hasattr(fd.fd,'name') else '<bytes>'}...")
         fd.setSize(0)
-        dataOff = (self._HDR_SIZE_ + self.sfat.calcsize() + self.sfnt._SIZE_ + 255) & ~255
+        self.sfat.prepareExport()
+        if saveSFNT:
+            self.sfnt.data = self.sfat.packSFNTData()
+        else:
+            self.sfnt.data = b''
+        dataOff = (self._HDR_SIZE_ + self.sfat.calcsize() + self.sfnt.calcsize() + 255) & ~255
         
         fd.writeRaw(b'SARC', 4)
         fd.writeInt(self._HDR_SIZE_, 16)
@@ -331,7 +395,7 @@ class SARC:
         fd.setOffset(self._HDR_SIZE_ + self.sfat.calcsize())
         self.sfnt.pack(fd, self.sfat)
         fd.setOffset(self._HDR_SIZE_)
-        self.sfat.pack(fd, dataOff, combineDup)
+        self.sfat.pack(fd, dataOff, combineDup, forcePad)
 
         fd.getSize()
         fd.setOffset(8)

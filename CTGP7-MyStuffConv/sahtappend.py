@@ -6,7 +6,7 @@ from ctgp7tools.misc.gameEnum import *
 from ioHelper import IOHelper
 
 try:
-    with open("HashTable.saht","rb") as f:
+    with open("test.saht/HashTableC.saht","rb") as f:
         s = SAHT(IOHelper(f))
         if not s.verify("remove"):
             print("!! HashTable has bad keys!")
@@ -53,8 +53,28 @@ if True:
         s.getAddHash(f"screw_{i}.bcmdl")
         s.getAddHash(f"screw_{i}_lod.bcmdl")
 
-for k,n in s.hashes.items():
-    print(f"{k:08X} {n}")
+    from glob import glob
+    for i in glob("*.szs",root_dir="/data/0/data/Citra/sdmc/CTGP-7/gamefs/Course/"):
+        n = i[:-4]
+        s.add(f"{n}_map.bclim")
+        s.add(f"{n}_map2.bclim")
+        s.add(f"{n}.bcmdl")
+        s.add(f"{n}.kmp")
+        s.add(f"{n}.kcl")
+        s.add(f"{n}.div")
+        s.add(f"{n}.bcfog")
+        s.add(f"{n}.bclgt")
+        s.add(f"{n}_ch0.bclgt")
+        s.add(f"{n}_ch1.bclgt")
+        s.add(f"{n}_ch2.bclgt")
+        s.add(f"{n}_ch3.bclgt")
+        s.add(f"{n}_ch4.bclgt")
+        s.add(f"{n}_ch5.bclgt")
 
-with open("HashTable2.saht","wb") as f:
+        s.add(f"{n}_TL.bclim")
+        s.add(f"{n}_BL.bclim")
+        s.add(f"{n}_TR.bclim")
+        s.add(f"{n}_BR.bclim")
+
+with open("CTGP-7HashTable.saht","wb") as f:
     s.save(IOHelper(f))

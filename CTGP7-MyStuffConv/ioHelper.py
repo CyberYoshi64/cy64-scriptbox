@@ -19,11 +19,12 @@ class IOHelper:
         if not hasattr(fd, "read"):
             self.fd = io.BytesIO(fd)
             self.relOff = 0
+            self.size = 0
         else:
             self.fd = fd
             self.relOff = fd.tell()
-        self.size = fd.seek(0,2)
-        fd.seek(self.relOff)
+            self.size = fd.seek(0,2)
+            fd.seek(self.relOff)
         self.endian = e
         self.closed = False
     

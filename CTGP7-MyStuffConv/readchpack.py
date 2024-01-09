@@ -13,13 +13,9 @@ c = ctgp7tools.mystuff.character.v2.Character(
     sys.argv[1]
 )
 
-print(c.cfgkeys)
-print(c.driver)
-print(c.karts)
-print(c.stdWingColor)
-print(c.thankyou_anim)
-print(c.sounds)
-
-for i in c.sounds:
-    with open("out-"+i,"wb") as f:
-        f.write(c.sarc.getFile(i).data)
+print("Config: ",c.cfgkeys)
+print("Driver: ",len(c.driver))
+print("Karts: ",len(c.karts))
+print("Has stdWingColor? ",c.stdWingColor)
+print("Has thankyou_anim? ",c.thankyou_anim)
+print("Sounds: ",len(c.sounds))
