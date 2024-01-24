@@ -14,7 +14,8 @@ class CRC32:
         self.table = []
         for n in range(256):
             c = n
-            for k in range(8): c = (0xEDB88320^(c>>1)) if (c&1) else (c>>1)
+            for k in range(8):
+                c = (0xEDB88320^(c>>1)) if (c&1) else (c>>1)
             self.table.append(c)
         if data:
             self.append(data)
