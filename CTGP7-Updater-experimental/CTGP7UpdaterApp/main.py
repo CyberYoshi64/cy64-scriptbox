@@ -35,7 +35,7 @@ class IntCheckWorker(QRunnable):
 
     def logData(self, data: dict):
         self.signals.progress.emit(data)
-    
+
     def onStop(self):
         if (self.updater):
             self.updater.stop()
@@ -76,7 +76,7 @@ class IntCheckWorker_Step2(QRunnable):
 
     def logData(self, data: dict):
         self.signals.progress.emit(data)
-    
+
     def onStop(self):
         if (self.updater):
             self.updater.stop()
@@ -109,7 +109,7 @@ class ChangeLogViewerRun(QRunnable, QThread):
         super().__init__()
         self.closed = False
         self.signals = ThreadedDialog.RunSignals()
-    
+
     @Slot()
     def setClosed(self):
         self.closed = True
@@ -144,11 +144,11 @@ class ChangeLogViewerRun(QRunnable, QThread):
             self.signals.progress.emit(False)
             self.signals.detailedText.emit(False, str(e))
             return
-        
+
         self.signals.text.emit("")
         self.signals.progress.emit(False)
         self.signals.minsize.emit(QSize(480, 300))
-        
+
         tex1 = ""
         for i in range(len(hdr)):
             # tex1 += "### Ver. {}\n\n{}\n\n".format(hdr[i], text[i])
@@ -178,7 +178,7 @@ class CTGP7InstallerWorker(QRunnable):
 
     def logData(self, data: dict):
         self.signals.progress.emit(data)
-    
+
     def onStop(self):
         if (self.updater):
             self.updater.stop()
@@ -206,7 +206,7 @@ class CTGP7InstallerWorker(QRunnable):
         self.finished = True
 
 class Window(QMainWindow, Ui_MainWindow):
-    
+
     HELP_DISCORD_LINK = "https://discord.com/invite/0uTPwYv3SPQww54l"
     HELP_GAMEBANANA_LINK = "https://gamebanana.com/mods/50221"
     HELP_GITHUB_LINK = "https://github.com/CyberYoshi64/CTGP7-UpdateTool/issues"
@@ -304,7 +304,7 @@ class Window(QMainWindow, Ui_MainWindow):
                     b.click()
                     break
             msg.exec_()
- 
+
     def reSetup(self):
         try:    self.citraDir = self.getCitraDir()
         except: self.citraDir = None
@@ -415,7 +415,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 break
         msg.exec_()
         self.reSetup()#self.close()
-    
+
     def installPrematureExit(self, err:str):
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Warning)
@@ -423,7 +423,7 @@ class Window(QMainWindow, Ui_MainWindow):
         msg.setWindowTitle(lang.get("warning"))
         msg.exec_()
         self.reSetup()#self.close()
-    
+
     def installOnSuccess(self, ver:str):
         QMessageBox.information(
             self, lang.get("success"),
@@ -507,7 +507,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 s = self.selectSDFromList(fol)
                 if type(s)==str:
                     self.sdRootText.setText(s)
-            
+
     def updateButtonPress(self):
         if self.hasPending:
             msg = QMessageBox(self)
@@ -521,7 +521,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 lang.get("pendUpdateContinue").replace("\n","<br>")
             )
             if msg.exec_() == QMessageBox.No: return
-        
+
         self.workerMode = const._MODE_UPDATE
         self.miscInfoLabel.setText("")
         self.installerworker = CTGP7InstallerWorker(self.sdRootText.text(), self.workerMode, self.isCitraPath)
@@ -573,7 +573,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.installerworker = IntCheckWorker(self.sdRootText.text(), self.isCitraPath)
         self.prepareForIntCheckWorker1()
         self.threadPool.start(self.installerworker)
-    
+
     def installButtonPress(self):
         if (self.startButtonState > 0 and self.startButtonState < 4):
             msg = QMessageBox(self)
@@ -584,14 +584,13 @@ class Window(QMainWindow, Ui_MainWindow):
             msg.setDefaultButton(QMessageBox.No)
             
             if (self.startButtonState == 2):
-                
                 msg.setText(lang.get("reinstallConfirmRegular"))
                 if msg.exec_() == QMessageBox.No: return
-            
+
             if (self.startButtonState == 3):
                 msg.setText(lang.get("reinstallConfirmNeeded"))
                 if msg.exec_() == QMessageBox.No: return
-            
+
             if self.workerMode and (self.isCitraPath == None):
                 msg = QMessageBox(self)
                 msg.setWindowTitle(lang.get("question"))
@@ -773,7 +772,7 @@ class Window(QMainWindow, Ui_MainWindow):
             utils.strfmt(lang.get("version0"), CTGP7Updater.displayProgramVersion()),
             "<a href='{}'>{}</a>".format(self.HELP_DISCORD_LINK, lang.get("discordURLName"))
             ).replace("\n","<br>")+
-            "<br><br>2021-2023 CyberYoshi64, PabloMK7"
+            "<br><br>2021-2024 CyberYoshi64, PabloMK7"
         )
         msg.exec_()
 

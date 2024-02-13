@@ -1,5 +1,7 @@
 import os, locale, json
 
+LANG_DISABLE = True
+
 lang = None
 data = {}
 
@@ -34,11 +36,14 @@ def Initialize():
     
     path = getAppPath()
     data = {}
-    flist = (
-        os.path.join(path, "lang", "en.json"),
-        os.path.join(path, "lang", "{}.json".format(lang)),
-        os.path.join(path, "lang", "{}.json".format(lang.split("_")[0]))
-    )
+    flist = [
+        os.path.join(path, "lang", "en.json")
+    ]
+    if not LANG_DISABLE:
+        flist += [
+            os.path.join(path, "lang", "{}.json".format(lang)),
+            os.path.join(path, "lang", "{}.json".format(lang.split("_")[0]))
+        ]
     for i in flist:
         tdata = tryLoadLangJson(i)
         if tdata != None:

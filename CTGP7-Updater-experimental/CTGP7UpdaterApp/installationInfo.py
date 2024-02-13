@@ -27,7 +27,7 @@ class CTGP7InstallationInformation:
                     self.version = False
                     return
                 self.version = v
-            
+
             self.consideredBroken = os.path.exists(os.path.join(modFolder, *c._REINSTALLFLAG_PATH))
             self.hasPendingUpdate = os.path.exists(os.path.join(modFolder, *c._PENDINGUPDATE_PATH))
         except:
@@ -37,7 +37,7 @@ class CTGP7InstallationInformation:
 
     def good(self):
         return self.valid and not self.consideredBroken
-    
+
     def stateDescription(self):
         if self.valid == None:
             return lang.get("instVerdMissing")

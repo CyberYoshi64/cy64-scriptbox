@@ -7,7 +7,7 @@ def strfmt(s:str, *a):
         index = s.find("%", index)
         if index<0: break
         occ.append(index)
-    
+
     while len(occ):
         index = occ[-1]
         n = None; end = index

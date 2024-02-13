@@ -7,14 +7,14 @@
     "version0": "Version: %0",
     "version1": "Version: %0 (%1)",
 
-    "installSuccess": "Installation finished successfully! (v%0)\nMake sure to install the CIA file in the following directory:\n\nSD → CTGP-7 → cia",
-    
+    "installSuccess": "Installation finished successfully! (v%0)\nMake sure to install the CIA file in the following directory:\n\nSD -> CTGP-7 -> cia",
+
     "saveBackup": "Save Data Backup",
     "logSaveBackupCreate": "Creating save data backup...",
     "saveBackupFoundOld": "While no save data could be found for CTGP-7, a previous backup was detected.\n\nDo you want to use it?",
     "saveBackupCreatedAt": "Save data backup of the previous CTGP-7 installation has been made in the following directory:\n\n%0",
     "saveBackupRestoreQuestion": "Would you like to restore the save backup done previously?",
-    
+
     "errorOccured": "An error has occured.",
     "errorDescGeneric": "See the error information below.\n\nAsk for help in the %0, if this error keeps happening.",
     "installerVerDesc": "Installer version",
@@ -72,7 +72,7 @@
     "instVerdReinstall": "Marked for re-installation",
     "instVerdOKwithPend": "Valid installation (Pending update)",
     "instVerdOK": "Valid installation",
-    
+
     "pendUpdate": "A pending update was detected.",
     "pendUpdateContinue": "It has to be completed first before looking for newer updates.\nDo you want to continue this update?",
 
@@ -106,7 +106,7 @@
     "abortUpdate": "Suspending update...",
     "installFinishing": "Finishing up...",
     "installWiping": "Removing previous installation...",
-    
+
     "unInstallQuestion": "You're about to uninstall CTGP-7.\n\nDo you want to back up the save data before wiping the installation?",
     "unInstallQuestionNoSave": "You're about to uninstall CTGP-7.\n\nDo you want to continue?",
     "unInstallError": "Failed to remove installation: %0",
@@ -127,7 +127,7 @@
     "failSaveBackupRestore": "Failed to restore save backup, please restore it manually: %0",
 
     "failOpenURL": "Failed to open the URL \"%0\": got status code %1.",
-    
+
     "failGetUpdateInfo": "Failed getting update info: %0",
     "failParseSizeParam": "Failed parsing size parameter of the file list: %0",
     "failInit": "Failed to initialize the installer engine: %0",

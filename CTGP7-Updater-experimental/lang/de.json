@@ -7,14 +7,14 @@
     "version0": "Version: %0",
     "version1": "Version: %0 (%1)",
 
-    "installSuccess": "Installation erfolgreich abgeschlossen! (v%0)\nStelle sicher, dass du die CIA-Datei im folgenden Ordner installierst:\n\nSD → CTGP-7 → cia",
-    
+    "installSuccess": "Installation erfolgreich abgeschlossen! (v%0)\nStelle sicher, dass du die CIA-Datei im folgenden Ordner installierst:\n\nSD -> CTGP-7 -> cia",
+
     "saveBackup": "Speicherdatensicherung",
     "logSaveBackupCreate": "Speicherdaten werden gesichert...",
     "saveBackupFoundOld": "Es wurde eine vorherige Sicherung gefunden, obwohl für CTGP-7 keine existieren.\n\nMöchtest du diese Sicherung verwenden?",
     "saveBackupCreatedAt": "Die Speicherdaten sind im folgenden Ordner gesichert:\n\n%0",
     "saveBackupRestoreQuestion": "Möchtest du die Speicherdaten mithilfe der Sicherung wiederherstellen?",
-    
+
     "errorOccured": "Ein Fehler ist aufgetreten.",
     "errorDescGeneric": "Sollten Probleme weiterhin bestehen bleiben, suche dir Hilfe (auf Englisch) im %0.",
     "installerVerDesc": "Installer-Version",
@@ -72,7 +72,7 @@
     "instVerdReinstall": "Diese Installation wurde zur Löschung markiert.",
     "instVerdOKwithPend": "Diese Installation hat ein pausiertes Update.",
     "instVerdOK": "Diese Installation scheint in Ordnung zu sein.",
-    
+
     "pendUpdate": "Ein pausiertes Update wurde erkannt.",
     "pendUpdateContinue": "Es muss zuerst abgeschlossen werden, bevor nach neuen Updates gesucht werden kann.\nMöchtest du fortfahren?",
 
@@ -106,7 +106,7 @@
     "abortUpdate": "Update wird pausiert...",
     "installFinishing": "Verwaltung wird beendet...",
     "installWiping": "Vorherige Installation wird gelöscht...",
-    
+
     "unInstallQuestion": "Du bist dabei, CTGP-7 zu deinstallieren.\n\nMöchtest du die Speicherdaten sichern und fortfahren?",
     "unInstallQuestionNoSave": "Du bist dabei, CTGP-7 zu deinstallieren.\n\nMöchtest du fortfahren?",
     "unInstallError": "Konnte die Installation nicht entfernen: %0",
@@ -119,15 +119,15 @@
     "chgLogViewExcep": "Die Versionshistorie konnte nicht angezeigt werden.\n\nSollten Probleme weiterhin bestehen, suche dir Hilfe (auf Englisch) im %0.",
 
     "cantExitAskForce": "Einige Hintergrundaufgaben reagieren nicht.\n\nMöchtest du dennoch die Anwendung beenden?",
-    "featureNotImpl": "Feature not implemented",
-    "featureNotImplText": "Diese Funktion ist noch nicht vorhanden. Vielleicht ist sie in der nächsten Version.",
+    "featureNotImpl": "Funktion nicht vorhanden",
+    "featureNotImplText": "Diese Funktion ist noch nicht vorhanden. Vielleicht ist sie in der nächsten Version dabei.",
 
-    "userCancel": "Anwender hat die Operation abgebrochen.",
+    "userCancel": "Du hast die Operation abgebrochen.",
     "failSaveBackupCreate": "Die Sicherung der Speicherdaten ist fehlgeschlagen: %0",
     "failSaveBackupRestore": "Die wiederherstellung der Speicherdaten ist fehlgeschlagen. Bitte stelle sie manuell wieder her: %0",
 
     "failOpenURL": "Die Ressource unter \"%0\" konnte nicht geöffnet werden: Statusnummer %1 erhalten.",
-    
+
     "failGetUpdateInfo": "Fehler beim Beziehen der Update-Informationen: %0",
     "failParseSizeParam": "Die Größeneigenschaft der Dateiliste ist fehlerhaft: %0",
     "failInit": "Der Prozess konnte nicht vorbereitet werden: %0",

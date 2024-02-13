@@ -6,6 +6,12 @@ from CTGP7UpdaterApp.constants import CONSTANT as const
 import CTGP7UpdaterApp.utils as utils
 import CTGP7UpdaterApp.lang as lang
 
+try:
+    import pyctr.type.cia
+    PYCTR_AVAILABLE = True
+except:
+    PYCTR_AVAILABLE = False
+
 urlmgr = urllib3.PoolManager(headers={"Connection":"Keep-Alive"})
 def urlopen(url:str, **kwarg):
     out = urlmgr.request("GET", url, chunked=True, preload_content=False, **kwarg)
@@ -568,8 +574,8 @@ class CTGP7Updater:
         
         ciaFile = os.path.join(self.basePath, *const._APPPACKAGE_CIA_PATH)
         ciaTemp = os.path.join(self.basePath, *const._APPPACKAGE_CIA_TEMP)
-        hblFile = os.path.join(self.basePath, *const._APPPACKAGE_HBL_PATH1)
-        hblFileFinal = os.path.join(self.basePath, *const._APPPACKAGE_HBL_PATH2)
+        hblFile = os.path.join(self.basePath, *const._APPPACKAGE_HBL_PATH_SRC)
+        hblFileFinal = os.path.join(self.basePath, *const._APPPACKAGE_HBL_PATH_DEST)
         hblTemp = os.path.join(self.basePath, *const._APPPACKAGE_HBL_TEMP)
         
         self._log(lang.get("installFinishing"))
@@ -584,6 +590,20 @@ class CTGP7Updater:
                 self.makeReinstallFlag()
                 raise Exception(utils.strfmt(lang.get("failWriteVerInfo"), e))
         
+        
+        if os.path.exists(ciaTemp) and PYCTR_AVAILABLE:
+            try:
+                with pyctr.type.cia.CIAReader(ciaTemp) as ciahdl:
+                    with open(os.path.join(mainfolder, *const._EXPECTEDVER_PATH),"wb") as vf:
+                        vf.write(bytes([
+                            ciahdl.tmd.title_version.major,
+                            ciahdl.tmd.title_version.minor,
+                            ciahdl.tmd.title_version.micro
+                        ]))
+            except Exception as e:
+                self.fileDelete(os.path.join(mainfolder, *self._EXPECTEDVER_PATH))
+                raise Exception("Failed to write launcher info: {}".format(e))
+
         try:
             self.fileDelete(os.path.join(self.basePath, const._BASE_MOD_FOLDER_PATH, *const._PENDINGUPDATE_PATH))
             if os.path.exists(hblTemp):

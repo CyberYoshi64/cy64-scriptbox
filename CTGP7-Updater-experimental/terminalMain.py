@@ -24,7 +24,6 @@ def ConsoleConfirmed(message:str):
     try:    return input("[y/N]").upper()=="Y"
     except: return False
 
-
 try:
     _INSTALLER_VERB = {
         CTGP7Updater._MODE_INSTALL: "install",
@@ -33,7 +32,7 @@ try:
     }
     makeNewInstall = False; madeSaveBackup = False
     didProcessSucceed = False
-    
+
     print("CTGP-7 Installer v"+CTGP7Updater.VERSION_NUMBER+"-CLI")
     if arg.path != None:
         sdPath = arg.path
@@ -46,7 +45,7 @@ try:
         elif sdPath == None:
             raise Exception("Cannot determine a suitable SD Card.{}Try specifying the path with -p".format(os.linesep))
         print("Detected SD Card: \"{}\"".format(sdPath))
-    
+
     isInstallForCitra = CTGP7Updater.isCitraDirectory(sdPath)
 
     if not os.path.exists(sdPath):
@@ -76,7 +75,7 @@ Do you wish to continue anyway?
 (Your save data will be backed up, if possible.)"""):
             raise Exception("User refused to reinstall the mod.")
         makeNewInstall = True
-    
+
     if not arg.install and (installPathFlag & 8):
         if not ConsoleConfirmed("""\
 This installation is flagged for reinstall as it cannot be
@@ -87,7 +86,7 @@ Do you wish to continue anyway?
 (Your save data will be backed up, if possible.)"""):
             raise Exception("User refused to reinstall the mod.")
         makeNewInstall = True
-    
+
     if arg.install:
         print("!! WARNING: -i/--install specified, forcing a reinstall.")
         makeNewInstall = True

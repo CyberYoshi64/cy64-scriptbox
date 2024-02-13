@@ -24,22 +24,22 @@ class ThreadedDialog:
             self.closed = False
             self.setupUi(self)
             self.signals = ThreadedDialog.Signals()
-        
+
         @Slot()
         def _setTitle(self, s):
             if self.closed: self.signals.closed2.emit()
             self.setWindowTitle(str(s))
-        
+
         @Slot()
         def _setSize(self, s):
             if self.closed: self.signals.closed2.emit()
             self.setFixedSize(s)
-        
+
         @Slot()
         def _setMinSize(self, s):
             if self.closed: self.signals.closed2.emit()
             self.setMinimumSize(s)
-        
+
         @Slot()
         def _setText(self, s):
             if not self.text or self.closed:
@@ -53,7 +53,7 @@ class ThreadedDialog:
             else:
                 self.text.setHidden(False)
                 self.text.setText(str(s))
-        
+
         @Slot()
         def _setDetailedText(self, append, s):
             if not self.detailedText or self.closed:
@@ -65,7 +65,7 @@ class ThreadedDialog:
                 self.scrollArea.setHidden(False)
                 if append: self.detailedText.setText(self.detailedText.text() + str(s))
                 else: self.detailedText.setText(str(s))
-        
+
         @Slot()
         def _setProgress(self, p):
             if not self.progBar or self.closed:
@@ -77,7 +77,7 @@ class ThreadedDialog:
                 self.progBar.setHidden(False)
                 self.progBar.setEnabled(p>=0)
                 if p >= 0: self.progBar.setValue(p)
-        
+
         @Slot()
         def _setButtons(self, m):
             if not self.buttonBox or self.closed:
