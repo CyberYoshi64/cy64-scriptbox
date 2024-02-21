@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${DEVKITPRO}/libctru/**"
             ],
             "defines": [],
             "compilerPath": "/opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc",

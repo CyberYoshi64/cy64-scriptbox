@@ -12,3 +12,7 @@ CustomFormats/CYCFG/test*
 # Pending projects
 CY64SBFP2/
 CY64PTCFP2/
+
+ctrdummyCfgSet/*.elf
+ctrdummyCfgSet/*.smdh
+ctrdummyCfgSet/build/*.map
