@@ -13,6 +13,7 @@ CustomFormats/CYCFG/test*
 CY64SBFP2/
 CY64PTCFP2/
 
+ctrdummyCfgSet/*.3dsx
 ctrdummyCfgSet/*.elf
 ctrdummyCfgSet/*.smdh
-ctrdummyCfgSet/build/*.map
+ctrdummyCfgSet/build

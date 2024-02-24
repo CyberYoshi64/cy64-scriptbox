@@ -31,3 +31,22 @@ This is made by observations of TGA files made by `NW4C_TextureConverter.exe` an
 
 Requirements: `pillow`
 
+### ctr-configblock.py
+
+Read `config` and extract config blocks or inject data into them.
+
+Refer to the `-h` switch for help.
+
+### 3dnus.py
+
+A simple C#-to-Python port of the [3DNUS core](https://github.com/DrHacknik/3DNUS) for use on Linux.
+
+Requirements: `shutil`, [`make_cdn_cia` (seperate program)](https://github.com/DavidSouthgate/make_cdn_cia)
+
+Refer to the `-h` switch for help.
+
+DrHacknik/3DNUS is licensed under the [GNU General Public License v3.0](https://github.com/DrHacknik/3DNUS/blob/master/LICENSE.txt).
+
+### ctrDummyCfgSet
+
+It just makes hardcoded changes to the 3DS `config` file through a homebrew. Use and edit at your own risk.
